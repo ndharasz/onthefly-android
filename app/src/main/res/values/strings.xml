@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">On The Fly</string>
+    <string name="remember">Remember Me</string>
+    <string name="login">Log In</string>
+    <string name="forgot_password">I forgot my password</string>
 </resources>

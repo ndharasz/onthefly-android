@@ -15,6 +15,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.ActivityFlightList"/>
+        <activity android:name=".activities.ActivityEditFlight"/>
+        <activity android:name=".activities.ActivityCreateFlight"/>
+        <activity android:name=".activities.ActivityReport"/>
     </application>
 
 </manifest>
