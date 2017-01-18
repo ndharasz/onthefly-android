@@ -1,13 +1,15 @@
-package com.example.noah.onthefly;
+package com.example.noah.onthefly.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class ActivityCreateFlight extends AppCompatActivity {
+import com.example.noah.onthefly.R;
+
+public class ActivityFlightList extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_acivity_create_flight);
+        setContentView(R.layout.activity_flight_list);
     }
 }
