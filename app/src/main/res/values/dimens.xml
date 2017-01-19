@@ -3,4 +3,6 @@
     <dimen name="activity_horizontal_margin">8dp</dimen>
     <dimen name="activity_vertical_margin">8dp</dimen>
     <dimen name="input_padding">16dp</dimen>
+    <dimen name="title_size">16pt</dimen>
+    <dimen name="title2_size">12pt</dimen>
 </resources>

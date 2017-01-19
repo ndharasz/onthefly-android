@@ -3,4 +3,10 @@
     <string name="remember">Remember Me</string>
     <string name="login">Log In</string>
     <string name="forgot_password">I forgot my password</string>
+    <string name="flights">Upcoming Flights</string>
+    <string name="date">Date</string>
+    <string name="departLoc">Dept Arpt</string>
+    <string name="arriveLoc">Arrv Arpt</string>
+    <string name="add_flight">Add New Flight</string>
+    <string name="edit">edit</string>
 </resources>
