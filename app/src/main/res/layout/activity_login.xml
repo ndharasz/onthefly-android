@@ -13,7 +13,10 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src = "@drawable/onthefly"/>
     <EditText
         android:id="@+id/username_input"
         android:layout_width="match_parent"
@@ -79,5 +82,6 @@
         android:textAllCaps="false"
         android:background="@color/colorPrimary"
         style="?android:attr/borderlessButtonStyle"/>
+
 
 </LinearLayout>
