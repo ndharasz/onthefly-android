@@ -39,11 +39,11 @@ captures/
 .idea/gradle.xml
 .idea/libraries
 .idea/compiler
-.idea/copyright
+.idea/copyright.xml
 .idea/gradle
-.idea/misc
-.idea/modules
-.idea/runConfigurations
+.idea/misc.xml
+.idea/modules.xml
+.idea/runConfigurations.xml
 
 
 # Keystore files
