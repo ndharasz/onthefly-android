@@ -39,7 +39,7 @@ captures/
 .idea/gradle.xml
 .idea/libraries
 .idea/compiler
-.idea/copyright.xml
+.idea/copyright
 .idea/gradle
 .idea/misc.xml
 .idea/modules.xml
