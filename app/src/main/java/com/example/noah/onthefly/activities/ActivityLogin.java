@@ -16,16 +16,11 @@ public class ActivityLogin extends AppCompatActivity {
     EditText passwordField;
     Button login;
     Button forgotPass;
-    public static final String READ = "agreed";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-
-        new Legal(this).show();
-
         inputSetup();
         buttonSetup();
     }

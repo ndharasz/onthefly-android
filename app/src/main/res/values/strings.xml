@@ -2,7 +2,5 @@
     <string name="app_name">On The Fly</string>
     <string name="remember">Remember Me</string>
     <string name="login">Log In</string>
-    <string name="forgot_password">Forgot your password?</string>
-    <string name="Agree">I agree</string>
-    <string name="Disagree">I decline</string>
+    <string name="forgot_password">I forgot my password</string>
 </resources>
