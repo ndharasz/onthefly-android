@@ -8,6 +8,67 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.noah.onthefly.AcivityCreateFlight">
+    tools:context="com.example.noah.onthefly.activities.ActivityCreateFlight"
+    android:orientation="vertical"
+    android:background="@color/colorPrimary">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/input_padding"
+        android:background="@color/colorAccent">
+
+        <TableRow>
+            <TextView
+                android:paddingTop="@dimen/title_padding"
+                android:paddingBottom="@dimen/title_padding"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/create_flight_title"
+                android:textSize="@dimen/title_size"
+                android:textAlignment="center"/>
+        </TableRow>
+
+        <TableRow
+            android:paddingLeft="@dimen/form_padding">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/choose_date"
+                android:textSize="@dimen/form_text_size"/>
+        </TableRow>
+
+        <TableRow>
+            <DatePicker
+                android:datePickerMode="spinner"
+                android:calendarViewShown="false"
+                android:layout_height="match_parent"/>
+        </TableRow>
+
+        <TableRow
+            android:paddingLeft="@dimen/form_padding">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/choose_dept_time"
+                android:textSize="@dimen/form_text_size"/>
+        </TableRow>
+
+        <TableRow>
+            <TimePicker
+                android:layout_height="match_parent"
+                android:timePickerMode="spinner"/>
+        </TableRow>
+
+        <TableRow>
+            <Button
+                android:text="@string/button_next"/>
+        </TableRow>
+
+    </TableLayout>
+
 
 </RelativeLayout>
