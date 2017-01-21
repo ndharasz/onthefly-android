@@ -25,7 +25,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="4dd7891ff29eaed9aa1d0b305c8ce741609f4b06">
+        sha1="05998b17d6844ccbb2da1d4aaa43adba56e0470a">
         <dex dex="C:\On the Fly\onthefly-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_7c6b287d5db2fed6519dd4559ee2c511b30da377\classes.dex" />
     </item>
     <item
@@ -52,7 +52,7 @@
         jumboMode="true"
         optimize="true"
         revision="25.0.2"
-        sha1="d9d25cb92942b51e7d152ed151b7c4f2936fef0c">
+        sha1="48340e6f81f01f1ac93e3b197abfaf837b47e20e">
         <dex dex="C:\On the Fly\onthefly-android\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_05fc42d1dff7e8559cc03be12563970ea44189c5\classes.dex" />
     </item>
     <item
