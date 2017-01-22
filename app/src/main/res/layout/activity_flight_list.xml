@@ -15,7 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:text="Log Out"
-        style="@style/invisible_button"/>
+        style="@style/invisible_button"
+        android:onClick="logout"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -38,8 +39,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/date"
                 android:textColor="@color/colorAccent"
-                android:textSize="@dimen/title2_size"
-                android:textAlignment="center"/>
+                android:textSize="@dimen/title2_size"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -47,8 +47,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/departLoc"
                 android:textColor="@color/colorAccent"
-                android:textSize="@dimen/title2_size"
-                android:textAlignment="center"/>
+                android:textSize="@dimen/title2_size"/>
 
             <TextView
                 android:layout_width="0dp"
@@ -56,8 +55,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/arriveLoc"
                 android:textColor="@color/colorAccent"
-                android:textSize="@dimen/title2_size"
-                android:textAlignment="center"/>
+                android:textSize="@dimen/title2_size"/>
         </TableRow>
         <ScrollView
             android:id="@+id/upcoming_flight_list"
@@ -72,6 +70,7 @@
         android:layout_height="wrap_content"
         android:text="@string/add_flight"
         android:layout_gravity="bottom"
-        style="@style/accent_button"/>
+        style="@style/accent_button"
+        android:onClick="createFlight"/>
 
 </LinearLayout>

@@ -9,25 +9,28 @@
         android:id="@+id/upcoming_flight_date"
         android:layout_width="0dp"
         android:layout_weight="4"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:textColor="@color/colorAccent"
-        android:textSize="@dimen/title2_size"/>
+        android:textSize="@dimen/title2_size"
+        android:gravity="center_vertical"/>
 
     <TextView
         android:id="@+id/upcoming_flight_depart"
         android:layout_width="0dp"
         android:layout_weight="5"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:textColor="@color/colorAccent"
-        android:textSize="@dimen/title2_size"/>
+        android:textSize="@dimen/title2_size"
+        android:textAlignment="center"/>
 
     <TextView
         android:id="@+id/upcoming_flight_arrival"
         android:layout_width="0dp"
         android:layout_weight="5"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:textColor="@color/colorAccent"
-        android:textSize="@dimen/title2_size"/>
+        android:textSize="@dimen/title2_size"
+        android:textAlignment="center"/>
 
     <Button
         android:id="@+id/upcoming_flight_edit"
