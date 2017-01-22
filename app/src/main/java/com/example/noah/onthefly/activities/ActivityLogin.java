@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.example.noah.onthefly.R;
@@ -16,6 +17,7 @@ public class ActivityLogin extends AppCompatActivity {
     EditText passwordField;
     Button login;
     Button forgotPass;
+    CheckBox rememberMe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +35,16 @@ public class ActivityLogin extends AppCompatActivity {
     protected void buttonSetup() {
         login = (Button) findViewById(R.id.log_in_button);
         forgotPass = (Button) findViewById(R.id.forgot_password_button);
+        rememberMe = (CheckBox) findViewById(R.id.remember_me_checkbox);
     }
 
     protected void login(View loginButton) {
         Intent flightListIntent = new Intent(this, ActivityFlightList.class);
         this.startActivity(flightListIntent);
+    }
+
+    protected void createAccount(View v) {
+        Intent createAccountIntent = new Intent(this, ActivityCreateAccount.class);
+        this.startActivity(createAccountIntent);
     }
 }
