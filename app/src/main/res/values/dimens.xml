@@ -3,4 +3,8 @@
     <dimen name="activity_horizontal_margin">8dp</dimen>
     <dimen name="activity_vertical_margin">8dp</dimen>
     <dimen name="input_padding">16dp</dimen>
+
+    <!-- Create flight screen -->
+    <dimen name="title_padding">26dp</dimen>
+    <dimen name="title_size">36sp</dimen>
 </resources>

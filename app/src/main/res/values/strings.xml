@@ -3,4 +3,7 @@
     <string name="remember">Remember Me</string>
     <string name="login">Log In</string>
     <string name="forgot_password">I forgot my password</string>
+    <string name="create_flight_title">Create Flight</string>
+    <string name="date">flight date</string>
+    <string name="time">departure time</string>
 </resources>
