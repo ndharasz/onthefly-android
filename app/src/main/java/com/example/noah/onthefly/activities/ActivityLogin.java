@@ -41,7 +41,7 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
     protected void login(View loginButton) {
-        Intent flightListIntent = new Intent(this, ActivityGenReport.class);
+        Intent flightListIntent = new Intent(this, ActivityCreateFlight.class);
         this.startActivity(flightListIntent);
     }
 }
