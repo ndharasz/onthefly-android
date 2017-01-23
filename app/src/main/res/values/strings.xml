@@ -5,4 +5,9 @@
     <string name="forgot_password">Forgot your password?</string>
     <string name="Agree">I agree</string>
     <string name="Disagree">I decline</string>
+    <string name="reportGenerated">Success! Report Generated. Please select or enter an email address to send to: </string>
+    <string name="sendToRegEMail">Send to user registered email address.</string>
+    <string name="email">youremailaddress@email.com</string>
+    <string name="saveLocal">Save Report Locally?</string>
+    <string name="send">Send it!</string>
 </resources>

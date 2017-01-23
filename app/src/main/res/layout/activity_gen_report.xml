@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/activity_vertical_margin"
+    tools:context="com.example.noah.onthefly.activities.ActivityGenReport"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:text="@string/reportGenerated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
+        android:padding="20sp"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:id="@+id/header" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentLeft="true">
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/send_to_reg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/colorAccent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sendToRegEMail"
+                android:textColor="@color/colorAccent"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+    <EditText
+        android:id="@+id/user_input_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:hint="@string/email"
+        android:padding="@dimen/input_padding"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:singleLine="true"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="32sp"
+            android:orientation="horizontal"
+            android:layout_alignParentLeft="true">
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/save_report_local"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="@color/colorAccent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/saveLocal"
+                android:textColor="@color/colorAccent"/>
+
+
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/send"
+        android:onClick="send">
+
+    </Button>
+</LinearLayout>
