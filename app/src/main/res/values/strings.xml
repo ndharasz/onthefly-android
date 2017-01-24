@@ -6,4 +6,5 @@
     <string name="create_flight_title">Create Flight</string>
     <string name="date">flight date</string>
     <string name="time">departure time</string>
+    <string name="button_submit">Submit</string>
 </resources>

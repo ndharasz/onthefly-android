@@ -1,18 +1,27 @@
 package com.example.noah.onthefly.activities;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.noah.onthefly.R;
+import com.example.noah.onthefly.fragments.DatePickerFragment;
+import com.example.noah.onthefly.fragments.TimePickerFragment;
+import com.example.noah.onthefly.interfaces.CallsDatePicker;
+import com.example.noah.onthefly.interfaces.CallsTimePicker;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
@@ -22,13 +31,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ActivityCreateFlight extends AppCompatActivity {
+public class ActivityCreateFlight extends AppCompatActivity implements CallsDatePicker, CallsTimePicker {
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private EditText dateField;
+    private EditText timeField;
+    private DialogFragment datePickerFragment;
+    private DialogFragment timePickerFragment;
 
     private class ArrayAdapterWithHint<T> extends ArrayAdapter {
         public ArrayAdapterWithHint(
@@ -68,6 +81,9 @@ public class ActivityCreateFlight extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acivity_create_flight);
 
+        dateField = (EditText) findViewById(R.id.flight_date);
+        timeField = (EditText) findViewById(R.id.flight_time);
+
         Spinner plane_spinner = (Spinner) findViewById(R.id.choose_plane_spinner);
         String[] planes = new String[]{
                 "Choose a plane", "Plane 1", "Plane 2"
@@ -101,39 +117,51 @@ public class ActivityCreateFlight extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("ActivityCreateFlight Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
+    protected void showDate(View v) {
+        showDatePicker(v);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    public void showDatePicker(View v) {
+        if (datePickerFragment == null) {
+            datePickerFragment = new DatePickerFragment();
+            datePickerFragment.show(getFragmentManager(), "datePickerFragment");
+        }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
+    public void hideDatePicker(String date) {
+        if (datePickerFragment != null) {
+            if (date.compareTo("") != 0) {
+                dateField.setText(date);
+            }
+            datePickerFragment.dismiss();
+            datePickerFragment = null;
+            Log.d("Tag", "DatePicker dismissed");
+        }
+    }
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
+    protected void showTime(View v) {
+        showTimePicker(v);
+    }
+
+    public void showTimePicker(View v) {
+        if (timePickerFragment == null) {
+            timePickerFragment = new TimePickerFragment();
+            timePickerFragment.show(getFragmentManager(), "datePickerFragment");
+        }
+    }
+
+    public void hideTimePicker(String time) {
+        if (timePickerFragment != null) {
+            if (time.compareTo("") != 0) {
+                timeField.setText(time);
+            }
+            timePickerFragment.dismiss();
+            timePickerFragment = null;
+        }
+    }
+
+    public void submit(View v) {
+        Intent editFlightIntent = new Intent(this, ActivityEditFlight.class);
+        this.startActivity(editFlightIntent);
     }
 }

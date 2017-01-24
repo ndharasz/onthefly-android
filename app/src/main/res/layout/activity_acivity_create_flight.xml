@@ -26,43 +26,63 @@
         android:id="@+id/choose_plane_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_vertical_margin"/>
+        android:padding="@dimen/input_padding"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:background="@color/colorAccent"/>
 
     <Spinner
         android:id="@+id/choose_dept_airport_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_vertical_margin"/>/>
+        android:padding="@dimen/input_padding"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:background="@color/colorAccent"/>
 
     <Spinner
         android:id="@+id/choose_arr_airport_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_vertical_margin"/>/>
+        android:padding="@dimen/input_padding"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:background="@color/colorAccent"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="@dimen/activity_horizontal_margin">
+        android:orientation="horizontal">
 
         <EditText
+            android:id="@+id/flight_date"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/colorAccent"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            android:hint="@string/date"/>
+            android:padding="@dimen/input_padding"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:hint="@string/date"
+            android:editable="false"
+            android:onClick="showDate"/>
 
         <EditText
+            android:id="@+id/flight_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/colorAccent"
-            android:layout_margin="@dimen/activity_horizontal_margin"
-            android:hint="@string/time"/>
+            android:padding="@dimen/input_padding"
+            android:hint="@string/time"
+            android:editable="false"
+            android:onClick="showTime"/>
 
     </LinearLayout>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/button_submit"
+        android:padding="@dimen/input_padding"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:onClick="submit"/>
 
 </LinearLayout>
