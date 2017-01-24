@@ -10,6 +10,10 @@
     <string name="saveLocal">Save Report Locally?</string>
     <string name="send">Send it!</string>
     <string name="forgot_password">I forgot my password</string>
+    <string name="create_flight_title">Create Flight</string>
+    <string name="flight_date">flight date</string>
+    <string name="dept_time">departure time</string>
+    <string name="button_submit">Submit</string>
     <string name="flights">Upcoming Flights</string>
     <string name="date">Date</string>
     <string name="departLoc">Dept Arpt</string>
