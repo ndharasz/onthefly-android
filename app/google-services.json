@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "350972028266",
+    "firebase_url": "https://on-the-fly-b1d8e.firebaseio.com",
+    "project_id": "on-the-fly-b1d8e",
+    "storage_bucket": "on-the-fly-b1d8e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350972028266:android:c492c550687802aa",
+        "android_client_info": {
+          "package_name": "com.example.noah.onthefly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350972028266-qc5sq72fg8a5g5bb7c0n2qqk0rfk7a47.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBA6GFkWBB5TBniVSwuwjMUbA6p6--Usto"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
