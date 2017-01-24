@@ -15,7 +15,7 @@ public class ActivityFlightList extends AppCompatActivity {
         setContentView(R.layout.activity_flight_list);
     }
 
-    protected void logout (View v) {
+    protected void logout(View v) {
         Intent logoutIntent = new Intent(this, ActivityLogin.class);
         this.startActivity(logoutIntent);
     }

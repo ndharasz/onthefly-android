@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">On The Fly</string>
+    <string name="username_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password">Confirm Password</string>
     <string name="remember">Remember Me</string>
     <string name="login">Log In</string>
     <string name="Agree">I agree</string>
@@ -20,4 +23,8 @@
     <string name="arriveLoc">Arrv Arpt</string>
     <string name="add_flight">Add New Flight</string>
     <string name="edit">edit</string>
+    <string name="create_account">+ Create Account</string>
+    <string name="new_account">New Account</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
 </resources>

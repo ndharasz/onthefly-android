@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
-        android:hint="Username"
+        android:hint="@string/username_hint"
         android:padding="@dimen/input_padding"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:singleLine="true"/>
@@ -29,9 +29,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
-        android:hint="Password"
+        android:hint="@string/password_hint"
         android:padding="@dimen/input_padding"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:inputType="textPassword"
         android:singleLine="true"/>
 
     <RelativeLayout
@@ -76,5 +77,17 @@
         android:layout_height="wrap_content"
         android:text="@string/forgot_password"
         style="@style/invisible_button"/>
+
+    <Button
+        android:id="@+id/create_account_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="bottom"
+        android:background="@color/colorSpecial"
+        android:text="@string/create_account"
+        android:textAllCaps="false"
+        android:textSize="@dimen/title2_size"
+        android:textColor="@color/colorAccent"
+        android:onClick="createAccount"/>
 
 </LinearLayout>
