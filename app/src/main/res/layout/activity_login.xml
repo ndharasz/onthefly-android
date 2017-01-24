@@ -13,10 +13,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src = "@drawable/onthefly"/>
+
     <EditText
         android:id="@+id/username_input"
         android:layout_width="match_parent"
@@ -67,9 +64,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/login"
-            android:background="@color/colorAccent"
             android:layout_alignParentRight="true"
-            android:onClick="login" />
+            android:onClick="login"
+            style="@style/accent_button"/>
 
     </RelativeLayout>
 
@@ -78,10 +75,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/forgot_password"
-        android:textColor="@color/colorAccent"
-        android:textAllCaps="false"
-        android:background="@color/colorPrimary"
-        style="?android:attr/borderlessButtonStyle"/>
-
+        style="@style/invisible_button"/>
 
 </LinearLayout>
