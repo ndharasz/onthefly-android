@@ -19,7 +19,6 @@
         <activity android:name=".activities.ActivityEditFlight" />
         <activity android:name=".activities.ActivityCreateFlight" />
         <activity android:name=".activities.ActivityReport" />
-        <activity android:name=".activities.ActivityGenReport"></activity>
     </application>
 
 </manifest>

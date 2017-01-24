@@ -1,12 +1,9 @@
 package com.example.noah.onthefly.activities;
 
-import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,10 +19,6 @@ import com.example.noah.onthefly.fragments.DatePickerFragment;
 import com.example.noah.onthefly.fragments.TimePickerFragment;
 import com.example.noah.onthefly.interfaces.CallsDatePicker;
 import com.example.noah.onthefly.interfaces.CallsTimePicker;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,11 +26,6 @@ import java.util.List;
 
 public class ActivityCreateFlight extends AppCompatActivity implements CallsDatePicker, CallsTimePicker {
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
     private EditText dateField;
     private EditText timeField;
     private DialogFragment datePickerFragment;
@@ -79,7 +67,7 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_acivity_create_flight);
+        setContentView(R.layout.activity_create_flight);
 
         dateField = (EditText) findViewById(R.id.flight_date);
         timeField = (EditText) findViewById(R.id.flight_time);
@@ -112,9 +100,6 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         plane_spinner.setAdapter(planeArrayAdapter);
         dept_loc_spinner.setAdapter(deptArrayAdapter);
         arr_loc_spinner.setAdapter(arrArrayAdapter);
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     protected void showDate(View v) {

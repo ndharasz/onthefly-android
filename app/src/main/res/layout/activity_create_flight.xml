@@ -59,7 +59,7 @@
             android:background="@color/colorAccent"
             android:padding="@dimen/input_padding"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:hint="@string/date"
+            android:hint="@string/flight_date"
             android:editable="false"
             android:onClick="showDate"/>
 
@@ -70,7 +70,7 @@
             android:layout_weight="1"
             android:background="@color/colorAccent"
             android:padding="@dimen/input_padding"
-            android:hint="@string/time"
+            android:hint="@string/dept_time"
             android:editable="false"
             android:onClick="showTime"/>
 

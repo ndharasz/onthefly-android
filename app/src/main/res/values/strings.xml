@@ -7,12 +7,12 @@
     <string name="reportGenerated">Success! Report Generated. Please select or enter an email address to send to: </string>
     <string name="sendToRegEMail">Send to user registered email address.</string>
     <string name="email">youremailaddress@email.com</string>
-    <string name="saveLocal">Save Report Locally?</string>
+    <string name="saveLocal">Save Report Locally</string>
     <string name="send">Send it!</string>
     <string name="forgot_password">I forgot my password</string>
     <string name="create_flight_title">Create Flight</string>
-    <string name="flight_date">flight date</string>
-    <string name="dept_time">departure time</string>
+    <string name="flight_date">Flight Date</string>
+    <string name="dept_time">Departure Time</string>
     <string name="button_submit">Submit</string>
     <string name="flights">Upcoming Flights</string>
     <string name="date">Date</string>
