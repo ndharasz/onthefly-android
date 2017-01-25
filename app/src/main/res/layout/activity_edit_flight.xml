@@ -25,7 +25,8 @@
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/title3_size"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:text="Flight\nInformation"/>
 
     <LinearLayout
         android:layout_width="match_parent"

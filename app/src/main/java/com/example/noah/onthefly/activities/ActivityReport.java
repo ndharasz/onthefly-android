@@ -29,7 +29,7 @@ public class ActivityReport extends AppCompatActivity {
         alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK. Return to Home.",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(ActivityReport.this, ActivityCreateFlight.class);
+                        Intent intent = new Intent(ActivityReport.this, ActivityFlightList.class);
                         startActivity(intent);
                         dialog.dismiss();
                     }
