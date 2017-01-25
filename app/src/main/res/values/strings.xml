@@ -11,7 +11,7 @@
     <string name="sendToRegEMail">Send to user registered email address.</string>
     <string name="email">youremailaddress@email.com</string>
     <string name="saveLocal">Save Report Locally</string>
-    <string name="send">Send it!</string>
+    <string name="send">Send</string>
     <string name="forgot_password">I forgot my password</string>
     <string name="create_flight_title">Create Flight</string>
     <string name="flight_date">Flight Date</string>
@@ -27,4 +27,12 @@
     <string name="new_account">New Account</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
+    <string name="edit_flight_title">View &amp; Edit Flight</string>
+    <string name="gen_report_button">Generate Weight and Balance Report</string>
+    <string name="add_passenger">Add Passenger</string>
+    <string name="passenger_view">Passenger View</string>
+    <string name="cargo_view">Cargo View</string>
+    <string name="front_cargo">Front Cargo Hold</string>
+    <string name="rear_cargo">Rear Cargo Hold</string>
+    <string name="curr_weight">Current Weight:</string>
 </resources>

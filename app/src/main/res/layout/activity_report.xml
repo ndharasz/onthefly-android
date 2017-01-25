@@ -94,8 +94,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/send"
-        android:onClick="send">
-
-    </Button>
+        android:text="@string/send"
+        android:onClick="send"
+        style="@style/accent_button"/>
 </LinearLayout>

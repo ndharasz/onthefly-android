@@ -15,7 +15,7 @@ import java.sql.Time;
  * Created by Brian Woodbury on 1/23/2017.
  */
 
-public class TimePickerFragment extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+public class FragmentTimePicker extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
