@@ -81,8 +81,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/button_submit"
-        android:padding="@dimen/input_padding"
         android:layout_margin="@dimen/activity_vertical_margin"
-        android:onClick="submit"/>
+        android:onClick="submit"
+        style="@style/accent_button"/>
 
 </LinearLayout>

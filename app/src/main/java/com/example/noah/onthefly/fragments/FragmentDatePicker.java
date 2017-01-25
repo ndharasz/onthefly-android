@@ -18,7 +18,7 @@ import java.util.Calendar;
  * Created by Brian Woodbury on 1/23/2017.
  */
 
-public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+public class FragmentDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

@@ -15,8 +15,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.noah.onthefly.R;
-import com.example.noah.onthefly.fragments.DatePickerFragment;
-import com.example.noah.onthefly.fragments.TimePickerFragment;
+import com.example.noah.onthefly.fragments.FragmentDatePicker;
+import com.example.noah.onthefly.fragments.FragmentTimePicker;
 import com.example.noah.onthefly.interfaces.CallsDatePicker;
 import com.example.noah.onthefly.interfaces.CallsTimePicker;
 
@@ -108,7 +108,7 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
 
     public void showDatePicker(View v) {
         if (datePickerFragment == null) {
-            datePickerFragment = new DatePickerFragment();
+            datePickerFragment = new FragmentDatePicker();
             datePickerFragment.show(getFragmentManager(), "datePickerFragment");
         }
     }
@@ -130,7 +130,7 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
 
     public void showTimePicker(View v) {
         if (timePickerFragment == null) {
-            timePickerFragment = new TimePickerFragment();
+            timePickerFragment = new FragmentTimePicker();
             timePickerFragment.show(getFragmentManager(), "datePickerFragment");
         }
     }
