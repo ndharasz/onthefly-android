@@ -47,6 +47,11 @@ public class ActivityLogin extends AppCompatActivity {
         this.startActivity(flightListIntent);
     }
 
+    protected void forgotPassword(View v) {
+        Intent forgotPasswordIntent = new Intent(this, ActivityForgotPassword.class);
+        this.startActivity(forgotPasswordIntent);
+    }
+
     protected void createAccount(View v) {
         Intent createAccountIntent = new Intent(this, ActivityCreateAccount.class);
         this.startActivity(createAccountIntent);
