@@ -19,7 +19,7 @@ public class ActivityReport extends AppCompatActivity {
     }
 
     public void send(View inputButton) {
-        AlertDialog alertDialog = new AlertDialog.Builder(ActivityReport.this,  AlertDialog.THEME_DEVICE_DEFAULT_DARK).create();
+        AlertDialog alertDialog = new AlertDialog.Builder(ActivityReport.this,  AlertDialog.THEME_DEVICE_DEFAULT_LIGHT).create();
         alertDialog.setTitle("Report Sent!");
         alertDialog.getWindow().setLayout(600, 400);
         EditText getNameField = (EditText) findViewById(R.id.user_input_email);
