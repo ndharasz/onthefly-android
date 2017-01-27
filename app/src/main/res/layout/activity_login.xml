@@ -76,6 +76,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/forgot_password"
+        android:onClick="forgotPassword"
         style="@style/invisible_button"/>
 
     <Button

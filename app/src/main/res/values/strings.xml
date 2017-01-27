@@ -35,4 +35,7 @@
     <string name="front_cargo">Front Cargo Hold</string>
     <string name="rear_cargo">Rear Cargo Hold</string>
     <string name="curr_weight">Current Weight:</string>
+    <string name="reset_password">Password Reset</string>
+    <string name="reset_password_instructions">Enter your email below to reset your password.</string>
+    <string name="reset_password_button">Reset my password</string>
 </resources>

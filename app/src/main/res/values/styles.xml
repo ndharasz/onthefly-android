@@ -25,4 +25,8 @@
         <item name="android:padding">@dimen/input_padding</item>
     </style>
 
+    <style name="PasswordResetConfirmationDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="buttonBarButtonStyle">@style/accent_button</item>
+    </style>
+
 </resources>
