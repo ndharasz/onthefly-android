@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,13 +33,19 @@ public class ActivityLogin extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private String TAG = "ActivityLogin";
 
+    private SharedPreferences loginPrefs;
+    private SharedPreferences.Editor loginPrefsEditor;
+    Boolean saveLogin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         inputSetup();
         buttonSetup();
         firebaseSetup();
+        saveLoginSetup();
     }
 
     @Override
@@ -52,6 +59,17 @@ public class ActivityLogin extends AppCompatActivity {
         super.onStop();
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
+        }
+    }
+
+    protected void saveLoginSetup() {
+        loginPrefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPrefs.edit();
+        saveLogin = loginPrefs.getBoolean("saveLogin", false);
+        if (saveLogin == true) {
+            usernameField.setText(loginPrefs.getString("username", ""));
+            passwordField.setText(loginPrefs.getString("password", ""));
+            rememberMe.setChecked(true);
         }
     }
 
@@ -85,18 +103,26 @@ public class ActivityLogin extends AppCompatActivity {
 
     protected void login(View loginButton) {
         Log.d(TAG, "Task started");
-        mAuth.createUserWithEmailAndPassword(usernameField.getText().toString(),
-                    passwordField.getText().toString())
+        final String username = usernameField.getText().toString();
+        final String pass = passwordField.getText().toString();
+        mAuth.signInWithEmailAndPassword(username, pass)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG, "Login task complete");
                 if (task.isSuccessful()) {
+                    Log.d(TAG, "sucess");
+                    if(rememberMe.isChecked()) {
+                        loginPrefsEditor.putBoolean("saveLogin", true);
+                        loginPrefsEditor.putString("username", username);
+                        loginPrefsEditor.putString("password", pass);
+                        loginPrefsEditor.commit();
+                    }
                     Intent flightListIntent = new Intent(ActivityLogin.this,
                                 ActivityFlightList.class);
                     ActivityLogin.this.startActivity(flightListIntent);
                 } else {
-                    Log.d(TAG, "Login failed.");
+                    Log.d(TAG, "failure");
+                    Toast.makeText(ActivityLogin.this, "Username or password was invalid.", Toast.LENGTH_SHORT).show();
                     // print error message?
                 }
             }
