@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -108,7 +109,6 @@ public class ActivityLogin extends AppCompatActivity {
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG, "Login task complete");
                 if (task.isSuccessful()) {
                     Log.d(TAG, "sucess");
                     if(rememberMe.isChecked()) {
@@ -122,6 +122,7 @@ public class ActivityLogin extends AppCompatActivity {
                     ActivityLogin.this.startActivity(flightListIntent);
                 } else {
                     Log.d(TAG, "failure");
+                    Toast.makeText(ActivityLogin.this, "Username or password was invalid.", Toast.LENGTH_SHORT).show();
                     // print error message?
                 }
             }
