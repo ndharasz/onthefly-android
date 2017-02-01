@@ -26,10 +26,56 @@ import java.util.List;
 
 public class ActivityCreateFlight extends AppCompatActivity implements CallsDatePicker, CallsTimePicker {
 
+    private Spinner plane_spinner;
+    private Spinner dept_loc_spinner;
+    private Spinner arr_loc_spinner;
     private EditText dateField;
     private EditText timeField;
     private DialogFragment datePickerFragment;
     private DialogFragment timePickerFragment;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_create_flight);
+
+        dateTimeSetup();
+        spinnerSetup();
+    }
+
+    protected  void dateTimeSetup() {
+        dateField = (EditText) findViewById(R.id.flight_date);
+        timeField = (EditText) findViewById(R.id.flight_time);
+    }
+
+    protected void spinnerSetup() {
+
+        plane_spinner = (Spinner) findViewById(R.id.choose_plane_spinner);
+        dept_loc_spinner = (Spinner) findViewById(R.id.choose_dept_airport_spinner);
+        arr_loc_spinner = (Spinner) findViewById(R.id.choose_arr_airport_spinner);
+
+        final List<String> planesList = new ArrayList<>(Arrays.asList(new String[]{
+                "Choose a plane", "Plane 1", "Plane 2"
+        }));
+        final List<String> deptList = new ArrayList<>(Arrays.asList(new String[] {
+                "Departure location", "ATL", "SEA", "MIA"
+        }));
+        final List<String> arrList = new ArrayList<>(Arrays.asList(new String[] {
+                "Arrival location", "ATL", "SEA", "MIA"
+        }));
+
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> planeArrayAdapter = new ArrayAdapterWithHint<String>(
+                this, android.R.layout.simple_spinner_item, planesList);
+        final ArrayAdapter<String> deptArrayAdapter = new ArrayAdapterWithHint<String>(
+                this, android.R.layout.simple_spinner_item, deptList);
+        final ArrayAdapter<String> arrArrayAdapter = new ArrayAdapterWithHint<String>(
+                this, android.R.layout.simple_spinner_item, arrList);
+
+        plane_spinner.setAdapter(planeArrayAdapter);
+        dept_loc_spinner.setAdapter(deptArrayAdapter);
+        arr_loc_spinner.setAdapter(arrArrayAdapter);
+    }
 
     private class ArrayAdapterWithHint<T> extends ArrayAdapter {
         public ArrayAdapterWithHint(
@@ -62,44 +108,6 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
             }
             return view;
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_flight);
-
-        dateField = (EditText) findViewById(R.id.flight_date);
-        timeField = (EditText) findViewById(R.id.flight_time);
-
-        Spinner plane_spinner = (Spinner) findViewById(R.id.choose_plane_spinner);
-        String[] planes = new String[]{
-                "Choose a plane", "Plane 1", "Plane 2"
-        };
-        final List<String> planesList = new ArrayList<>(Arrays.asList(planes));
-
-        Spinner dept_loc_spinner = (Spinner) findViewById(R.id.choose_dept_airport_spinner);
-        String[] dept_locs = new String[] {
-                "Departure location", "ATL", "SEA", "MIA"
-        };
-        final List<String> deptList = new ArrayList<>(Arrays.asList(dept_locs));
-
-        Spinner arr_loc_spinner = (Spinner) findViewById(R.id.choose_arr_airport_spinner);
-        String[] arr_locs = new String[] {
-                "Arrical location", "ATL", "SEA", "MIA"
-        };
-        final List<String> arrList = new ArrayList<>(Arrays.asList(arr_locs));
-
-        // Initializing an ArrayAdapter
-        final ArrayAdapter<String> planeArrayAdapter = new ArrayAdapterWithHint<String>(
-                this, android.R.layout.simple_spinner_item, planesList);
-        final ArrayAdapter<String> deptArrayAdapter = new ArrayAdapterWithHint<String>(
-                this, android.R.layout.simple_spinner_item, deptList);
-        final ArrayAdapter<String> arrArrayAdapter = new ArrayAdapterWithHint<String>(
-                this, android.R.layout.simple_spinner_item, arrList);
-        plane_spinner.setAdapter(planeArrayAdapter);
-        dept_loc_spinner.setAdapter(deptArrayAdapter);
-        arr_loc_spinner.setAdapter(arrArrayAdapter);
     }
 
     protected void showDate(View v) {
@@ -145,7 +153,12 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         }
     }
 
-    public void submit(View v) {
+    protected void submit(View v) {
+        String plane = plane_spinner.getSelectedItem().toString();
+        String dept_loc = dept_loc_spinner.getSelectedItem().toString();
+        String arr_loc = arr_loc_spinner.getSelectedItem().toString();
+        String date = dateField.getText().toString();
+        String time = timeField.getText().toString();
         Intent editFlightIntent = new Intent(this, ActivityEditFlight.class);
         this.startActivity(editFlightIntent);
     }

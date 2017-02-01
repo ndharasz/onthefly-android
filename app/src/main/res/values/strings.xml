@@ -38,4 +38,6 @@
     <string name="reset_password">Password Reset</string>
     <string name="reset_password_instructions">Enter your email below to reset your password.</string>
     <string name="reset_password_button">Reset my password</string>
+    <string name="your_email_hint">your@email.com</string>
+    <string name="another_email">Send to a different email address:</string>
 </resources>

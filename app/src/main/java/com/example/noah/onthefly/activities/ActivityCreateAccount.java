@@ -33,6 +33,11 @@ public class ActivityCreateAccount extends AppCompatActivity {
     }
 
     protected void createAccount(View v) {
+        String firstName = firstName_input.getText().toString();
+        String lastName = lastName_input.getText().toString();
+        String email = email_input.getText().toString();
+        String password = pass_input.getText().toString();
+        String conf_pass = confirmPass_input.getText().toString();
         Intent loginIntent = new Intent(this, ActivityLogin.class);
         this.startActivity(loginIntent);
     }

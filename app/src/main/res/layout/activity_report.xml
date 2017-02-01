@@ -32,7 +32,7 @@
             android:layout_alignParentLeft="true">
 
             <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/send_to_reg"
+                android:id="@+id/send_to_reg_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/colorAccent"/>
@@ -47,6 +47,27 @@
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
+
+        <android.support.v7.widget.AppCompatCheckBox
+            android:id="@+id/send_to_other_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/colorAccent"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/another_email"
+            android:textColor="@color/colorAccent"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/user_input_email"
@@ -61,17 +82,17 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="32sp"
             android:orientation="horizontal"
             android:layout_alignParentLeft="true">
 
             <android.support.v7.widget.AppCompatCheckBox
-                android:id="@+id/save_report_local"
+                android:id="@+id/save_report_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:buttonTint="@color/colorAccent"/>

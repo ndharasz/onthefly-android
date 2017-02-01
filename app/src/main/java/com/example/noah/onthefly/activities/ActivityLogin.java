@@ -38,19 +38,7 @@ public class ActivityLogin extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         inputSetup();
         buttonSetup();
-
-        mAuth = FirebaseAuth.getInstance();
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is logged in
-                } else {
-                    // Display error message?
-                }
-            }
-        };
+        firebaseSetup();
     }
 
     @Override
@@ -78,6 +66,21 @@ public class ActivityLogin extends AppCompatActivity {
         login = (Button) findViewById(R.id.log_in_button);
         forgotPass = (Button) findViewById(R.id.forgot_password_button);
         rememberMe = (CheckBox) findViewById(R.id.remember_me_checkbox);
+    }
+
+    protected void firebaseSetup() {
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is logged in
+                } else {
+                    // Display error message?
+                }
+            }
+        };
     }
 
     protected void login(View loginButton) {
