@@ -11,7 +11,7 @@
         android:layout_weight="4"
         android:layout_height="match_parent"
         android:textColor="@color/colorAccent"
-        android:textSize="@dimen/title2_size"
+        android:textSize="@dimen/title3_size"
         android:gravity="center_vertical"/>
 
     <TextView
@@ -21,7 +21,7 @@
         android:layout_height="match_parent"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/title2_size"
-        android:textAlignment="center"/>
+        android:gravity="center_vertical"/>
 
     <TextView
         android:id="@+id/upcoming_flight_arrival"
@@ -30,7 +30,7 @@
         android:layout_height="match_parent"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/title2_size"
-        android:textAlignment="center"/>
+        android:gravity="center_vertical"/>
 
     <Button
         android:id="@+id/upcoming_flight_edit"

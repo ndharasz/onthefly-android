@@ -1,11 +1,17 @@
 package com.example.noah.onthefly.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.noah.onthefly.R;
+
+import java.util.zip.Inflater;
 
 public class ActivityFlightList extends AppCompatActivity {
 
@@ -13,6 +19,17 @@ public class ActivityFlightList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flight_list);
+//      for future dynamic adding usage:
+//        LayoutInflater item = (LayoutInflater)
+//                this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//
+//        View v = item.inflate(R.layout.item_flight, (ViewGroup)findViewById(R.id.upcoming_flight_list));
+//        ((Button)v.findViewById(R.id.upcoming_flight_edit)).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(ActivityFlightList.this, ActivityEditFlight.class));
+//            }
+//        });
     }
 
     protected void logout(View v) {
