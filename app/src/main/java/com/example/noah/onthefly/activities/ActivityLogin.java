@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -84,22 +85,19 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
     protected void login(View loginButton) {
-        Log.d(TAG, "Task started");
         mAuth.signInWithEmailAndPassword(usernameField.getText().toString(),
                     passwordField.getText().toString())
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                Log.d(TAG, "Login task complete");
                 if (task.isSuccessful()) {
-                    Log.d(TAG, "sucess");
+                    Log.d(TAG, "Login sucess");
                     Intent flightListIntent = new Intent(ActivityLogin.this,
                                 ActivityFlightList.class);
                     ActivityLogin.this.startActivity(flightListIntent);
                 } else {
-                    Log.d(TAG, "failure");
-                    Log.d(TAG, task.getException().toString());
-                    Log.d(TAG, task.getResult().toString());
+                    Log.d(TAG, "Login failure.");
+                    Toast.makeText(ActivityLogin.this, "Username or password was invalid.", Toast.LENGTH_SHORT).show();
                     // print error message?
                 }
             }
