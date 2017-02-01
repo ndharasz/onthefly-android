@@ -85,18 +85,21 @@ public class ActivityLogin extends AppCompatActivity {
 
     protected void login(View loginButton) {
         Log.d(TAG, "Task started");
-        mAuth.createUserWithEmailAndPassword(usernameField.getText().toString(),
+        mAuth.signInWithEmailAndPassword(usernameField.getText().toString(),
                     passwordField.getText().toString())
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 Log.d(TAG, "Login task complete");
                 if (task.isSuccessful()) {
+                    Log.d(TAG, "sucess");
                     Intent flightListIntent = new Intent(ActivityLogin.this,
                                 ActivityFlightList.class);
                     ActivityLogin.this.startActivity(flightListIntent);
                 } else {
-                    Log.d(TAG, "Login failed.");
+                    Log.d(TAG, "failure");
+                    Log.d(TAG, task.getException().toString());
+                    Log.d(TAG, task.getResult().toString());
                     // print error message?
                 }
             }
