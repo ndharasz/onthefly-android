@@ -45,7 +45,7 @@ public class ActivityCreateAccount extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    updateUserInformation();
+                    Log.d(TAG, "User is logged in: " + user.getEmail());
                 }
             }
         };
@@ -71,12 +71,6 @@ public class ActivityCreateAccount extends AppCompatActivity {
         email_input = (EditText) findViewById(R.id.email_input);
         pass_input = (EditText) findViewById(R.id.password_input);
         confirmPass_input = (EditText) findViewById(R.id.confirm_password_input);
-    }
-
-    protected void updateUserInformation() {
-        String firstName = firstName_input.getText().toString();
-        String lastName = lastName_input.getText().toString();
-        // TODO: send this information to firebase.
     }
 
     protected void createAccount(View v) {
