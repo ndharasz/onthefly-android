@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
 
@@ -77,32 +78,12 @@ public class ActivityCreateAccount extends AppCompatActivity {
                 lastName_input.getCurrentTextColor() == RED ||
                 email_input.getCurrentTextColor() == RED ||
                 firstName.matches("") || lastName.matches("") || email.matches("") || password.matches("") || conf_pass.matches("")) {
-                    android.app.AlertDialog notValid = new android.app.AlertDialog.Builder(ActivityCreateAccount.this, android.app.AlertDialog.THEME_DEVICE_DEFAULT_LIGHT).create();
-                    notValid.setTitle("Form Error");
-                    notValid.setMessage("One or more of your fields were empty or invalid. Invalid fields are marked in red.");
-                    notValid.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    dialog.dismiss();
-                                }
-                            });
-                    notValid.show();
+            Toast.makeText(this, "One or more of your fields were empty or invalid.", Toast.LENGTH_SHORT).show();
 
         } else if (!(password.equals(conf_pass))) {
             pass_input.setTextColor(RED);
             confirmPass_input.setTextColor(RED);
-            android.app.AlertDialog notValid = new android.app.AlertDialog.Builder(ActivityCreateAccount.this, android.app.AlertDialog.THEME_DEVICE_DEFAULT_LIGHT).create();
-            notValid.setTitle("Password Error");
-            notValid.setMessage("Your passwords do not match.");
-            notValid.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "OK",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            dialog.dismiss();
-                        }
-                    });
-            notValid.show();
+            Toast.makeText(this, "Your passwords did not match.", Toast.LENGTH_SHORT).show();
 
         } else {
             pass_input.setTextColor(BLACK);
@@ -121,19 +102,9 @@ public class ActivityCreateAccount extends AppCompatActivity {
 
                     Pattern pattern = Pattern.compile("[~#@*+%{}<>\\[\\]|\"\\_^1234567890;!$^&*(]");
                     Matcher matcher = pattern.matcher(text.getText().toString());
-                    if (matcher.find() || text.getText().toString().equals("")) {
+                    if (matcher.find() && !text.getText().toString().equals("")) {
                         text.setTextColor(RED);
-                        android.app.AlertDialog notValid = new android.app.AlertDialog.Builder(ActivityCreateAccount.this, android.app.AlertDialog.THEME_DEVICE_DEFAULT_LIGHT).create();
-                        notValid.setTitle("Name Input Error");
-                        notValid.setMessage("The first and last name fields can contain only alphabetical characters.");
-                        notValid.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        dialog.dismiss();
-                                    }
-                                });
-                        notValid.show();
+                        Toast.makeText(ActivityCreateAccount.this, "Names can contain only alphabetical characters.", Toast.LENGTH_SHORT).show();
                     } else {
                         text.setTextColor(BLACK);
                     }
@@ -154,26 +125,14 @@ public class ActivityCreateAccount extends AppCompatActivity {
 
                 if(!hasFocus) {
 
-                    boolean isValid = false;
-
                     String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
                     CharSequence inputStr = text.getText().toString();
 
                     Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
                     Matcher matcher = pattern.matcher(inputStr);
-                    if (!matcher.matches()) {
+                    if (!matcher.matches() && !text.getText().toString().matches("")) {
                         text.setTextColor(RED);
-                        android.app.AlertDialog notValid = new android.app.AlertDialog.Builder(ActivityCreateAccount.this, android.app.AlertDialog.THEME_DEVICE_DEFAULT_LIGHT).create();
-                        notValid.setTitle("Email Error");
-                        notValid.setMessage("You have entered an invalid email address.");
-                        notValid.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "OK",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        dialog.dismiss();
-                                    }
-                                });
-                        notValid.show();
+                        Toast.makeText(ActivityCreateAccount.this, "You have entered an invalid email address.", Toast.LENGTH_SHORT).show();
                     } else {
                         text.setTextColor(BLACK);
                     }
@@ -195,7 +154,8 @@ public class ActivityCreateAccount extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus) {
 
-                    if (!(pass.getText().toString().equals(confirm.getText().toString()))) {
+                    if (!(pass.getText().toString().equals(confirm.getText().toString())) && !pass.getText().toString().matches("")
+                            && !confirm.getText().toString().matches("")) {
                         pass.setTextColor(RED);
                         confirm.setTextColor(RED);
 
