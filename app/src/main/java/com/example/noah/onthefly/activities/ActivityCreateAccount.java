@@ -2,11 +2,14 @@ package com.example.noah.onthefly.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -16,6 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
+import com.example.noah.onthefly.models.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.sql.ResultSetMetaData;
 import java.util.regex.Matcher;
@@ -33,6 +44,10 @@ public class ActivityCreateAccount extends AppCompatActivity {
     EditText confirmPass_input;
     Button create;
 
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
+    private final String TAG = "ActivityCreateAccount";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +55,35 @@ public class ActivityCreateAccount extends AppCompatActivity {
         setContentView(R.layout.activity_create_account);
 
         inputSetup();
-
+      
         checkNames(firstName_input);
         checkNames(lastName_input);
         checkEMail(email_input);
         checkPassMatch(pass_input, confirmPass_input);
+        mAuth = FirebaseAuth.getInstance();
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    Log.d(TAG, "User is logged in: " + user.getEmail());
+                }
+            }
+        };
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthStateListener != null) {
+            mAuth.removeAuthStateListener(mAuthStateListener);
+        }
     }
 
 
@@ -66,12 +104,11 @@ public class ActivityCreateAccount extends AppCompatActivity {
     }
 
     protected void createAccount(View v) {
-        String firstName = firstName_input.getText().toString();
-        String lastName = lastName_input.getText().toString();
-        String email = email_input.getText().toString();
+        final String firstName = firstName_input.getText().toString();
+        final String lastName = lastName_input.getText().toString();
+        final String email = email_input.getText().toString();
         String password = pass_input.getText().toString();
         String conf_pass = confirmPass_input.getText().toString();
-
 
 
         if (firstName_input.getCurrentTextColor() == RED ||
@@ -169,5 +206,46 @@ public class ActivityCreateAccount extends AppCompatActivity {
                 }
             }
         });
+        if (!validPassword(password)) {
+            Toast.makeText(ActivityCreateAccount.this,
+                    "Password must have at least 8 characters.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (!password.equals(conf_pass)) {
+            Toast.makeText(ActivityCreateAccount.this,
+                    "The passwords do not match.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(ActivityCreateAccount.this, "Invalid email.",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Save user data after authentication is proven
+                            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference dRef = database.getReference("users");
+                            dRef.child(uid).setValue(new User(firstName, lastName, email));
+
+                            // Redirect to the login screen
+                            Toast.makeText(ActivityCreateAccount.this, "Account creation successful",
+                                    Toast.LENGTH_SHORT).show();
+                            Intent loginIntent = new Intent(ActivityCreateAccount.this,
+                                    ActivityLogin.class);
+                            ActivityCreateAccount.this.startActivity(loginIntent);
+                        }
+                    }
+                });
+    }
+
+    protected boolean validPassword(String password) {
+        return (password.length() >= 8);
     }
 }
