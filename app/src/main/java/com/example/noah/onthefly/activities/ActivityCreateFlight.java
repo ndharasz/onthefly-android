@@ -2,6 +2,7 @@ package com.example.noah.onthefly.activities;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -20,9 +21,12 @@ import com.example.noah.onthefly.fragments.FragmentTimePicker;
 import com.example.noah.onthefly.interfaces.CallsDatePicker;
 import com.example.noah.onthefly.interfaces.CallsTimePicker;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ActivityCreateFlight extends AppCompatActivity implements CallsDatePicker, CallsTimePicker {
 
@@ -55,13 +59,13 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         arr_loc_spinner = (Spinner) findViewById(R.id.choose_arr_airport_spinner);
 
         final List<String> planesList = new ArrayList<>(Arrays.asList(new String[]{
-                "Choose a plane", "Plane 1", "Plane 2"
+                "Choose A Plane", "Plane 1", "Plane 2"
         }));
         final List<String> deptList = new ArrayList<>(Arrays.asList(new String[] {
-                "Departure location", "ATL", "SEA", "MIA"
+                "Departure Location", "ATL", "SEA", "MIA"
         }));
         final List<String> arrList = new ArrayList<>(Arrays.asList(new String[] {
-                "Arrival location", "ATL", "SEA", "MIA"
+                "Arrival Location", "ATL", "SEA", "MIA"
         }));
 
         // Initializing an ArrayAdapter
@@ -159,8 +163,65 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         String arr_loc = arr_loc_spinner.getSelectedItem().toString();
         String date = dateField.getText().toString();
         String time = timeField.getText().toString();
-        Intent editFlightIntent = new Intent(this, ActivityEditFlight.class);
-        this.startActivity(editFlightIntent);
+
+
+        if (dept_loc.matches("Departure Location") || arr_loc.matches("Arrival Location") || date.matches("") || time.matches("") || plane.matches("Choose A Plane")) {
+            android.app.AlertDialog notValid = new android.app.AlertDialog.Builder(ActivityCreateFlight.this, android.app.AlertDialog.THEME_DEVICE_DEFAULT_LIGHT).create();
+            notValid.setTitle("Flight Creation Error");
+            notValid.setMessage("One or more of your fields were empty or invalid.");
+            notValid.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            dialog.dismiss();
+                        }
+                    });
+            notValid.show();
+            return;
+        }
+
+
+        if(!dateBefore()) {
+            Intent editFlightIntent = new Intent(this, ActivityEditFlight.class);
+            this.startActivity(editFlightIntent);
+        }
+
+    }
+
+    protected boolean dateBefore() throws IllegalArgumentException {
+        String date = dateField.getText().toString();
+        String time = timeField.getText().toString();
+        SimpleDateFormat date12Format = new SimpleDateFormat("hh:mm a");
+        SimpleDateFormat date24Format = new SimpleDateFormat("HH:mm");
+
+        try {
+            String update = date24Format.format(date12Format.parse(time));
+            date = date + " " + update;
+            Date today = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy hh:mm");
+            Date parsedDate = formatter.parse(date);
+
+            if (parsedDate.before(today)) {
+                throw new IllegalArgumentException();
+            }
+
+        } catch (ParseException e) {
+            //error in parse
+
+        } catch (IllegalArgumentException e) {
+            android.app.AlertDialog notValid = new android.app.AlertDialog.Builder(ActivityCreateFlight.this, android.app.AlertDialog.THEME_DEVICE_DEFAULT_LIGHT).create();
+            notValid.setTitle("Input Error");
+            notValid.setMessage("You have entered a flight date before the current date. On the Fly complies with FAA regulations on Weight and Balance Report creation prior to flight.");
+            notValid.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "Re-enter Date",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            notValid.show();
+            return true;
+        }
+        return false;
     }
 
 
