@@ -11,11 +11,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
+import com.example.noah.onthefly.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class ActivityCreateAccount extends AppCompatActivity {
     EditText firstName_input;
@@ -77,9 +80,9 @@ public class ActivityCreateAccount extends AppCompatActivity {
     }
 
     protected void createAccount(View v) {
-        String firstName = firstName_input.getText().toString();
-        String lastName = lastName_input.getText().toString();
-        String email = email_input.getText().toString();
+        final String firstName = firstName_input.getText().toString();
+        final String lastName = lastName_input.getText().toString();
+        final String email = email_input.getText().toString();
         String password = pass_input.getText().toString();
         String conf_pass = confirmPass_input.getText().toString();
 
@@ -105,6 +108,13 @@ public class ActivityCreateAccount extends AppCompatActivity {
                             Toast.makeText(ActivityCreateAccount.this, "Invalid email.",
                                     Toast.LENGTH_SHORT).show();
                         } else {
+                            // Save user data after authentication is proven
+                            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference dRef = database.getReference("users");
+                            dRef.child(uid).setValue(new User(firstName, lastName, email));
+
+                            // Redirect to the login screen
                             Toast.makeText(ActivityCreateAccount.this, "Account creation successful",
                                     Toast.LENGTH_SHORT).show();
                             Intent loginIntent = new Intent(ActivityCreateAccount.this,
