@@ -14,12 +14,17 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.fragments.FragmentDatePicker;
 import com.example.noah.onthefly.fragments.FragmentTimePicker;
 import com.example.noah.onthefly.interfaces.CallsDatePicker;
 import com.example.noah.onthefly.interfaces.CallsTimePicker;
+import com.example.noah.onthefly.models.Flight;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -38,6 +43,9 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
     private DialogFragment datePickerFragment;
     private DialogFragment timePickerFragment;
 
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +53,8 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
 
         dateTimeSetup();
         spinnerSetup();
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     protected  void dateTimeSetup() {
@@ -114,10 +124,6 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         }
     }
 
-    protected void showDate(View v) {
-        showDatePicker(v);
-    }
-
     public void showDatePicker(View v) {
         if (datePickerFragment == null) {
             datePickerFragment = new FragmentDatePicker();
@@ -134,10 +140,6 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
             datePickerFragment = null;
             Log.d("Tag", "DatePicker dismissed");
         }
-    }
-
-    protected void showTime(View v) {
-        showTimePicker(v);
     }
 
     public void showTimePicker(View v) {
@@ -165,23 +167,13 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         String time = timeField.getText().toString();
 
 
-        if (dept_loc.matches("Departure Location") || arr_loc.matches("Arrival Location") || date.matches("") || time.matches("") || plane.matches("Choose A Plane")) {
-            android.app.AlertDialog notValid = new android.app.AlertDialog.Builder(ActivityCreateFlight.this, android.app.AlertDialog.THEME_DEVICE_DEFAULT_LIGHT).create();
-            notValid.setTitle("Flight Creation Error");
-            notValid.setMessage("One or more of your fields were empty or invalid.");
-            notValid.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "OK",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            dialog.dismiss();
-                        }
-                    });
-            notValid.show();
-            return;
-        }
-
-
-        if(!dateBefore()) {
+        if (dept_loc.matches("Departure Location") || arr_loc.matches("Arrival Location") ||
+                date.matches("") || time.matches("") || plane.matches("Choose A Plane")) {
+            Toast.makeText(this, "Please fill empty fields.", Toast.LENGTH_LONG).show();
+        } else if(!dateBefore()) {
+            Flight newFlight = new Flight(plane, dept_loc, arr_loc, date, time,
+                    mAuth.getCurrentUser().getUid());
+            mDatabase.child("flights").push().setValue(newFlight);
             Intent editFlightIntent = new Intent(this, ActivityEditFlight.class);
             this.startActivity(editFlightIntent);
         }
@@ -200,29 +192,10 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
             Date today = new Date();
             SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy hh:mm");
             Date parsedDate = formatter.parse(date);
-
-            if (parsedDate.before(today)) {
-                throw new IllegalArgumentException();
-            }
-
-        } catch (ParseException e) {
-            //error in parse
-
-        } catch (IllegalArgumentException e) {
-            android.app.AlertDialog notValid = new android.app.AlertDialog.Builder(ActivityCreateFlight.this, android.app.AlertDialog.THEME_DEVICE_DEFAULT_LIGHT).create();
-            notValid.setTitle("Input Error");
-            notValid.setMessage("You have entered a flight date before the current date. On the Fly complies with FAA regulations on Weight and Balance Report creation prior to flight.");
-            notValid.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "Re-enter Date",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-            notValid.show();
-            return true;
+            return parsedDate.before(today);
+        } catch (Exception e) {
+            //this should not happen since we format the date ourselves
         }
         return false;
     }
-
-
 }

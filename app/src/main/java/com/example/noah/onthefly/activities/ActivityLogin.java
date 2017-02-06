@@ -105,29 +105,33 @@ public class ActivityLogin extends AppCompatActivity {
         Log.d(TAG, "Task started");
         final String username = usernameField.getText().toString();
         final String pass = passwordField.getText().toString();
-        mAuth.signInWithEmailAndPassword(username, pass)
+        if(username.equals("") || pass.equals("")){
+            Toast.makeText(ActivityLogin.this,
+                    "Username or password was invalid.", Toast.LENGTH_LONG).show();
+        } else {
+            mAuth.signInWithEmailAndPassword(username, pass)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Log.d(TAG, "sucess");
-                    if(rememberMe.isChecked()) {
-                        loginPrefsEditor.putBoolean("saveLogin", true);
-                        loginPrefsEditor.putString("username", username);
-                        loginPrefsEditor.putString("password", pass);
-                        loginPrefsEditor.commit();
-                    }
-                    Intent flightListIntent = new Intent(ActivityLogin.this,
-                                ActivityFlightList.class);
-                    ActivityLogin.this.startActivity(flightListIntent);
-                } else {
-                    Log.d(TAG, "failure");
-                    Toast.makeText(ActivityLogin.this, "Username or password was invalid.", Toast.LENGTH_SHORT).show();
-                    // print error message?
-                }
-            }
-        });
-
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Log.d(TAG, "sucess");
+                                if (rememberMe.isChecked()) {
+                                    loginPrefsEditor.putBoolean("saveLogin", true);
+                                    loginPrefsEditor.putString("username", username);
+                                    loginPrefsEditor.putString("password", pass);
+                                    loginPrefsEditor.commit();
+                                }
+                                Intent flightListIntent = new Intent(ActivityLogin.this,
+                                        ActivityFlightList.class);
+                                ActivityLogin.this.startActivity(flightListIntent);
+                            } else {
+                                Log.d(TAG, "failure");
+                                Toast.makeText(ActivityLogin.this,
+                                        "Username or password invalid.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
     }
 
     protected void forgotPassword(View v) {
