@@ -61,7 +61,7 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:hint="@string/flight_date"
             android:editable="false"
-            android:onClick="showDate"/>
+            android:onClick="showDatePicker"/>
 
         <EditText
             android:id="@+id/flight_time"
@@ -72,7 +72,7 @@
             android:padding="@dimen/input_padding"
             android:hint="@string/dept_time"
             android:editable="false"
-            android:onClick="showTime"/>
+            android:onClick="showTimePicker"/>
 
     </LinearLayout>
 

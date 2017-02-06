@@ -34,8 +34,9 @@ public class FragmentDatePicker extends DialogFragment implements DatePickerDial
 
     @Override
     public void onDateSet(DatePicker view, int y, int m, int d) {
-        String date = Integer.toString(m + 1) + "-" + Integer.toString(d)
-                + "-" + Integer.toString(y);
+        String date = String.format("%02d", m + 1) + "-"
+                + String.format("%02d", d) + "-"
+                + String.format("%04d",y);
         Log.d("Tag", "onDateSet reached");
         ((CallsDatePicker) getActivity()).hideDatePicker(date);
     }
