@@ -116,7 +116,7 @@ public class ActivityCreateAccount extends AppCompatActivity {
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus) {
                     String email = email_input.getText().toString();
-                    if (Mailer.isEmailValid(email)) {
+                    if (!Mailer.isEmailValid(email)) {
                         email_input.setTextColor(RED);
                         Toast.makeText(ActivityCreateAccount.this, "You have entered an invalid email address.", Toast.LENGTH_SHORT).show();
                     } else {
