@@ -30,25 +30,40 @@
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:background="@color/colorAccent"/>
 
-    <Spinner
-        android:id="@+id/choose_dept_airport_spinner"
+    <AutoCompleteTextView
+        android:id="@+id/depPick"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/input_padding"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:background="@color/colorAccent"/>
+        android:paddingBottom="13dp"
+        android:ems="10"
+        android:inputType="textNoSuggestions"
+        android:paddingLeft="14dp"
+        android:paddingTop="13dp"
+        android:background="@color/colorAccent"
+        android:layout_marginTop="10dp"
+        android:hint="Departure Airport">
+        <requestFocus />
+    </AutoCompleteTextView>
 
-    <Spinner
-        android:id="@+id/choose_arr_airport_spinner"
+    <AutoCompleteTextView
+        android:id="@+id/arrPick"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/input_padding"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:background="@color/colorAccent"/>
+        android:ems="10"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp"
+        android:paddingLeft="14dp"
+        android:background="@color/colorAccent"
+        android:inputType="textNoSuggestions"
+        android:layout_marginTop="10dp"
+        android:hint="Arrival Airport">
+        <requestFocus />
+    </AutoCompleteTextView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="20dp"
         android:orientation="horizontal">
 
         <EditText

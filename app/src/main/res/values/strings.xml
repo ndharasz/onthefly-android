@@ -12,6 +12,7 @@
     <string name="email">youremailaddress@email.com</string>
     <string name="saveLocal">Save Report Locally</string>
     <string name="send">Send</string>
+    <string name="clear">Clear</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="create_flight_title">Create Flight</string>
     <string name="flight_date">Flight Date</string>

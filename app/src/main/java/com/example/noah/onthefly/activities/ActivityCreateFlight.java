@@ -27,21 +27,43 @@ import java.util.Arrays;
 import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import android.widget.AutoCompleteTextView;
 
 public class ActivityCreateFlight extends AppCompatActivity implements CallsDatePicker, CallsTimePicker {
 
     private Spinner plane_spinner;
-    private Spinner dept_loc_spinner;
-    private Spinner arr_loc_spinner;
     private EditText dateField;
     private EditText timeField;
     private DialogFragment datePickerFragment;
     private DialogFragment timePickerFragment;
+    private AutoCompleteTextView departures;
+    private AutoCompleteTextView arrivals;
+    private String[] dept = {"Orlando, FL - MCO", "Atlanta, GA - ATL", "Los Angeles, CA - LAX"};
+    private String[] arr = {"Orlando, FL - MCO", "Atlanta, GA - ATL", "Los Angeles, CA - LAX"};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_flight);
+
+        departures = (AutoCompleteTextView)findViewById(R.id.depPick);
+        arrivals = (AutoCompleteTextView)findViewById(R.id.arrPick);
+
+        ArrayAdapter deptAdapter = new
+                ArrayAdapter(this,android.R.layout.simple_list_item_1,dept);
+
+        departures.setAdapter(deptAdapter);
+        departures.setThreshold(1);
+
+        ArrayAdapter arrAdapter = new
+                ArrayAdapter(this,android.R.layout.simple_list_item_1,arr);
+
+        arrivals.setAdapter(arrAdapter);
+        arrivals.setThreshold(1);
+
+
+
 
         dateTimeSetup();
         spinnerSetup();
@@ -55,30 +77,17 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
     protected void spinnerSetup() {
 
         plane_spinner = (Spinner) findViewById(R.id.choose_plane_spinner);
-        dept_loc_spinner = (Spinner) findViewById(R.id.choose_dept_airport_spinner);
-        arr_loc_spinner = (Spinner) findViewById(R.id.choose_arr_airport_spinner);
 
         final List<String> planesList = new ArrayList<>(Arrays.asList(new String[]{
                 "Choose A Plane", "Plane 1", "Plane 2"
-        }));
-        final List<String> deptList = new ArrayList<>(Arrays.asList(new String[] {
-                "Departure Location", "ATL", "SEA", "MIA"
-        }));
-        final List<String> arrList = new ArrayList<>(Arrays.asList(new String[] {
-                "Arrival Location", "ATL", "SEA", "MIA"
         }));
 
         // Initializing an ArrayAdapter
         final ArrayAdapter<String> planeArrayAdapter = new ArrayAdapterWithHint<String>(
                 this, android.R.layout.simple_spinner_item, planesList);
-        final ArrayAdapter<String> deptArrayAdapter = new ArrayAdapterWithHint<String>(
-                this, android.R.layout.simple_spinner_item, deptList);
-        final ArrayAdapter<String> arrArrayAdapter = new ArrayAdapterWithHint<String>(
-                this, android.R.layout.simple_spinner_item, arrList);
 
         plane_spinner.setAdapter(planeArrayAdapter);
-        dept_loc_spinner.setAdapter(deptArrayAdapter);
-        arr_loc_spinner.setAdapter(arrArrayAdapter);
+
     }
 
     private class ArrayAdapterWithHint<T> extends ArrayAdapter {
@@ -147,6 +156,8 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         }
     }
 
+
+
     public void hideTimePicker(String time) {
         if (timePickerFragment != null) {
             if (time.compareTo("") != 0) {
@@ -157,15 +168,22 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         }
     }
 
+    public void clearDepature(View v) {
+        departures.setText("");
+    }
+
+    public void clearArrival(View v) {
+        arrivals.setText("");
+    }
+
     protected void submit(View v) {
         String plane = plane_spinner.getSelectedItem().toString();
-        String dept_loc = dept_loc_spinner.getSelectedItem().toString();
-        String arr_loc = arr_loc_spinner.getSelectedItem().toString();
         String date = dateField.getText().toString();
         String time = timeField.getText().toString();
+        String departure = departures.getText().toString();
+        String arrival = arrivals.getText().toString();
 
-
-        if (dept_loc.matches("Departure Location") || arr_loc.matches("Arrival Location") || date.matches("") || time.matches("") || plane.matches("Choose A Plane")) {
+        if (arrival.matches("") || departure.matches("") || date.matches("") || time.matches("") || plane.matches("Choose A Plane")) {
             android.app.AlertDialog notValid = new android.app.AlertDialog.Builder(ActivityCreateFlight.this, android.app.AlertDialog.THEME_DEVICE_DEFAULT_LIGHT).create();
             notValid.setTitle("Flight Creation Error");
             notValid.setMessage("One or more of your fields were empty or invalid.");
