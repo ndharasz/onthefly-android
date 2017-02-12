@@ -20,6 +20,7 @@ import com.example.noah.onthefly.fragments.FragmentDatePicker;
 import com.example.noah.onthefly.fragments.FragmentTimePicker;
 import com.example.noah.onthefly.interfaces.CallsDatePicker;
 import com.example.noah.onthefly.interfaces.CallsTimePicker;
+import com.example.noah.onthefly.models.Plane;
 import com.example.noah.onthefly.models.Flight;
 import com.example.noah.onthefly.util.Airports;
 import com.example.noah.onthefly.util.CustomAdapter;
@@ -92,10 +93,9 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
     protected void spinnerSetup() {
 
         plane_spinner = (Spinner) findViewById(R.id.choose_plane_spinner);
-
-        final List<String> planesList = new ArrayList<>(Arrays.asList(new String[]{
-                "Choose A Plane", "Plane 1", "Plane 2"
-        }));
+      
+        final List<String> planesList = Plane.readAllPlaneNames(this);
+        planesList.add(0, "Choose plane");
 
         // Initializing an ArrayAdapter
         final ArrayAdapter<String> planeArrayAdapter = new ArrayAdapterWithHint<String>(
