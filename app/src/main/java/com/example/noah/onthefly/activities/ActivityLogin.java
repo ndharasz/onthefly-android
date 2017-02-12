@@ -28,6 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.File;
 import java.io.FileOutputStream;
 
 public class ActivityLogin extends AppCompatActivity {
@@ -78,7 +79,6 @@ public class ActivityLogin extends AppCompatActivity {
                         // Add this plane object to the persistent data
                         Plane plane = dataSnapshot.getValue(Plane.class);
                         plane.writeToFile(ActivityLogin.this);
-                        Log.d(TAG, "Plane was added to preferences");
                     }
 
                     @Override
@@ -90,6 +90,7 @@ public class ActivityLogin extends AppCompatActivity {
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
                         // Remove this plane object from persistent data
                         Plane plane = dataSnapshot.getValue(Plane.class);
+                        plane.deleteFile(ActivityLogin.this);
                         Log.d(TAG, "Plane was removed from database");
                     }
 

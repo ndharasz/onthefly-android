@@ -20,6 +20,7 @@ import java.util.Map;
  */
 
 public class Plane implements Comparable<Plane>, Serializable {
+    static final long serialVersionUID = -5203400849366852220L;
     private static String TAG = "Plane";
 
     private String name;
@@ -126,6 +127,14 @@ public class Plane implements Comparable<Plane>, Serializable {
     }
 
     public void writeToFile(Context context) {
+        File dir = context.getFilesDir();
+        File[] files = dir.listFiles();
+        for (File f : files) {
+            if (f.getName().equals(name)) {
+                Log.d(TAG, "Plane already exists locally");
+                return;
+            }
+        }
         ObjectOutputStream objectOut = null;
         try {
             FileOutputStream fileOutputStream = context.openFileOutput(this.getName(), Activity.MODE_PRIVATE);
@@ -143,6 +152,14 @@ public class Plane implements Comparable<Plane>, Serializable {
                     Log.d(TAG, "Could not close output stream");
                 }
             }
+        }
+    }
+
+    public void deleteFile(Context context) {
+        try {
+            context.deleteFile(name);
+        } catch (Exception e) {
+            Log.d(TAG, "Plane did not exist");
         }
     }
 
