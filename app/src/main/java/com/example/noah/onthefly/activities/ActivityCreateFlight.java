@@ -2,6 +2,7 @@ package com.example.noah.onthefly.activities;
 
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.fragments.FragmentDatePicker;
@@ -20,10 +22,17 @@ import com.example.noah.onthefly.fragments.FragmentTimePicker;
 import com.example.noah.onthefly.interfaces.CallsDatePicker;
 import com.example.noah.onthefly.interfaces.CallsTimePicker;
 import com.example.noah.onthefly.models.Plane;
+import com.example.noah.onthefly.models.Flight;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ActivityCreateFlight extends AppCompatActivity implements CallsDatePicker, CallsTimePicker {
 
@@ -35,6 +44,9 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
     private DialogFragment datePickerFragment;
     private DialogFragment timePickerFragment;
 
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +54,8 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
 
         dateTimeSetup();
         spinnerSetup();
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     protected  void dateTimeSetup() {
@@ -54,15 +68,14 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         plane_spinner = (Spinner) findViewById(R.id.choose_plane_spinner);
         dept_loc_spinner = (Spinner) findViewById(R.id.choose_dept_airport_spinner);
         arr_loc_spinner = (Spinner) findViewById(R.id.choose_arr_airport_spinner);
-
+      
         final List<String> planesList = Plane.readAllPlaneNames(this);
         planesList.add(0, "Choose plane");
-
         final List<String> deptList = new ArrayList<>(Arrays.asList(new String[] {
-                "Departure location", "ATL", "SEA", "MIA"
+                "Departure Location", "ATL", "SEA", "MIA"
         }));
         final List<String> arrList = new ArrayList<>(Arrays.asList(new String[] {
-                "Arrival location", "ATL", "SEA", "MIA"
+                "Arrival Location", "ATL", "SEA", "MIA"
         }));
 
         // Initializing an ArrayAdapter
@@ -111,10 +124,6 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         }
     }
 
-    protected void showDate(View v) {
-        showDatePicker(v);
-    }
-
     public void showDatePicker(View v) {
         if (datePickerFragment == null) {
             datePickerFragment = new FragmentDatePicker();
@@ -131,10 +140,6 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
             datePickerFragment = null;
             Log.d("Tag", "DatePicker dismissed");
         }
-    }
-
-    protected void showTime(View v) {
-        showTimePicker(v);
     }
 
     public void showTimePicker(View v) {
@@ -160,9 +165,37 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         String arr_loc = arr_loc_spinner.getSelectedItem().toString();
         String date = dateField.getText().toString();
         String time = timeField.getText().toString();
-        Intent editFlightIntent = new Intent(this, ActivityEditFlight.class);
-        this.startActivity(editFlightIntent);
+
+
+        if (dept_loc.matches("Departure Location") || arr_loc.matches("Arrival Location") ||
+                date.matches("") || time.matches("") || plane.matches("Choose A Plane")) {
+            Toast.makeText(this, "Please fill empty fields.", Toast.LENGTH_LONG).show();
+        } else if(!dateBefore()) {
+            Flight newFlight = new Flight(plane, dept_loc, arr_loc, date, time,
+                    mAuth.getCurrentUser().getUid());
+            mDatabase.child("flights").push().setValue(newFlight);
+            Intent editFlightIntent = new Intent(this, ActivityEditFlight.class);
+            this.startActivity(editFlightIntent);
+        }
+
     }
 
+    protected boolean dateBefore() throws IllegalArgumentException {
+        String date = dateField.getText().toString();
+        String time = timeField.getText().toString();
+        SimpleDateFormat date12Format = new SimpleDateFormat("hh:mm a");
+        SimpleDateFormat date24Format = new SimpleDateFormat("HH:mm");
 
+        try {
+            String update = date24Format.format(date12Format.parse(time));
+            date = date + " " + update;
+            Date today = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy hh:mm");
+            Date parsedDate = formatter.parse(date);
+            return parsedDate.before(today);
+        } catch (Exception e) {
+            //this should not happen since we format the date ourselves
+        }
+        return false;
+    }
 }

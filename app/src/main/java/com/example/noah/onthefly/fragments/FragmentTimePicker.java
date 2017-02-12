@@ -28,7 +28,7 @@ public class FragmentTimePicker extends DialogFragment implements TimePickerDial
     @Override
     public void onTimeSet(TimePicker view, int h, int m) {
         int hour = ((h % 12) == 0)? 12:h%12;
-        String date = Integer.toString(hour) + ":" + Integer.toString(m) + " ";
+        String date = Integer.toString(hour) + ":" + String.format("%02d",m) + " ";
         if (h / 12 == 1)
             date += "pm";
         else

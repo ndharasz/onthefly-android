@@ -22,7 +22,7 @@
         android:hint="@string/username_hint"
         android:padding="@dimen/input_padding"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:singleLine="true"/>
+        android:inputType="textEmailAddress"/>
 
     <EditText
         android:id="@+id/password_input"
@@ -32,8 +32,7 @@
         android:hint="@string/password_hint"
         android:padding="@dimen/input_padding"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:inputType="textPassword"
-        android:singleLine="true"/>
+        android:inputType="textPassword"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -1,39 +1,54 @@
 package com.example.noah.onthefly.activities;
-
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
+import com.example.noah.onthefly.util.Mailer;
 
 public class ActivityReport extends AppCompatActivity {
+    CheckBox sendToSavedCheckbox;
+    CheckBox sendtoOtherCheckbox;
+    EditText otherEmailInput;
+    CheckBox saveReportCheckbox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
+
+        checkboxSetup();
+        otherEmailInput = (EditText)findViewById(R.id.user_input_email);
+    }
+
+    protected void checkboxSetup() {
+        sendToSavedCheckbox = (CheckBox)findViewById(R.id.send_to_reg_checkbox);
+        sendtoOtherCheckbox = (CheckBox)findViewById(R.id.send_to_other_checkbox);
+        saveReportCheckbox = (CheckBox)findViewById(R.id.save_report_checkbox);
     }
 
     public void send(View inputButton) {
-        AlertDialog alertDialog = new AlertDialog.Builder(ActivityReport.this,  AlertDialog.THEME_DEVICE_DEFAULT_LIGHT).create();
-        alertDialog.setTitle("Report Sent!");
-        alertDialog.getWindow().setLayout(600, 400);
-        EditText getNameField = (EditText) findViewById(R.id.user_input_email);
-        String castToString = (String) getNameField.getText().toString();
-
-        alertDialog.setMessage("Your weight and balance report has been sent to " + castToString);
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK. Return to Home.",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(ActivityReport.this, ActivityFlightList.class);
-                        startActivity(intent);
-                        dialog.dismiss();
-                    }
-                });
-        alertDialog.show();
+        String email = otherEmailInput.getText().toString();
+        if(sendtoOtherCheckbox.isChecked()) {
+            if (!email.equals("")) {
+                if(Mailer.isEmailValid(email)) {
+                    Toast.makeText(this,
+                            "Your weight and balance report has been sent to " + email + ".",
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "Email invalid.", Toast.LENGTH_LONG).show();
+                    return;
+                }
+            } else {
+                Toast.makeText(this, "Empty email field.", Toast.LENGTH_LONG).show();
+                return;
+            }
+        }
+        Intent intent = new Intent(ActivityReport.this, ActivityFlightList.class);
+        startActivity(intent);
     }
 }
