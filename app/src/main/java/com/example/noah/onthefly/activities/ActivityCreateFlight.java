@@ -66,6 +66,8 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         dept = Airports.getAirports();
         arr = Airports.getAirports();
 
+
+
         departures = (AutoCompleteTextView)findViewById(R.id.depPick);
         arrivals = (AutoCompleteTextView)findViewById(R.id.arrPick);
 
@@ -73,13 +75,13 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
                 CustomAdapter(this,android.R.layout.simple_list_item_1, new ArrayList<String>(Arrays.asList(dept)));
 
         departures.setAdapter(deptAdapter);
-        departures.setThreshold(1);
+        departures.setThreshold(2);
 
         CustomAdapter arrAdapter = new
                 CustomAdapter(this,android.R.layout.simple_list_item_1, new ArrayList<String>(Arrays.asList(arr)));
 
         arrivals.setAdapter(arrAdapter);
-        arrivals.setThreshold(1);
+        arrivals.setThreshold(2);
     }
 
     protected  void dateTimeSetup() {
