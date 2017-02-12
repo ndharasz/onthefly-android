@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
@@ -37,6 +39,7 @@ public class ActivityLogin extends AppCompatActivity {
     Button login;
     Button forgotPass;
     CheckBox rememberMe;
+    ProgressBar loginProgress;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -119,10 +122,11 @@ public class ActivityLogin extends AppCompatActivity {
         loginPrefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPrefs.edit();
         saveLogin = loginPrefs.getBoolean("saveLogin", false);
+        usernameField.setText(loginPrefs.getString("username", ""));
+        passwordField.setText(loginPrefs.getString("password", ""));
         if (saveLogin == true) {
-            usernameField.setText(loginPrefs.getString("username", ""));
-            passwordField.setText(loginPrefs.getString("password", ""));
             rememberMe.setChecked(true);
+            login(login);
         }
     }
 
@@ -155,6 +159,7 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
     protected void login(View loginButton) {
+        loginProgress = (ProgressBar) findViewById(R.id.login_progress);
         Log.d(TAG, "Task started");
         final String username = usernameField.getText().toString();
         final String pass = passwordField.getText().toString();
@@ -162,6 +167,9 @@ public class ActivityLogin extends AppCompatActivity {
             Toast.makeText(ActivityLogin.this,
                     "Username or password was invalid.", Toast.LENGTH_LONG).show();
         } else {
+            ViewGroup btnWrapper = (ViewGroup)loginButton.getParent();
+            login.setVisibility(View.INVISIBLE);
+            loginProgress.setVisibility(View.VISIBLE);
             mAuth.signInWithEmailAndPassword(username, pass)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
@@ -178,6 +186,8 @@ public class ActivityLogin extends AppCompatActivity {
                                         ActivityFlightList.class);
                                 ActivityLogin.this.startActivity(flightListIntent);
                             } else {
+                                login.setVisibility(View.INVISIBLE);
+                                loginProgress.setVisibility(View.VISIBLE);
                                 Log.d(TAG, "failure");
                                 Toast.makeText(ActivityLogin.this,
                                         "Username or password invalid.", Toast.LENGTH_SHORT).show();
