@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
+import com.example.noah.onthefly.models.Plane;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -26,6 +27,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.FileOutputStream;
 
 public class ActivityLogin extends AppCompatActivity {
     EditText usernameField;
@@ -63,15 +66,19 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
     protected void syncPlanes() {
-        new Thread(new Runnable() {
+        Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                Log.d(TAG, "Searching for new planes");
                 FirebaseDatabase db = FirebaseDatabase.getInstance();
                 DatabaseReference ref = db.getReference("planes");
                 ref.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         // Add this plane object to the persistent data
+                        Plane plane = dataSnapshot.getValue(Plane.class);
+                        plane.writeToFile(ActivityLogin.this);
+                        Log.d(TAG, "Plane was added to preferences");
                     }
 
                     @Override
@@ -82,6 +89,8 @@ public class ActivityLogin extends AppCompatActivity {
                     @Override
                     public void onChildRemoved(DataSnapshot dataSnapshot) {
                         // Remove this plane object from persistent data
+                        Plane plane = dataSnapshot.getValue(Plane.class);
+                        Log.d(TAG, "Plane was removed from database");
                     }
 
                     @Override
@@ -96,6 +105,7 @@ public class ActivityLogin extends AppCompatActivity {
                 });
             }
         });
+        thread.start();
     }
 
     protected void inputSetup() {
