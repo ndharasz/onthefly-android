@@ -16,11 +16,20 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
+import com.example.noah.onthefly.models.Plane;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.io.File;
+import java.io.FileOutputStream;
 
 public class ActivityLogin extends AppCompatActivity {
     EditText usernameField;
@@ -52,6 +61,7 @@ public class ActivityLogin extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+        syncPlanes();
     }
 
     @Override
@@ -62,6 +72,49 @@ public class ActivityLogin extends AppCompatActivity {
         }
     }
 
+    protected void syncPlanes() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "Searching for new planes");
+                FirebaseDatabase db = FirebaseDatabase.getInstance();
+                DatabaseReference ref = db.getReference("planes");
+                ref.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        // Add this plane object to the persistent data
+                        Plane plane = dataSnapshot.getValue(Plane.class);
+                        plane.writeToFile(ActivityLogin.this);
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        // Update this plane object in persistent data
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        // Remove this plane object from persistent data
+                        Plane plane = dataSnapshot.getValue(Plane.class);
+                        plane.deleteFile(ActivityLogin.this);
+                        Log.d(TAG, "Plane was removed from database");
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                        // I don't think this will ever be called
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // What is this event?
+                    }
+                });
+            }
+        });
+        thread.start();
+    }
+  
     protected void saveLoginSetup() {
         loginPrefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
         loginPrefsEditor = loginPrefs.edit();
