@@ -56,6 +56,14 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_flight);
 
+        airportSetup();
+        dateTimeSetup();
+        spinnerSetup();
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+    }
+
+    protected void airportSetup() {
         dept = Airports.getAirports();
         arr = Airports.getAirports();
 
@@ -73,14 +81,6 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
 
         arrivals.setAdapter(arrAdapter);
         arrivals.setThreshold(1);
-
-
-
-
-        dateTimeSetup();
-        spinnerSetup();
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     protected  void dateTimeSetup() {
@@ -174,14 +174,6 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         }
     }
 
-    public void clearDepature(View v) {
-        departures.setText("");
-    }
-
-    public void clearArrival(View v) {
-        arrivals.setText("");
-    }
-
     protected void submit(View v) {
         String plane = plane_spinner.getSelectedItem().toString();
         String date = dateField.getText().toString();
@@ -208,7 +200,7 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
 
     }
 
-    protected boolean dateBefore() throws IllegalArgumentException {
+    protected boolean dateBefore() {
         String date = dateField.getText().toString();
         String time = timeField.getText().toString();
         SimpleDateFormat date12Format = new SimpleDateFormat("hh:mm a");
