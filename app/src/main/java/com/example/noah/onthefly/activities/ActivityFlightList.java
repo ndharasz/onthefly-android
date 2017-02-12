@@ -2,6 +2,7 @@ package com.example.noah.onthefly.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import com.example.noah.onthefly.R;
 import java.util.zip.Inflater;
 
 public class ActivityFlightList extends AppCompatActivity {
+    private SharedPreferences loginPrefs;
+    private SharedPreferences.Editor loginPrefsEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,10 @@ public class ActivityFlightList extends AppCompatActivity {
     }
 
     protected void logout(View v) {
+        loginPrefs = getSharedPreferences("loginPrefs", MODE_PRIVATE);
+        loginPrefsEditor = loginPrefs.edit();
+        loginPrefsEditor.putBoolean("saveLogin", false);
+        loginPrefsEditor.commit();
         Intent logoutIntent = new Intent(this, ActivityLogin.class);
         this.startActivity(logoutIntent);
     }

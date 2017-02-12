@@ -58,16 +58,24 @@
                 android:textColor="@color/colorAccent"/>
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/log_in_button"
+        <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login"
-            android:layout_alignParentRight="true"
-            android:onClick="login"
-            style="@style/accent_button"/>
-
+            android:layout_alignParentRight="true">
+            <Button
+                android:id="@+id/log_in_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login"
+                android:onClick="login"
+                style="@style/accent_button"/>
+            <ProgressBar
+                android:id="@+id/login_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="invisible"/>
+        </FrameLayout>
     </RelativeLayout>
 
     <Button
