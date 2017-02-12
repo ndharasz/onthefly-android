@@ -26,6 +26,7 @@
         android:id="@+id/choose_plane_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:windowSoftInputMode="stateHidden"
         android:padding="@dimen/input_padding"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:background="@color/colorAccent"/>
@@ -72,6 +73,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:windowSoftInputMode="stateHidden"
             android:background="@color/colorAccent"
             android:padding="@dimen/input_padding"
             android:focusable="false"
@@ -86,6 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:focusable="false"
+            android:windowSoftInputMode="stateHidden"
             android:background="@color/colorAccent"
             android:padding="@dimen/input_padding"
             android:hint="@string/dept_time"

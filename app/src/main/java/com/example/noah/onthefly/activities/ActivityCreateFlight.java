@@ -2,7 +2,6 @@ package com.example.noah.onthefly.activities;
 
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -23,11 +22,11 @@ import com.example.noah.onthefly.interfaces.CallsDatePicker;
 import com.example.noah.onthefly.interfaces.CallsTimePicker;
 import com.example.noah.onthefly.models.Flight;
 import com.example.noah.onthefly.util.Airports;
+import com.example.noah.onthefly.util.CustomAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,14 +61,14 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         departures = (AutoCompleteTextView)findViewById(R.id.depPick);
         arrivals = (AutoCompleteTextView)findViewById(R.id.arrPick);
 
-        ArrayAdapter deptAdapter = new
-                ArrayAdapter(this,android.R.layout.simple_list_item_1,dept);
+        CustomAdapter deptAdapter = new
+                CustomAdapter(this,android.R.layout.simple_list_item_1, new ArrayList<String>(Arrays.asList(dept)));
 
         departures.setAdapter(deptAdapter);
         departures.setThreshold(1);
 
-        ArrayAdapter arrAdapter = new
-                ArrayAdapter(this,android.R.layout.simple_list_item_1,arr);
+        CustomAdapter arrAdapter = new
+                CustomAdapter(this,android.R.layout.simple_list_item_1, new ArrayList<String>(Arrays.asList(arr)));
 
         arrivals.setAdapter(arrAdapter);
         arrivals.setThreshold(1);
