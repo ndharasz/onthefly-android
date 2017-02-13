@@ -26,43 +26,46 @@
         android:textSize="@dimen/title_size"
         android:textAlignment="center"/>
 
-    <TableLayout
+    <ScrollView
+        android:id="@+id/upcoming_flight_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginBottom="@dimen/activity_vertical_margin">
-
-        <TableRow>
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:text="@string/date"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/title2_size"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:text="@string/departLoc"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/title2_size"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="wrap_content"
-                android:text="@string/arriveLoc"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/title2_size"/>
-        </TableRow>
-        <ScrollView
-            android:id="@+id/upcoming_flight_list"
+        android:layout_weight="1">
+        <TableLayout
+            android:id="@+id/flight_table"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
-    </TableLayout>
+            android:layout_weight="1"
+            android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+            <TableRow>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="@string/date"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/title2_size"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:text="@string/departLoc"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/title2_size"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:text="@string/arriveLoc"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/title2_size"/>
+            </TableRow>
+
+        </TableLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/add_new_flight_button"

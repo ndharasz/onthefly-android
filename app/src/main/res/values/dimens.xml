@@ -7,7 +7,7 @@
     <dimen name="circle_button_size">50dp</dimen>
     <dimen name="title_padding">26dp</dimen>
     <dimen name="title_size">16pt</dimen>
-    <dimen name="title2_size">12pt</dimen>
+    <dimen name="title2_size">8pt</dimen>
     <dimen name="title3_size">8pt</dimen>
     <dimen name="instruction_text">10pt</dimen>
 </resources>
