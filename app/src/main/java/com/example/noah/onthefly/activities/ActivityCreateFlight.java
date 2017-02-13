@@ -2,7 +2,6 @@ package com.example.noah.onthefly.activities;
 
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -23,26 +22,31 @@ import com.example.noah.onthefly.interfaces.CallsDatePicker;
 import com.example.noah.onthefly.interfaces.CallsTimePicker;
 import com.example.noah.onthefly.models.Plane;
 import com.example.noah.onthefly.models.Flight;
+import com.example.noah.onthefly.util.Airports;
+import com.example.noah.onthefly.util.CustomAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import android.widget.AutoCompleteTextView;
 
 public class ActivityCreateFlight extends AppCompatActivity implements CallsDatePicker, CallsTimePicker {
 
     private Spinner plane_spinner;
-    private Spinner dept_loc_spinner;
-    private Spinner arr_loc_spinner;
     private EditText dateField;
     private EditText timeField;
     private DialogFragment datePickerFragment;
     private DialogFragment timePickerFragment;
+    private AutoCompleteTextView departures;
+    private AutoCompleteTextView arrivals;
+    private String[] dept;
+    private String[] arr;
+
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -52,10 +56,33 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_flight);
 
+        airportSetup();
         dateTimeSetup();
         spinnerSetup();
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+    }
+
+    protected void airportSetup() {
+        dept = Airports.getAirports();
+        arr = Airports.getAirports();
+
+
+
+        departures = (AutoCompleteTextView)findViewById(R.id.depPick);
+        arrivals = (AutoCompleteTextView)findViewById(R.id.arrPick);
+
+        CustomAdapter deptAdapter = new
+                CustomAdapter(this,android.R.layout.simple_list_item_1, new ArrayList<String>(Arrays.asList(dept)));
+
+        departures.setAdapter(deptAdapter);
+        departures.setThreshold(2);
+
+        CustomAdapter arrAdapter = new
+                CustomAdapter(this,android.R.layout.simple_list_item_1, new ArrayList<String>(Arrays.asList(arr)));
+
+        arrivals.setAdapter(arrAdapter);
+        arrivals.setThreshold(2);
     }
 
     protected  void dateTimeSetup() {
@@ -66,29 +93,16 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
     protected void spinnerSetup() {
 
         plane_spinner = (Spinner) findViewById(R.id.choose_plane_spinner);
-        dept_loc_spinner = (Spinner) findViewById(R.id.choose_dept_airport_spinner);
-        arr_loc_spinner = (Spinner) findViewById(R.id.choose_arr_airport_spinner);
       
         final List<String> planesList = Plane.readAllPlaneNames(this);
         planesList.add(0, "Choose plane");
-        final List<String> deptList = new ArrayList<>(Arrays.asList(new String[] {
-                "Departure Location", "ATL", "SEA", "MIA"
-        }));
-        final List<String> arrList = new ArrayList<>(Arrays.asList(new String[] {
-                "Arrival Location", "ATL", "SEA", "MIA"
-        }));
 
         // Initializing an ArrayAdapter
         final ArrayAdapter<String> planeArrayAdapter = new ArrayAdapterWithHint<String>(
                 this, android.R.layout.simple_spinner_item, planesList);
-        final ArrayAdapter<String> deptArrayAdapter = new ArrayAdapterWithHint<String>(
-                this, android.R.layout.simple_spinner_item, deptList);
-        final ArrayAdapter<String> arrArrayAdapter = new ArrayAdapterWithHint<String>(
-                this, android.R.layout.simple_spinner_item, arrList);
 
         plane_spinner.setAdapter(planeArrayAdapter);
-        dept_loc_spinner.setAdapter(deptArrayAdapter);
-        arr_loc_spinner.setAdapter(arrArrayAdapter);
+
     }
 
     private class ArrayAdapterWithHint<T> extends ArrayAdapter {
@@ -149,6 +163,8 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         }
     }
 
+
+
     public void hideTimePicker(String time) {
         if (timePickerFragment != null) {
             if (time.compareTo("") != 0) {
@@ -161,26 +177,31 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
 
     protected void submit(View v) {
         String plane = plane_spinner.getSelectedItem().toString();
-        String dept_loc = dept_loc_spinner.getSelectedItem().toString();
-        String arr_loc = arr_loc_spinner.getSelectedItem().toString();
         String date = dateField.getText().toString();
         String time = timeField.getText().toString();
+        String dept_loc = departures.getText().toString();
+        String arr_loc = arrivals.getText().toString();
 
 
-        if (dept_loc.matches("Departure Location") || arr_loc.matches("Arrival Location") ||
+        if (dept_loc.matches("") || arr_loc.matches("") ||
                 date.matches("") || time.matches("") || plane.matches("Choose A Plane")) {
             Toast.makeText(this, "Please fill empty fields.", Toast.LENGTH_LONG).show();
+        } else if (!Airports.isAirportValid(dept_loc) || !Airports.isAirportValid(arr_loc)) {
+            Toast.makeText(this, "Please make sure you are selecting an airport from the dropdown menu. "
+            + "No extra characters should be included in your arrival or departure airport entries.", Toast.LENGTH_LONG).show();
+
         } else if(!dateBefore()) {
             Flight newFlight = new Flight(plane, dept_loc, arr_loc, date, time,
                     mAuth.getCurrentUser().getUid());
             mDatabase.child("flights").push().setValue(newFlight);
+
             Intent editFlightIntent = new Intent(this, ActivityEditFlight.class);
             this.startActivity(editFlightIntent);
         }
 
     }
 
-    protected boolean dateBefore() throws IllegalArgumentException {
+    protected boolean dateBefore() {
         String date = dateField.getText().toString();
         String time = timeField.getText().toString();
         SimpleDateFormat date12Format = new SimpleDateFormat("hh:mm a");
