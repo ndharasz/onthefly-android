@@ -41,7 +41,7 @@
             <TableRow>
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_weight="4"
                     android:layout_height="wrap_content"
                     android:text="@string/date"
                     android:textColor="@color/colorAccent"
@@ -49,7 +49,7 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"
+                    android:layout_weight="5"
                     android:layout_height="wrap_content"
                     android:text="@string/departLoc"
                     android:textColor="@color/colorAccent"
@@ -57,7 +57,7 @@
 
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="2"
+                    android:layout_weight="7"
                     android:layout_height="wrap_content"
                     android:text="@string/arriveLoc"
                     android:textColor="@color/colorAccent"

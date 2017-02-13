@@ -44,7 +44,7 @@ public class ActivityFlightList extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Flight flight = (Flight) dataSnapshot.getValue(Flight.class);
-                // ignore this data if it doesn't belong to this used
+                // ignore this data if it doesn't belong to this user
                 if (!flight.getUserid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                     return;
                 }
@@ -58,9 +58,12 @@ public class ActivityFlightList extends AppCompatActivity {
                     }
                 });
 
-                ((TextView) v.findViewById(R.id.upcoming_flight_date)).setText(flight.getDate());
-                ((TextView) v.findViewById(R.id.upcoming_flight_arrival)).setText(flight.getArriveAirport());
-                ((TextView) v.findViewById(R.id.upcoming_flight_depart)).setText(flight.getDepartAirport());
+                ((TextView) v.findViewById(R.id.upcoming_flight_date))
+                        .setText(getDisplayDate(flight.getDate()));
+                ((TextView) v.findViewById(R.id.upcoming_flight_arrival))
+                        .setText(getDisplayAirport(flight.getArriveAirport()));
+                ((TextView) v.findViewById(R.id.upcoming_flight_depart))
+                        .setText(getDisplayAirport(flight.getDepartAirport()));
                 flightTable.addView(v);
             }
 
@@ -84,17 +87,17 @@ public class ActivityFlightList extends AppCompatActivity {
 
             }
         });
-//      for future dynamic adding usage:
-//        LayoutInflater item = (LayoutInflater)
-//                this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//
-//        View v = item.inflate(R.layout.item_flight, (ViewGroup)findViewById(R.id.upcoming_flight_list));
-//        ((Button)v.findViewById(R.id.upcoming_flight_edit)).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(ActivityFlightList.this, ActivityEditFlight.class));
-//            }
-//        });
+    }
+
+    // takes in the database date and displays it
+    public String getDisplayDate(String date) {
+        String newDate = date.substring(0, date.lastIndexOf('-'));
+        return newDate;
+    }
+
+    public String getDisplayAirport(String airport) {
+        String newAirport = airport.substring(airport.indexOf('(') + 1, airport.lastIndexOf(')'));
+        return newAirport;
     }
 
     protected void logout(View v) {
