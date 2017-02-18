@@ -180,7 +180,6 @@ public class ActivityCreateAccount extends AppCompatActivity {
 
             Toast.makeText(ActivityCreateAccount.this,
                     "Password must have at least 8 characters.", Toast.LENGTH_SHORT).show();
-
         } else if (!(password.equals(conf_pass))) {
 
             pass_input.setTextColor(RED);
@@ -195,8 +194,8 @@ public class ActivityCreateAccount extends AppCompatActivity {
                             Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
 
                             if (!task.isSuccessful()) {
-                                Toast.makeText(ActivityCreateAccount.this, "Invalid email.",
-                                        Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ActivityCreateAccount.this,
+                                        task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             } else {
                                 // Save user data after authentication is proven
                                 String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();

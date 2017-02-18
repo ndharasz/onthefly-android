@@ -118,9 +118,12 @@ public class ActivityEditFlight extends FragmentActivity {
         }
     }
 
-    protected void back(View v) {
+
+    @Override
+    public void onBackPressed() {
         Intent flightListIntent = new Intent(this, ActivityFlightList.class);
-        this.startActivity(flightListIntent);
+        startActivity(flightListIntent);
+        finish();
     }
 
     protected void generateReport(View v) {
