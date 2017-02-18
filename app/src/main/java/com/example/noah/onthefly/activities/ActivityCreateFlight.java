@@ -67,8 +67,6 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         dept = Airports.getAirports();
         arr = Airports.getAirports();
 
-
-
         departures = (AutoCompleteTextView)findViewById(R.id.depPick);
         arrivals = (AutoCompleteTextView)findViewById(R.id.arrPick);
 
@@ -191,7 +189,9 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
             + "No extra characters should be included in your arrival or departure airport entries.", Toast.LENGTH_LONG).show();
 
         } else if(!dateBefore()) {
-            Flight newFlight = new Flight(plane, dept_loc, arr_loc, date, time,
+            String parsed_dept_loc = parsePlaneCode(dept_loc);
+            String parsed_arr_loc = parsePlaneCode(arr_loc);
+            Flight newFlight = new Flight(plane, parsed_dept_loc, parsed_arr_loc, date, time,
                     mAuth.getCurrentUser().getUid());
             mDatabase.child("flights").push().setValue(newFlight);
 
@@ -218,5 +218,14 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
             //this should not happen since we format the date ourselves
         }
         return false;
+    }
+
+    public String parsePlaneCode(String airport) {
+        if (airport.contains("(") && airport.contains(")")
+                && airport.indexOf('(') < airport.lastIndexOf(')')) {
+            return airport.substring(airport.indexOf('(') + 1, airport.lastIndexOf(')'));
+        } else {
+            return airport;
+        }
     }
 }

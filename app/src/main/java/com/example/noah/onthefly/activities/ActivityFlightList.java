@@ -32,15 +32,18 @@ public class ActivityFlightList extends AppCompatActivity {
     private SharedPreferences.Editor loginPrefsEditor;
     private TableLayout flightTable;
 
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference flightListReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flight_list);
         flightTable = (TableLayout) findViewById(R.id.flight_table);
 
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = firebaseDatabase.getReference("flights");
-        databaseReference.addChildEventListener(new ChildEventListener() {
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        flightListReference = firebaseDatabase.getReference("flights");
+        flightListReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Flight flight = (Flight) dataSnapshot.getValue(Flight.class);
@@ -61,20 +64,24 @@ public class ActivityFlightList extends AppCompatActivity {
                 ((TextView) v.findViewById(R.id.upcoming_flight_date))
                         .setText(getDisplayDate(flight.getDate()));
                 ((TextView) v.findViewById(R.id.upcoming_flight_arrival))
-                        .setText(getDisplayAirport(flight.getArriveAirport()));
+                        .setText(flight.getArriveAirport());
                 ((TextView) v.findViewById(R.id.upcoming_flight_depart))
-                        .setText(getDisplayAirport(flight.getDepartAirport()));
+                        .setText(flight.getDepartAirport());
                 flightTable.addView(v);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
+                // Changing a child can only happen in another screen
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                Flight flight = (Flight) dataSnapshot.getValue(Flight.class);
+                if (!flight.getUserid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                    return;
+                }
+                // Also can't happen unless there's a delete button in the list
             }
 
             @Override
@@ -91,13 +98,11 @@ public class ActivityFlightList extends AppCompatActivity {
 
     // takes in the database date and displays it
     public String getDisplayDate(String date) {
-        String newDate = date.substring(0, date.lastIndexOf('-'));
-        return newDate;
-    }
-
-    public String getDisplayAirport(String airport) {
-        String newAirport = airport.substring(airport.indexOf('(') + 1, airport.lastIndexOf(')'));
-        return newAirport;
+        if (date.contains("-")) {
+            return date.substring(0, date.lastIndexOf('-'));
+        } else {
+            return date;
+        }
     }
 
     protected void logout(View v) {

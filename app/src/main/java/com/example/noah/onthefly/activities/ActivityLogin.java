@@ -65,6 +65,8 @@ public class ActivityLogin extends AppCompatActivity {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
         syncPlanes();
+        login.setVisibility(View.VISIBLE);
+        loginProgress.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -127,6 +129,8 @@ public class ActivityLogin extends AppCompatActivity {
         if (saveLogin == true) {
             rememberMe.setChecked(true);
             login(login);
+        } else {
+            rememberMe.setChecked(false);
         }
     }
 
@@ -141,6 +145,7 @@ public class ActivityLogin extends AppCompatActivity {
         login = (Button) findViewById(R.id.log_in_button);
         forgotPass = (Button) findViewById(R.id.forgot_password_button);
         rememberMe = (CheckBox) findViewById(R.id.remember_me_checkbox);
+        loginProgress = (ProgressBar) findViewById(R.id.login_progress);
     }
 
     protected void firebaseSetup() {
@@ -159,7 +164,6 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
     protected void login(View loginButton) {
-        loginProgress = (ProgressBar) findViewById(R.id.login_progress);
         Log.d(TAG, "Task started");
         final String username = usernameField.getText().toString();
         final String pass = passwordField.getText().toString();
@@ -181,16 +185,20 @@ public class ActivityLogin extends AppCompatActivity {
                                     loginPrefsEditor.putString("username", username);
                                     loginPrefsEditor.putString("password", pass);
                                     loginPrefsEditor.commit();
+                                } else {
+                                    loginPrefsEditor.putBoolean("saveLogin", false);
+                                    loginPrefsEditor.commit();
                                 }
                                 Intent flightListIntent = new Intent(ActivityLogin.this,
                                         ActivityFlightList.class);
                                 ActivityLogin.this.startActivity(flightListIntent);
                             } else {
-                                login.setVisibility(View.INVISIBLE);
-                                loginProgress.setVisibility(View.VISIBLE);
+                                login.setVisibility(View.VISIBLE);
+                                loginProgress.setVisibility(View.INVISIBLE);
                                 Log.d(TAG, "failure");
                                 Toast.makeText(ActivityLogin.this,
                                         "Username or password invalid.", Toast.LENGTH_SHORT).show();
+
                             }
                         }
                     });

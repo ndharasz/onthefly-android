@@ -118,6 +118,11 @@ public class ActivityEditFlight extends FragmentActivity {
         }
     }
 
+    protected void back(View v) {
+        Intent flightListIntent = new Intent(this, ActivityFlightList.class);
+        this.startActivity(flightListIntent);
+    }
+
     protected void generateReport(View v) {
         Intent reportIntent = new Intent(this, ActivityReport.class);
         this.startActivity(reportIntent);
