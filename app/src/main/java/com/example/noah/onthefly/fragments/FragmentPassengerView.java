@@ -1,7 +1,5 @@
 package com.example.noah.onthefly.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,9 +12,13 @@ import android.widget.LinearLayout;
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.widgets.PlaneView;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class FragmentPassengerView extends Fragment {
     Button tab;
-    private PlaneView planeView;
+    private PlaneView pilotView;
+    private PlaneView passengerView;
 
     public FragmentPassengerView setTabButton(Button tab) {
         this.tab = tab;
@@ -34,11 +36,26 @@ public class FragmentPassengerView extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Double[] pilotArmsArray = {12.0};
+        Double[] passengerArmsArray = {50.0, 60.0, 70.0, 80.0};
+
+        List<Double> pilotArms = Arrays.asList(pilotArmsArray);
+        List<Double> passengerArms = Arrays.asList(passengerArmsArray);
+
         View v = inflater.inflate(R.layout.fragment_passenger_view, container, false);
-        LinearLayout baseLayout = (LinearLayout) v.findViewById(R.id.base_layout);
-        planeView = new PlaneView(getContext(), 2, 8);
-        baseLayout.addView(planeView);
+        LinearLayout pilotLayout = (LinearLayout) v.findViewById(R.id.pilot_view);
+        LinearLayout passengerLayout = (LinearLayout) v.findViewById(R.id.passenger_view);
+
+        pilotView = new PlaneView(getContext(), 2, 2, pilotArms);
+        passengerView = new PlaneView(getContext(), 2, 8, passengerArms);
+
+        pilotLayout.addView(pilotView);
+        passengerLayout.addView(passengerView);
         return v;
+    }
+
+    public double calculateMoment() {
+        return pilotView.calculateMoment() + passengerView.calculateMoment();
     }
 
 //    @Override

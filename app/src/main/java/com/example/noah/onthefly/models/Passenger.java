@@ -16,11 +16,11 @@ public class Passenger {
         this.name = name;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
@@ -40,15 +40,15 @@ public class Passenger {
     }
 
     private String name;
-    private int weight;
-    public Passenger(String name, int weight) {
+    private double weight;
+    public Passenger(String name, double weight) {
         this.name =  name;
         this.weight = weight;
     }
 
     public static void swap(Passenger p1, Passenger p2) {
         String p2name = p2.name;
-        int p2weight = p2.weight;
+        double p2weight = p2.weight;
         p2.name = p1.name;
         p2.weight = p1.weight;
         p1.name = p2name;
@@ -57,8 +57,8 @@ public class Passenger {
 
     public static Passenger reconstructPassenger(String toString) {
         try {
-            String[] parts = toString.split("$");
-            return new Passenger(parts[0], Integer.valueOf(parts[1]));
+            String[] parts = toString.split("\\$");
+            return new Passenger(parts[0], Double.valueOf(parts[1]));
         } catch (Exception e) {
             return Passenger.EMPTY;
         }

@@ -31,6 +31,8 @@ import java.util.List;
 
 public class PlaneView extends GridView {
     private static final String TAG = "PlaneView";
+    private int numColumns;
+    private int numSeats;
     private List<Double> rowArms;
 
     // This is the majority of the PlaneView.
@@ -90,11 +92,10 @@ public class PlaneView extends GridView {
                                 public void onClick(DialogInterface dialog, int which) {
                                     try {
                                         final String passName = name.getText().toString().trim();
-                                        final int passWeight = Integer.parseInt(weight.getText().toString().trim());
+                                        final double passWeight = Double.parseDouble(weight.getText().toString().trim());
                                         getItem(pos).setWeight(passWeight);
                                         getItem(pos).setName(passName);
-                                        name.setText(passName);
-                                        weight.setText(String.valueOf(passWeight));
+                                        refreshView();
                                     } catch (Exception e) {
                                         Toast.makeText(context, "One or more fields were input incorrectly.", Toast.LENGTH_SHORT).show();
                                     }
@@ -137,6 +138,7 @@ public class PlaneView extends GridView {
                             float left = passengerView.getLeft();
                             float top = passengerView.getTop();
                             if (left == endX && top == endY) {
+                                Log.d(TAG, "Swapping Views");
                                 String passengerDragged = event.getClipData().getItemAt(0).getText().toString();
                                 swapViews(passengerDragged, i);
                             }
@@ -149,10 +151,14 @@ public class PlaneView extends GridView {
             return layout;
         }
 
+        private void refreshView() {
+            notifyDataSetChanged();
+        }
+
         private Passenger viewToPassenger(LinearLayout view) {
             try {
                 String name = ((TextView) view.findViewById(R.id.passenger_name)).getText().toString();
-                int weight = Integer.parseInt(((TextView) view.findViewById(R.id.passenger_weight)).getText().toString());
+                double weight = Double.parseDouble(((TextView) view.findViewById(R.id.passenger_weight)).getText().toString());
                 return new Passenger(name, weight);
             } catch (Exception e) {
                 // to avoid crashes, if a view is bad, return an empty passenger.
@@ -163,6 +169,10 @@ public class PlaneView extends GridView {
 
         private void swapViews(String passengerDragged, int b) {
             int a = getPosition(Passenger.reconstructPassenger(passengerDragged));
+            // A value less than a signals that a view was dragged outside its boundaries
+            //   so we'll just ignore that request
+            if (a < 0)
+                return;
             Passenger first = getItem(a);
             Passenger second = getItem(b);
             Passenger.swap(first, second);
@@ -180,6 +190,8 @@ public class PlaneView extends GridView {
             throw new IllegalArgumentException("Number of row arms != number of rows.");
         }
         this.rowArms = rowArms;
+        this.numSeats = numSeats;
+        this.numColumns = columnsPerRow;
 
         ArrayList<Passenger> passengers = new ArrayList<>(numSeats);
         for (int i = 0; i < numSeats; i++) {
@@ -196,6 +208,13 @@ public class PlaneView extends GridView {
 
     public double calculateMoment() {
         // iterate through the rows and multiply the corresponding moment
+        double totalMoment = 0.0;
+        for (int row = 0; row < numSeats; row++) {
+            for (int col = 0; col < numColumns; col++) {
+                Passenger curPassenger =  ((PassengerViewAdapter) getAdapter()).getItem(row * numColumns + col);
+                totalMoment += rowArms.get(row) * curPassenger.getWeight();
+            }
+        }
         return 0;
     }
 
