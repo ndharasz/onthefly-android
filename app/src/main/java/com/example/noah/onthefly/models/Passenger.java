@@ -1,10 +1,13 @@
 package com.example.noah.onthefly.models;
 
+import java.util.Objects;
+
 /**
  * Created by brian on 2/21/17.
  */
 
 public class Passenger {
+    public static Passenger EMPTY = new Passenger("Add Passenger", 0);
     public String getName() {
         return name;
     }
@@ -28,12 +31,12 @@ public class Passenger {
         if (!(other instanceof Passenger))
             return false;
         Passenger that = (Passenger) other;
-        return name.equals(that.name);
+        return name.equals(that.name) && weight == that.weight;
     }
 
     @Override
     public String toString() {
-        return name + ", " + String.valueOf(weight);
+        return name + "$" + String.valueOf(weight);
     }
 
     private String name;
@@ -50,5 +53,14 @@ public class Passenger {
         p2.weight = p1.weight;
         p1.name = p2name;
         p1.weight = p2weight;
+    }
+
+    public static Passenger reconstructPassenger(String toString) {
+        try {
+            String[] parts = toString.split("$");
+            return new Passenger(parts[0], Integer.valueOf(parts[1]));
+        } catch (Exception e) {
+            return Passenger.EMPTY;
+        }
     }
 }
