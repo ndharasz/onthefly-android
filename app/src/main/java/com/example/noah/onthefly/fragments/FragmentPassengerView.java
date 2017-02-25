@@ -40,9 +40,7 @@ public class FragmentPassengerView extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
         Double[] pilotArmsArray = {12.0};
         Double[] passengerArmsArray = {50.0, 60.0, 70.0, 80.0};
 
@@ -59,6 +57,10 @@ public class FragmentPassengerView extends Fragment {
         pilotLayout.addView(pilotView);
         passengerLayout.addView(passengerView);
         return v;
+    }
+
+    public double calculateMoment() {
+        return pilotView.calculateMoment() + passengerView.calculateMoment();
     }
 
     public double calculateMoment() {

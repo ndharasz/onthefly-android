@@ -19,14 +19,17 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.models.Passenger;
 import com.example.noah.onthefly.util.ImageDragShadowBuilder;
-
 import java.util.ArrayList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 /**
@@ -39,9 +42,7 @@ public class PlaneView extends GridView {
     private int numSeats;
     private List<Double> rowArms;
     private Animation animation;
-
     private int replace;
-
 
     // This is the majority of the PlaneView.
     // Basically the PassengerViewAdapter is a mapping from Passengers to views which
@@ -168,21 +169,16 @@ public class PlaneView extends GridView {
                         view.startDrag(data, shadowBuilder, view, 0);
 
                         switchAnimation(true);
-
                         return true;
                     } else {
                         return false;
                     }
                 }
             });
-
-
-
             // All the code for drag and drop is below
             layout.setOnDragListener(new OnDragListener() {
                 @Override
                 public boolean onDrag(View v, DragEvent event) {
-
                     if (event.getAction() == DragEvent.ACTION_DRAG_STARTED) {
                         return true;
                     } else if (event.getAction() == DragEvent.ACTION_DROP) {
@@ -240,14 +236,12 @@ public class PlaneView extends GridView {
                     return false;
                 }
             });
-
             return layout;
         }
 
         private void refreshView() {
             notifyDataSetChanged();
         }
-
         private Passenger viewToPassenger(RelativeLayout view) {
             try {
                 String name = ((TextView) view.findViewById(R.id.passenger_name)).getText().toString();
@@ -268,8 +262,7 @@ public class PlaneView extends GridView {
                 return;
             Passenger first = getItem(a);
             Passenger second = getItem(b);
-
-
+          
             if (second.getName() == "Add Passenger") {
                 getChildAt(a).findViewById(R.id.seat).setVisibility(INVISIBLE);
                 getChildAt(b).findViewById(R.id.seat).setVisibility(VISIBLE);
