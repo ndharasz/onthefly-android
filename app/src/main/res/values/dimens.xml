@@ -8,8 +8,10 @@
     <dimen name="circle_button_size">50dp</dimen>
     <dimen name="title_padding">26dp</dimen>
     <dimen name="title_size">16pt</dimen>
-    <dimen name="title2_size">8pt</dimen>
+    <dimen name="title2_size">10pt</dimen>
     <dimen name="title3_size">8pt</dimen>
     <dimen name="instruction_text">10pt</dimen>
     <dimen name="button_text_size">8pt</dimen>
+    <dimen name="passenger_name">8pt</dimen>
+    <dimen name="passenger_weight">6pt</dimen>
 </resources>
