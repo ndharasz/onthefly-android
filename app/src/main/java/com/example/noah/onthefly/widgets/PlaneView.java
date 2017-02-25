@@ -1,17 +1,12 @@
 package com.example.noah.onthefly.widgets;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.media.Image;
-import android.os.Build;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -32,7 +27,6 @@ import com.example.noah.onthefly.models.Passenger;
 import com.example.noah.onthefly.util.ImageDragShadowBuilder;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -68,7 +62,7 @@ public class PlaneView extends GridView {
             View view = convertView;
 
             if (view == null) {
-                view = createNewView(pos);
+                view = newPassenger(pos);
             }
 
             ((TextView) view.findViewById(R.id.passenger_name)).setText(getItem(currPos).getName());
@@ -80,7 +74,7 @@ public class PlaneView extends GridView {
             return view;
         }
 
-        private View createNewView(int pos) {
+        private View newPassenger(int pos) {
             animation = AnimationUtils.loadAnimation(getContext(),R.anim.shake);
             final int tInt = pos;
 
@@ -97,19 +91,23 @@ public class PlaneView extends GridView {
                     // pull up dialog to enter passenger names
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context, android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
                     alertDialogBuilder.setView(promptView);
-                    alertDialogBuilder.setTitle("New Passenger at Seat " + (tInt + 1));
+                    ((TextView)promptView.findViewById(R.id.dialog_title))
+                            .setText("New Passenger at Seat " + (tInt + 1));
                     final EditText name = (EditText) promptView.findViewById(R.id.passName);
-                    name.setHint("Name");
-
                     final EditText weight = (EditText) promptView.findViewById(R.id.passWeight);
-                    weight.setHint("Weight (Pounds)");
 
                     if (!getItem(tInt).equals(Passenger.EMPTY)) {
                         name.setText(getItem(tInt).getName());
                         weight.setText(String.valueOf(getItem(tInt).getWeight()));
                     }
 
-                    alertDialogBuilder.setCancelable(false)
+                    alertDialogBuilder
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -144,8 +142,17 @@ public class PlaneView extends GridView {
                                 }
                             });
                     AlertDialog alert = alertDialogBuilder.create();
+                    alert.getWindow().setBackgroundDrawable(
+                            new ColorDrawable(android.graphics.Color.TRANSPARENT));
                     alert.show();
-
+                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(
+                            ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(
+                            ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                            ContextCompat.getColor(getContext(), R.color.colorAccent));
+                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                            ContextCompat.getColor(getContext(), R.color.colorAccent));
                 }
             });
 
