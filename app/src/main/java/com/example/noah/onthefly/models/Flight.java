@@ -11,6 +11,12 @@ public class Flight {
     private String date;
     private String time;
     private String userid;
+    private String frontBaggageWeight;
+    private String aftBaggageWeight;
+    private String flightDuration;
+    private String startFuel;
+    private String fuelFlow;
+    private String taxiFuelBurn;
 
     public Flight(){}
 
@@ -71,5 +77,53 @@ public class Flight {
 
     public void setPlane(String plane) {
         this.plane = plane;
+    }
+    
+    public String getFrontBaggageWeight() {
+        return frontBaggageWeight;
+    }
+
+    public void setFrontBaggageWeight(String frontBaggageWeight) {
+        this.frontBaggageWeight = frontBaggageWeight;
+    }
+
+    public String getAftBaggageWeight() {
+        return aftBaggageWeight;
+    }
+
+    public void setAftBaggageWeight(String aftBaggageWeight) {
+        this.aftBaggageWeight = aftBaggageWeight;
+    }
+
+    public String getFlightDuration() {
+        return flightDuration;
+    }
+
+    public void setFlightDuration(String flightDuration) {
+        this.flightDuration = flightDuration;
+    }
+
+    public String getStartFuel() {
+        return startFuel;
+    }
+
+    public void setStartFuel(String startFuel) {
+        this.startFuel = startFuel;
+    }
+
+    public String getFuelFlow() {
+        return fuelFlow;
+    }
+
+    public void setFuelFlow(String fuelFlow) {
+        this.fuelFlow = fuelFlow;
+    }
+
+    public String getTaxiFuelBurn() {
+        return taxiFuelBurn;
+    }
+
+    public void setTaxiFuelBurn(String taxiFuelBurn) {
+        this.taxiFuelBurn = taxiFuelBurn;
     }
 }
