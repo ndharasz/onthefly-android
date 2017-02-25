@@ -5,6 +5,8 @@
     android:layout_height="wrap_content"
     android:background="@color/colorPrimary">
 
+
+
     <TextView
         android:id="@+id/upcoming_flight_date"
         android:layout_width="0dp"
