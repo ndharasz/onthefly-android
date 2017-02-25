@@ -12,4 +12,6 @@
     <dimen name="title3_size">8pt</dimen>
     <dimen name="instruction_text">10pt</dimen>
     <dimen name="button_text_size">8pt</dimen>
+    <dimen name="passenger_name">8pt</dimen>
+    <dimen name="passenger_weight">6pt</dimen>
 </resources>
