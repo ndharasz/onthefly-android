@@ -42,4 +42,8 @@
     <string name="your_email_hint">your@email.com</string>
     <string name="another_email">Send to a different email address:</string>
     <string name="back">Back</string>
+    <string name="flight_duration">Duration (min)</string>
+    <string name="start_fuel">Starting Fuel Amount (gal)</string>
+    <string name="fuel_flow">Flow Rate (gal/hr)</string>
+    <string name="taxi_fuel_usage">Taxi Fuel Usage</string>
 </resources>

@@ -44,6 +44,10 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
     private DialogFragment timePickerFragment;
     private AutoCompleteTextView departures;
     private AutoCompleteTextView arrivals;
+    private EditText duration;
+    private EditText start_fuel;
+    private EditText flow_rate;
+    private EditText taxi_fuel;
     private String[] dept;
     private String[] arr;
 
@@ -59,6 +63,7 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         airportSetup();
         dateTimeSetup();
         spinnerSetup();
+        inputSetup();
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
@@ -101,6 +106,13 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
 
         plane_spinner.setAdapter(planeArrayAdapter);
 
+    }
+
+    protected void inputSetup() {
+        duration = (EditText)findViewById(R.id.flight_duration);
+        start_fuel = (EditText)findViewById(R.id.start_fuel);
+        flow_rate = (EditText)findViewById(R.id.fuel_flow);
+        taxi_fuel = (EditText)findViewById(R.id.taxi_fuel);
     }
 
     private class ArrayAdapterWithHint<T> extends ArrayAdapter {
@@ -179,7 +191,11 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         String time = timeField.getText().toString();
         String dept_loc = departures.getText().toString();
         String arr_loc = arrivals.getText().toString();
-
+        String flight_duration = duration.getText().toString();
+        String starting_fuel = start_fuel.getText().toString();
+        String fuel_flow = flow_rate.getText().toString();
+        String taxi_usage = taxi_fuel.getText().toString();
+        Log.d("TEST", Boolean.toString(dateAfterToday()));
 
         if (dept_loc.matches("") || arr_loc.matches("") ||
                 date.matches("") || time.matches("") || plane.matches("Choose A Plane")) {
@@ -187,34 +203,30 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         } else if (!Airports.isAirportValid(dept_loc) || !Airports.isAirportValid(arr_loc)) {
             Toast.makeText(this, "Please make sure you are selecting an airport from the dropdown menu. "
             + "No extra characters should be included in your arrival or departure airport entries.", Toast.LENGTH_LONG).show();
-
-        } else if(!dateBefore()) {
+        } else if(dateAfterToday()) {
+            Log.d("TEST", "Reached2");
             String parsed_dept_loc = parsePlaneCode(dept_loc);
             String parsed_arr_loc = parsePlaneCode(arr_loc);
             Flight newFlight = new Flight(plane, parsed_dept_loc, parsed_arr_loc, date, time,
-                    mAuth.getCurrentUser().getUid());
+                    mAuth.getCurrentUser().getUid(), flight_duration, starting_fuel, fuel_flow, taxi_usage);
             mDatabase.child("flights").push().setValue(newFlight);
-
+            Log.d("TEST", "Reached3");
             Intent editFlightIntent = new Intent(this, ActivityEditFlight.class);
             this.startActivity(editFlightIntent);
         }
 
     }
 
-    protected boolean dateBefore() {
+    protected boolean dateAfterToday() {
         String date = dateField.getText().toString();
         String time = timeField.getText().toString();
-        SimpleDateFormat date12Format = new SimpleDateFormat("hh:mm a");
-        SimpleDateFormat date24Format = new SimpleDateFormat("HH:mm");
-
+        SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy hh:mm a");
         try {
-            String update = date24Format.format(date12Format.parse(time));
-            date = date + " " + update;
-            Date today = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("MM-dd-yyyy hh:mm");
-            Date parsedDate = formatter.parse(date);
-            return parsedDate.before(today);
+            Date given = formatter.parse(date+" "+time);
+            Date today = formatter.parse(formatter.format(new Date()));
+            return given.after(today);
         } catch (Exception e) {
+            Log.e("Date Error", e.getMessage());
             //this should not happen since we format the date ourselves
         }
         return false;
