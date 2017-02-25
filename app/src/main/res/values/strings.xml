@@ -42,4 +42,6 @@
     <string name="your_email_hint">your@email.com</string>
     <string name="another_email">Send to a different email address:</string>
     <string name="back">Back</string>
+    <string name="clear_cargo">Empty Cargo</string>
+    <string name="add_bag">Enter the bag weight (lbs):</string>
 </resources>
