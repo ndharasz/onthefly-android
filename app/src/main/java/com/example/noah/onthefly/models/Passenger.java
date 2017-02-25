@@ -1,10 +1,13 @@
 package com.example.noah.onthefly.models;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Created by brian on 2/21/17.
  */
+
+
 
 public class Passenger {
     public static Passenger EMPTY = new Passenger("Add Passenger", 0);

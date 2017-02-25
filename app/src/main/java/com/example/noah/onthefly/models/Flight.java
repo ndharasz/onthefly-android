@@ -1,10 +1,13 @@
 package com.example.noah.onthefly.models;
 
+import java.io.Serializable;
+
 /**
  * Created by ndharasz on 2/6/2017.
  */
 
-public class Flight {
+@SuppressWarnings("serial")
+public class Flight implements Serializable {
     private String plane;
     private String departAirport;
     private String arriveAirport;

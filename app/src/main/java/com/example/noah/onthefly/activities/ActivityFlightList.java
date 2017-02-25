@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.Serializable;
 import java.util.zip.Inflater;
 
 import static com.example.noah.onthefly.R.layout.item_flight;
@@ -46,7 +47,7 @@ public class ActivityFlightList extends AppCompatActivity {
         flightListReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Flight flight = (Flight) dataSnapshot.getValue(Flight.class);
+                final Flight flight = (Flight) dataSnapshot.getValue(Flight.class);
                 // ignore this data if it doesn't belong to this user
                 if (!flight.getUserid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                     return;
@@ -57,7 +58,9 @@ public class ActivityFlightList extends AppCompatActivity {
                 ((Button)v.findViewById(R.id.upcoming_flight_edit)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(ActivityFlightList.this, ActivityEditFlight.class));
+                        Intent intent = new Intent(ActivityFlightList.this, ActivityEditFlight.class);
+                        intent.putExtra("FlightDetails", flight);
+                        startActivity(intent);
                     }
                 });
 

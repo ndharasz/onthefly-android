@@ -196,6 +196,7 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
             mDatabase.child("flights").push().setValue(newFlight);
 
             Intent editFlightIntent = new Intent(this, ActivityEditFlight.class);
+            editFlightIntent.putExtra("FlightDetails", newFlight);
             this.startActivity(editFlightIntent);
         }
 
