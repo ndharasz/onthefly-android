@@ -20,15 +20,19 @@ public class Flight {
 
     public Flight(){}
 
-    public Flight(String plane, String departAirport,
-                  String arriveAirport, String date,
-                  String time, String userid) {
+    public Flight(String plane, String departAirport, String arriveAirport, String date,
+                  String time, String userid, String duration, String startFuel,
+                  String fuelFlow, String taxiFuelBurn) {
         this.plane = plane;
         this.departAirport = departAirport;
         this.arriveAirport = arriveAirport;
         this.date = date;
         this.time = time;
         this.userid = userid;
+        this.flightDuration = duration;
+        this.startFuel = startFuel;
+        this.fuelFlow = fuelFlow;
+        this.taxiFuelBurn = taxiFuelBurn;
     }
 
     public String getUserid() {
