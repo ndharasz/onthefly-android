@@ -30,38 +30,31 @@
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:background="@color/colorAccent"/>
 
-    <LinearLayout
+    <AutoCompleteTextView
+        android:id="@+id/depPick"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textNoSuggestions"
+        android:background="@color/colorAccent"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:orientation="horizontal">
-        <AutoCompleteTextView
-            android:id="@+id/depPick"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:inputType="textNoSuggestions"
-            android:background="@color/colorAccent"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:padding="@dimen/input_padding"
-            android:hint="Departure Airport"
-            android:cursorVisible="true">
-            <requestFocus />
-        </AutoCompleteTextView>
+        android:padding="@dimen/input_padding"
+        android:hint="Departure Airport"
+        android:cursorVisible="true">
+        <requestFocus />
+    </AutoCompleteTextView>
 
-        <AutoCompleteTextView
-            android:id="@+id/arrPick"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:background="@color/colorAccent"
-            android:inputType="textNoSuggestions"
-            android:padding="@dimen/input_padding"
-            android:hint="Arrival Airport">
-            <requestFocus />
-        </AutoCompleteTextView>
-    </LinearLayout>
+    <AutoCompleteTextView
+        android:id="@+id/arrPick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:background="@color/colorAccent"
+        android:inputType="textNoSuggestions"
+        android:padding="@dimen/input_padding"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:hint="Arrival Airport">
+        <requestFocus />
+    </AutoCompleteTextView>
 
     <EditText
         android:id="@+id/flight_date"
@@ -120,7 +113,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
         <EditText
             android:id="@+id/fuel_flow"
             android:layout_width="0dp"
@@ -130,7 +124,8 @@
             android:background="@color/colorAccent"
             android:padding="@dimen/input_padding"
             android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:hint="@string/fuel_flow"/>
+            android:hint="@string/fuel_flow"
+            android:nextFocusDown="@+id/taxi_fuel"/>
         <EditText
             android:id="@+id/taxi_fuel"
             android:layout_width="0dp"
@@ -139,7 +134,7 @@
             android:inputType="number"
             android:background="@color/colorAccent"
             android:padding="@dimen/input_padding"
-            android:hint="@string/taxi_fuel"/>
+            android:hint="@string/taxi_fuel_usage"/>
     </LinearLayout>
 
     <Button

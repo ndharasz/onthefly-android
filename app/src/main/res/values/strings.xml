@@ -45,5 +45,5 @@
     <string name="flight_duration">Duration (min)</string>
     <string name="start_fuel">Starting Fuel Amount (gal)</string>
     <string name="fuel_flow">Flow Rate (gal/hr)</string>
-    <string name="taxi_fuel">Taxi Fuel Usage</string>
+    <string name="taxi_fuel_usage">Taxi Fuel Usage</string>
 </resources>
