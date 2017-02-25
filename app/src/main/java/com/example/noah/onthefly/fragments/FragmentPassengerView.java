@@ -62,20 +62,4 @@ public class FragmentPassengerView extends Fragment {
     public double calculateMoment() {
         return pilotView.calculateMoment() + passengerView.calculateMoment();
     }
-
-    public double calculateMoment() {
-        return pilotView.calculateMoment() + passengerView.calculateMoment();
-    }
-
-
-//    @Override
-//    public void onHiddenChanged(boolean hidden) {
-//        super.onHiddenChanged(hidden);
-//        Log.d("Hidden called?", "YES");
-//        if(hidden) {
-//            tab.setBackgroundResource(R.drawable.edit_flight_tab);
-//        } else {
-//            tab.setBackgroundResource(R.drawable.edit_flight_tab_selected);
-//        }
-//    }
 }

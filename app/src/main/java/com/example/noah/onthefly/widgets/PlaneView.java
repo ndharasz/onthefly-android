@@ -179,6 +179,7 @@ public class PlaneView extends GridView {
             layout.setOnDragListener(new OnDragListener() {
                 @Override
                 public boolean onDrag(View v, DragEvent event) {
+                    GridView owner = (GridView) v.getParent();
                     if (event.getAction() == DragEvent.ACTION_DRAG_STARTED) {
                         return true;
                     } else if (event.getAction() == DragEvent.ACTION_DROP) {
@@ -187,10 +188,8 @@ public class PlaneView extends GridView {
                         int endX = (int) v.getX();
                         int endY = (int) v.getY();
 
-                        GridView owner = (GridView) v.getParent();
                         for (int i = 0; i < owner.getChildCount(); i++) {
                             View passengerView = owner.getChildAt(i);
-
                             int left = (int)passengerView.getLeft();
                             int top = (int)passengerView.getTop();
 
@@ -206,10 +205,6 @@ public class PlaneView extends GridView {
                                 }
                                 return true;
 
-                            }
-
-                            if (!event.getResult()) {
-                                getChildAt(replace).setBackgroundColor(Color.RED);
                             }
                         }
 
