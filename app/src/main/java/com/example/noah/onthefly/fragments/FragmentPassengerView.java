@@ -6,10 +6,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.noah.onthefly.R;
+import com.example.noah.onthefly.models.Passenger;
 import com.example.noah.onthefly.widgets.PlaneView;
 
 import java.util.Arrays;
@@ -21,12 +23,14 @@ public class FragmentPassengerView extends Fragment {
     private PlaneView passengerView;
 
     public FragmentPassengerView setTabButton(Button tab) {
+
         this.tab = tab;
         return new FragmentPassengerView();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
@@ -36,6 +40,9 @@ public class FragmentPassengerView extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         Double[] pilotArmsArray = {12.0};
         Double[] passengerArmsArray = {50.0, 60.0, 70.0, 80.0};
 
@@ -57,6 +64,7 @@ public class FragmentPassengerView extends Fragment {
     public double calculateMoment() {
         return pilotView.calculateMoment() + passengerView.calculateMoment();
     }
+
 
 //    @Override
 //    public void onHiddenChanged(boolean hidden) {

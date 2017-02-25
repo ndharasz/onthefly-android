@@ -4,12 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+
     tools:context="com.example.noah.onthefly.fragments.FragmentPassengerView"
     android:background="@drawable/edit_flight_tab">
+
 
     <LinearLayout
         android:id="@+id/pilot_view"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@drawable/edit_flight_tab"/>

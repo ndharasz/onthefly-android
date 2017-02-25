@@ -9,6 +9,7 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.media.Image;
 import android.os.Build;
 import android.util.Log;
@@ -16,25 +17,21 @@ import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
-import com.example.noah.onthefly.fragments.FragmentPassengerView;
 import com.example.noah.onthefly.models.Passenger;
-
-import org.w3c.dom.Text;
+import com.example.noah.onthefly.util.ImageDragShadowBuilder;
 
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -47,9 +44,10 @@ public class PlaneView extends GridView {
     private int numColumns;
     private int numSeats;
     private List<Double> rowArms;
+    private Animation animation;
 
-    private List<ObjectAnimator> mWobbleAnimators;
-    private ObjectAnimator animate;
+    private int replace;
+
 
     // This is the majority of the PlaneView.
     // Basically the PassengerViewAdapter is a mapping from Passengers to views which
@@ -83,7 +81,9 @@ public class PlaneView extends GridView {
         }
 
         private View createNewView(int pos) {
+            animation = AnimationUtils.loadAnimation(getContext(),R.anim.shake);
             final int tInt = pos;
+
             LayoutInflater inflater = LayoutInflater.from(context);
             final RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.item_passenger_view, null);
             final ImageView seat = (ImageView) layout.findViewById(R.id.seat);
@@ -115,17 +115,18 @@ public class PlaneView extends GridView {
                                 public void onClick(DialogInterface dialog, int which) {
                                     try {
                                         Log.d(TAG, "Clicked on pos = " + tInt);
+                                        replace = tInt;
                                         String passName = name.getText().toString().trim();
                                         double passWeight = Double.parseDouble(weight.getText().toString().trim());
 
                                         getItem(tInt).setWeight(passWeight);
                                         getItem(tInt).setName(passName);
 
+
                                         if (passName != "Add Passenger") {
                                             if (getChildAt(tInt) != null) {
                                                 ImageView iv = (ImageView) getChildAt(tInt).findViewById(R.id.seat);
                                                 iv.setVisibility(VISIBLE);
-
                                                 if (iv.getVisibility() == INVISIBLE) {
                                                     iv.setVisibility(VISIBLE);
                                                     refreshView();
@@ -133,9 +134,8 @@ public class PlaneView extends GridView {
                                             }
                                         }
 
-
-
                                         refreshView();
+                                        temp.setAlpha(1);
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         Toast.makeText(context, "One or more fields were input incorrectly.", Toast.LENGTH_SHORT).show();
@@ -155,11 +155,13 @@ public class PlaneView extends GridView {
                 public boolean onLongClick(View view) {
                     Passenger passenger = viewToPassenger((RelativeLayout) view);
                     if (!passenger.equals(Passenger.EMPTY)) {
+                        replace = tInt;
                         ClipData data = ClipData.newPlainText("Dragged Object", passenger.toString());
-                        DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+                        ImageDragShadowBuilder shadowBuilder = new ImageDragShadowBuilder(view);
                         view.startDrag(data, shadowBuilder, view, 0);
-                        view.setVisibility(INVISIBLE);
-                        startWobbleAnimation();
+
+                        switchAnimation(true);
+
                         return true;
                     } else {
                         return false;
@@ -173,34 +175,60 @@ public class PlaneView extends GridView {
             layout.setOnDragListener(new OnDragListener() {
                 @Override
                 public boolean onDrag(View v, DragEvent event) {
+
                     if (event.getAction() == DragEvent.ACTION_DRAG_STARTED) {
                         return true;
                     } else if (event.getAction() == DragEvent.ACTION_DROP) {
                         // Find view at location
-                        float endX = v.getX();
-                        float endY = v.getY();
+
+                        int endX = (int) v.getX();
+                        int endY = (int) v.getY();
+
                         GridView owner = (GridView) v.getParent();
                         for (int i = 0; i < owner.getChildCount(); i++) {
                             View passengerView = owner.getChildAt(i);
-                            float left = passengerView.getLeft();
-                            float top = passengerView.getTop();
+
+                            int left = (int)passengerView.getLeft();
+                            int top = (int)passengerView.getTop();
+
+                            String passengerDragged = event.getClipData().getItemAt(0).getText().toString();
+
                             if (left == endX && top == endY) {
-                                Log.d(TAG, "Swapping Views");
-                                String passengerDragged = event.getClipData().getItemAt(0).getText().toString();
+                                passengerView.setAlpha(1);
                                 swapViews(passengerDragged, i);
 
                                 for (int j = 0; j < getChildCount(); j++) {
                                     getChildAt(j).setVisibility(VISIBLE);
+                                    getChildAt(j).setAlpha(1);
                                 }
-
-                                passengerView.findViewById(R.id.seat).setVisibility(VISIBLE);
-
-                                refreshView();
                                 return true;
+
+                            }
+
+                            if (!event.getResult()) {
+                                getChildAt(replace).setBackgroundColor(Color.RED);
                             }
                         }
 
                         return true;
+                    } else if (event.getAction() == DragEvent.ACTION_DRAG_ENDED) {
+                        switchAnimation(false);
+                        v.setAlpha(1);
+                        v.clearAnimation();
+
+                        if (!event.getResult()) {
+                            getChildAt(replace).setBackgroundResource(R.drawable.passenger_box);
+                            getChildAt(replace).findViewById(R.id.seat).setVisibility(INVISIBLE);
+                            Passenger.swap(new Passenger("Add Passenger", 0), getItem(replace));
+                            refreshView();
+                        } else {
+                            getChildAt(replace).setBackgroundResource(R.drawable.passenger_box);
+                        }
+
+                    } else if (event.getAction() == DragEvent.ACTION_DRAG_EXITED) {
+                        getChildAt(replace).setBackgroundColor(Color.RED);
+                    } else if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
+                        getChildAt(replace).setBackgroundResource(R.drawable.passenger_box);
                     }
                     return false;
                 }
@@ -235,11 +263,14 @@ public class PlaneView extends GridView {
             Passenger second = getItem(b);
 
 
-            if (second.getName() == "Add Passenger" || first.getName() == "Add Passenger") {
+            if (second.getName() == "Add Passenger") {
                 getChildAt(a).findViewById(R.id.seat).setVisibility(INVISIBLE);
                 getChildAt(b).findViewById(R.id.seat).setVisibility(VISIBLE);
             }
-
+            if (first.getName() == "Add Passenger") {
+                getChildAt(b).findViewById(R.id.seat).setVisibility(INVISIBLE);
+                getChildAt(a).findViewById(R.id.seat).setVisibility(VISIBLE);
+            }
 
             Passenger.swap(first, second);
 
@@ -285,54 +316,14 @@ public class PlaneView extends GridView {
         return 0;
     }
 
-    private void startWobbleAnimation() {
+    private void switchAnimation(boolean turnOn) {
+
         for (int i = 0; i < getChildCount(); i++) {
-            View v = getChildAt(i);
-            if (v != null && Boolean.TRUE) {
-                animateWobble(v);
+            if (turnOn) {
+                getChildAt(i).startAnimation(animation);
+            } else {
+                animation.cancel();
             }
         }
     }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void animateWobble(View v) {
-        mWobbleAnimators = new LinkedList<ObjectAnimator>();
-        ObjectAnimator animator = createBaseWobble(v);
-        animator.setFloatValues(-2, 2);
-        animator.start();
-        mWobbleAnimators.add(animator);
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private ObjectAnimator createBaseWobble(final View v) {
-
-        animate = new ObjectAnimator();
-        //animator.setDuration(180);
-        animate.setRepeatMode(ValueAnimator.REVERSE);
-        animate.setRepeatCount(ValueAnimator.INFINITE);
-        animate.setPropertyName("rotation");
-        animate.setTarget(v);
-        animate.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                v.setLayerType(LAYER_TYPE_NONE, null);
-            }
-        });
-        return animate;
-    }
-
-    private void stopWobble(boolean resetRotation, int pos) {
-
-        for (Animator wobbleAnimator : mWobbleAnimators) {
-            wobbleAnimator.end();
-            Log.d(TAG, "Stopping Wobble");
-        }
-            View v = getChildAt(pos);
-            v.setVisibility(VISIBLE);
-            if (v != null) {
-                if (resetRotation) v.setRotation(0);
-
-        }
-    }
-
 }

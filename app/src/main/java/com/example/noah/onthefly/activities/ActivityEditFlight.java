@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.example.noah.onthefly.R;
@@ -34,6 +35,7 @@ public class ActivityEditFlight extends FragmentActivity {
         setupFlightDetails();
         setupButtons();
         setupPassengerCargoViews();
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     protected void setupFlightDetails(){
