@@ -20,24 +20,24 @@
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/title4_size"
-            android:layout_margin="@dimen/activity_vertical_margin"/>
+            android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
         <TextView
             android:id="@+id/front_cargo_display"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/title2_size"
-            android:text="Weight: 0 lbs"/>
+            android:text="Weight: 0.0 lbs"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
 
             <Button
                 android:id="@+id/front_cargo_add_btn"
@@ -45,7 +45,7 @@
                 android:layout_height="@dimen/circle_button_size"
                 android:layout_gravity="center"
                 android:background="@drawable/circle_add_button"
-                android:layout_margin="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:text="+"
                 android:textSize="@dimen/title_size"/>
 
@@ -55,7 +55,7 @@
                 android:layout_height="@dimen/circle_button_size"
                 android:layout_gravity="center"
                 android:background="@drawable/circle_add_button"
-                android:layout_margin="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:text="-"
                 android:textSize="@dimen/title_size"/>
         </LinearLayout>
@@ -85,24 +85,24 @@
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/title4_size"
-            android:layout_margin="@dimen/activity_vertical_margin"/>
+            android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
         <TextView
             android:id="@+id/rear_cargo_display"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/title2_size"
-            android:text="Weight: 0 lbs"/>
+            android:text="Weight: 0.0 lbs"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
 
             <Button
                 android:id="@+id/rear_cargo_add_btn"
@@ -110,7 +110,7 @@
                 android:layout_height="@dimen/circle_button_size"
                 android:layout_gravity="center"
                 android:background="@drawable/circle_add_button"
-                android:layout_margin="@dimen/activity_vertical_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:text="+"
                 android:textSize="@dimen/title_size"/>
 
@@ -120,7 +120,7 @@
                 android:layout_height="@dimen/circle_button_size"
                 android:layout_gravity="center"
                 android:background="@drawable/circle_add_button"
-                android:layout_margin="@dimen/activity_vertical_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:text="-"
                 android:textSize="@dimen/title_size"/>
         </LinearLayout>
@@ -131,7 +131,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/activity_vertical_margin"
             android:text="@string/clear_cargo"
-            style="@style/accent_button"/>
+            style="@style/accent_button"
+            android:layout_gravity="bottom"/>
 
     </LinearLayout>
 

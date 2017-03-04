@@ -3,8 +3,10 @@ package com.example.noah.onthefly.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -115,7 +117,7 @@ public class FragmentCargoView extends Fragment {
     }
 
     protected void addFrontCargo(View v) {
-        addCargo(new DialogCloseListener() {
+        changeCargo("Add Front", new DialogCloseListener() {
             @Override
             public void onDialogClose(double weight) {
                 frontWeight += weight;
@@ -125,11 +127,16 @@ public class FragmentCargoView extends Fragment {
     }
 
     protected void removeFrontCargo(View v) {
-        removeCargo(new DialogCloseListener() {
+        changeCargo("Remove Front", new DialogCloseListener() {
             @Override
             public void onDialogClose(double weight) {
-                frontWeight -= weight;
-                updateTotalFrontCargo();
+                if(frontWeight - weight < 0) {
+                    Toast.makeText(getActivity(), "Cannot remove more cargo than already exists.",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    frontWeight -= weight;
+                    updateTotalFrontCargo();
+                }
             }
         });
     }
@@ -140,7 +147,7 @@ public class FragmentCargoView extends Fragment {
     }
 
     protected void addRearCargo(View v) {
-        addCargo(new DialogCloseListener() {
+        changeCargo("Add Rear", new DialogCloseListener() {
             @Override
             public void onDialogClose(double weight) {
                 rearWeight += weight;
@@ -150,11 +157,16 @@ public class FragmentCargoView extends Fragment {
     }
 
     protected void removeRearCargo(View v) {
-        removeCargo(new DialogCloseListener() {
+        changeCargo("Remove Rear", new DialogCloseListener() {
             @Override
             public void onDialogClose(double weight) {
-                rearWeight -= weight;
-                updateTotalRearCargo();
+                if(frontWeight - weight < 0) {
+                    Toast.makeText(getActivity(), "Cannot remove more cargo than already exists.",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    rearWeight -= weight;
+                    updateTotalRearCargo();
+                }
             }
         });
     }
@@ -164,15 +176,20 @@ public class FragmentCargoView extends Fragment {
         updateTotalRearCargo();
     }
 
-    private void addCargo(final DialogCloseListener dialogCloseListener) {
+    private void changeCargo(String which, final DialogCloseListener dialogCloseListener) {
         final View cargoView = LayoutInflater.from(getContext()).inflate(R.layout.layout_add_cargo, null);
+        ((TextView)cargoView.findViewById(R.id.cargo_dialog_title)).setText(which + " Cargo");
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
         alertDialogBuilder.setView(cargoView);
-        alertDialogBuilder.setTitle("Add Cargo");
 
         final EditText weightField = (EditText) cargoView.findViewById(R.id.weight_field);
 
-        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 try {
@@ -187,43 +204,16 @@ public class FragmentCargoView extends Fragment {
         });
         AlertDialog alert = alertDialogBuilder.create();
         alert.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alert.getWindow().setBackgroundDrawable(
+                new ColorDrawable(android.graphics.Color.TRANSPARENT));
         alert.show();
+        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(
+                ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(
+                ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                ContextCompat.getColor(getContext(), R.color.colorAccent));
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                ContextCompat.getColor(getContext(), R.color.colorAccent));
     }
-
-    private void removeCargo(final DialogCloseListener dialogCloseListener) {
-        final View cargoView = LayoutInflater.from(getContext()).inflate(R.layout.layout_add_cargo, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
-        alertDialogBuilder.setView(cargoView);
-        alertDialogBuilder.setTitle("Remove Cargo");
-
-        final EditText weightField = (EditText) cargoView.findViewById(R.id.weight_field);
-
-        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                try {
-                    String weightString = weightField.getText().toString();
-                    double weight = Double.parseDouble(weightString);
-                    dialogCloseListener.onDialogClose(weight);
-                    dialog.dismiss();
-                } catch (Exception e) {
-                    Toast.makeText(getContext(), "Please enter a number only", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        alert.show();
-    }
-
-//    @Override
-//    public void onHiddenChanged(boolean hidden) {
-//        super.onHiddenChanged(hidden);
-//        Log.d("Hidden called?", "YES");
-//        if(hidden) {
-//            tab.setBackgroundResource(R.drawable.edit_flight_tab);
-//        } else {
-//            tab.setBackgroundResource(R.drawable.edit_flight_tab_selected);
-//        }
-//    }
 }

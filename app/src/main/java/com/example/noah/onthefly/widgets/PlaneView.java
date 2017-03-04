@@ -12,6 +12,7 @@ import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
@@ -143,6 +144,7 @@ public class PlaneView extends GridView {
                                 }
                             });
                     AlertDialog alert = alertDialogBuilder.create();
+                    alert.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
                     alert.getWindow().setBackgroundDrawable(
                             new ColorDrawable(android.graphics.Color.TRANSPARENT));
                     alert.show();
