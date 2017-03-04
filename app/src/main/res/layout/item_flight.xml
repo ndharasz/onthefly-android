@@ -3,41 +3,156 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    android:gravity="center_vertical">
 
+<LinearLayout
+    android:id="@+id/item_wrapper"
+    android:layout_width="0dp"
+    android:layout_weight="15"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center_vertical">
 
+    <LinearLayout
+        android:id="@+id/label_wrapper1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
 
-    <TextView
-        android:id="@+id/upcoming_flight_date"
-        android:layout_width="0dp"
-        android:layout_weight="4"
-        android:layout_height="match_parent"
-        android:textColor="@color/colorAccent"
-        android:textSize="@dimen/title3_size"
-        android:gravity="center_vertical"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="@dimen/title2_size"
+            android:text="@string/date" />
 
-    <TextView
-        android:id="@+id/upcoming_flight_depart"
-        android:layout_width="0dp"
-        android:layout_weight="5"
-        android:layout_height="match_parent"
-        android:textColor="@color/colorAccent"
-        android:textSize="@dimen/title2_size"
-        android:gravity="center_vertical"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="@dimen/title2_size"
+            android:text="@string/dpt_arpt"/>
 
-    <TextView
-        android:id="@+id/upcoming_flight_arrival"
-        android:layout_width="0dp"
-        android:layout_weight="5"
-        android:layout_height="match_parent"
-        android:textColor="@color/colorAccent"
-        android:textSize="@dimen/title2_size"
-        android:gravity="center_vertical"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="@dimen/title2_size"
+            android:text="@string/arr_arpt"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/upcoming_flight_date"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/title3_size"/>
+
+        <TextView
+            android:id="@+id/upcoming_flight_depart"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/title2_size" />
+
+        <TextView
+            android:id="@+id/upcoming_flight_arrival"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/title2_size"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/label_wrapper2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="@dimen/title2_size"
+            android:text="@string/dpt_time" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="@dimen/title2_size"
+            android:text="@string/duration"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="@dimen/title2_size"
+            android:text="@string/ac_num"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/detail_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/dept_time"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/title3_size"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/duration"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/title3_size"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/ac_num"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/title3_size"
+            android:gravity="center_vertical"/>
+
+    </LinearLayout>
+</LinearLayout>
 
     <Button
         android:id="@+id/upcoming_flight_edit"
         android:layout_width="0dp"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="@string/edit"
         style="@style/invisible_button"/>
