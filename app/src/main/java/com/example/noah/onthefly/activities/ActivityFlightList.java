@@ -1,13 +1,20 @@
 package com.example.noah.onthefly.activities;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
@@ -35,6 +42,8 @@ public class ActivityFlightList extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference flightListReference;
 
+    View expandedItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +61,7 @@ public class ActivityFlightList extends AppCompatActivity {
                     return;
                 }
 
-                TableRow v = (TableRow) LayoutInflater.from(ActivityFlightList.this).inflate(item_flight, null);
+                final TableRow v = (TableRow) LayoutInflater.from(ActivityFlightList.this).inflate(item_flight, null);
 
                 ((Button)v.findViewById(R.id.upcoming_flight_edit)).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -62,11 +71,25 @@ public class ActivityFlightList extends AppCompatActivity {
                 });
 
                 ((TextView) v.findViewById(R.id.upcoming_flight_date))
-                        .setText(getDisplayDate(flight.getDate()));
+                        .setText(flight.getDate());
                 ((TextView) v.findViewById(R.id.upcoming_flight_arrival))
                         .setText(flight.getArriveAirport());
                 ((TextView) v.findViewById(R.id.upcoming_flight_depart))
                         .setText(flight.getDepartAirport());
+                ((TextView)v.findViewById(R.id.dept_time))
+                        .setText(flight.getTime());
+                ((TextView)v.findViewById(R.id.duration))
+                        .setText(flight.getFlightDuration() + " m");
+                ((TextView)v.findViewById(R.id.ac_num))
+                        .setText(flight.getPlane());
+
+
+                v.findViewById(R.id.item_wrapper).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(final View v) {
+                        expandCollapseItem(v);
+                    }
+                });
                 flightTable.addView(v);
             }
 
@@ -94,6 +117,59 @@ public class ActivityFlightList extends AppCompatActivity {
 
             }
         });
+    }
+
+    protected void expandCollapseItem(View v) {
+        if(expandedItem == null) {
+            expandedItem = v;
+            expandItem(v);
+        } else {
+            collapseItem(expandedItem);
+            if(expandedItem == v) {
+                expandedItem = null;
+            } else {
+                expandedItem = v;
+                expandItem(v);
+            }
+        }
+    }
+
+    protected void expandItem(final View v) {
+        v.measure(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        int startHeight = v.getMeasuredHeight();
+        ((TableRow)v.getParent()).setBackgroundColor(getResources().getColor(R.color.colorPrimarySemiDark));
+        v.findViewById(R.id.label_wrapper1).setVisibility(View.VISIBLE);
+        v.findViewById(R.id.label_wrapper2).setVisibility(View.VISIBLE);
+        v.findViewById(R.id.detail_wrapper).setVisibility(View.VISIBLE);
+        v.measure(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        int targetHeight = (int)(v.getMeasuredHeight()*.65);
+        animate(startHeight, targetHeight, v);
+    }
+
+    protected void collapseItem(final View v) {
+        v.measure(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        int startHeight = (int)(v.getMeasuredHeight()*.65);
+        ((TableRow)v.getParent()).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        v.findViewById(R.id.label_wrapper1).setVisibility(View.GONE);
+        v.findViewById(R.id.label_wrapper2).setVisibility(View.GONE);
+        v.findViewById(R.id.detail_wrapper).setVisibility(View.GONE);
+        v.measure(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        int targetHeight = v.getMeasuredHeight();
+        animate(startHeight, targetHeight, v);
+    }
+
+    protected void animate(int start, int end, final View v) {
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(start, end);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                v.getLayoutParams().height = (int) animation.getAnimatedValue();
+                v.requestLayout();
+            }
+        });
+        valueAnimator.setInterpolator(new DecelerateInterpolator());
+        valueAnimator.setDuration(500);
+        valueAnimator.start();
     }
 
     // takes in the database date and displays it

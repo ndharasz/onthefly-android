@@ -48,4 +48,9 @@
     <string name="start_fuel">Starting Fuel Amount (gal)</string>
     <string name="fuel_flow">Flow Rate (gal/hr)</string>
     <string name="taxi_fuel_usage">Taxi Fuel Usage</string>
+    <string name="dpt_time">Dpt Time</string>
+    <string name="duration">Duration</string>
+    <string name="ac_num">A/C No</string>
+    <string name="dpt_arpt">Dpt Arpt</string>
+    <string name="arr_arpt">Arr Arpt</string>
 </resources>
