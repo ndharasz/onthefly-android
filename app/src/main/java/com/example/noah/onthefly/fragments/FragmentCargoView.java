@@ -10,9 +10,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.noah.onthefly.R;
+import com.example.noah.onthefly.util.FlightManager;
 
 public class FragmentCargoView extends Fragment {
     Button tab;
+
+    private FlightManager flightManager;
 
     public FragmentCargoView setTabButton(Button tab) {
         this.tab = tab;
@@ -30,6 +33,10 @@ public class FragmentCargoView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_cargo_view, container, false);
+    }
+
+    public void setFlightManager(FlightManager flightManager) {
+        this.flightManager = flightManager;
     }
 
 //    @Override

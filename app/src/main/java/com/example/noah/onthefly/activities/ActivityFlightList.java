@@ -48,6 +48,7 @@ public class ActivityFlightList extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 final Flight flight = (Flight) dataSnapshot.getValue(Flight.class);
+                flight.setKey(dataSnapshot.getKey());
                 // ignore this data if it doesn't belong to this user
                 if (!flight.getUserid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                     return;

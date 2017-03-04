@@ -1,56 +1,45 @@
 package com.example.noah.onthefly.activities;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.icu.util.BuddhistCalendar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.fragments.FragmentCargoView;
+import com.example.noah.onthefly.fragments.FragmentDetailsView;
 import com.example.noah.onthefly.fragments.FragmentPassengerView;
 import com.example.noah.onthefly.models.Flight;
-import com.example.noah.onthefly.models.Passenger;
-import com.example.noah.onthefly.models.Plane;
-import com.example.noah.onthefly.util.Airports;
-import com.example.noah.onthefly.util.CustomAdapter;
+import com.example.noah.onthefly.util.FlightManager;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class ActivityEditFlight extends FragmentActivity {
-    static final int NUM_TABS = 2;
+    static final int NUM_TABS = 3;
 
     TabAdapter tabAdapter;
     ViewPager tabPager;
 
     Flight curFlight;
+    FlightManager flightManager;
 
+    Button detailViewButton;
     Button passengerViewButton;
     Button cargoViewButton;
     Button genReportButton;
+
+    TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,40 +49,62 @@ public class ActivityEditFlight extends FragmentActivity {
         Intent i = getIntent();
         curFlight = (Flight) i.getSerializableExtra("FlightDetails");
 
-        TextView title = (TextView) findViewById(R.id.EditFlightTitle);
+        title = (TextView) findViewById(R.id.EditFlightTitle);
         title.setText(curFlight.getDepartAirport() + " \u2192 " + curFlight.getArriveAirport());
 
-        setupFlightDetails();
         setupButtons();
-        setupPassengerCargoViews();
+        setupFlightManager();
+        setupPassengerCargoDetailViews();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
-    protected void setupFlightDetails(){
+    protected void setupFlightManager() {
+        // Sets up the flight manager utility.  If a fragment alters the values, the listeners
+        //   will update the title of the activity.
+        flightManager = new FlightManager(curFlight, FirebaseAuth.getInstance().getCurrentUser().getUid());
+        flightManager.setDepartureAirportChangedListener(new FlightManager.ValueListener() {
+            @Override
+            public void onValueChanged(String value) {
+                title.setText(value + " \u2192 " + flightManager.getArrivalAirport());
+            }
+        });
+        flightManager.setArrivalAirportChangedListener(new FlightManager.ValueListener() {
+            @Override
+            public void onValueChanged(String value) {
+                title.setText(flightManager.getDepartureAirport() + " \u2192 " + value);
+            }
+        });
     }
 
     protected void setupButtons() {
+        detailViewButton = (Button) findViewById(R.id.details_view_button);
         passengerViewButton = (Button) findViewById(R.id.passenger_view_button);
         cargoViewButton = (Button) findViewById(R.id.cargo_view_button);
-        passengerViewButton.setOnClickListener(new View.OnClickListener() {
+        detailViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tabPager.setCurrentItem(0);
             }
         });
-        cargoViewButton.setOnClickListener(new View.OnClickListener() {
+        passengerViewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tabPager.setCurrentItem(1);
+            }
+        });
+        cargoViewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tabPager.setCurrentItem(2);
             }
         });
 
         genReportButton = (Button) findViewById(R.id.gen_report_button);
     }
 
-    protected void setupPassengerCargoViews() {
+    protected void setupPassengerCargoDetailViews() {
         tabAdapter = new TabAdapter(getSupportFragmentManager(),
-                passengerViewButton, cargoViewButton);
+                detailViewButton, passengerViewButton, cargoViewButton);
 
         tabPager = (ViewPager)findViewById(R.id.edit_flight_pager);
         tabPager.setAdapter(tabAdapter);
@@ -104,11 +115,18 @@ public class ActivityEditFlight extends FragmentActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if(position == 0) {
+                if (position == 0) {
+                    detailViewButton.setBackgroundResource(R.drawable.edit_flight_tab_selected);
+                    passengerViewButton.setBackgroundResource(R.drawable.edit_flight_tab);
+                    cargoViewButton.setBackgroundResource(R.drawable.edit_flight_tab);
+                    findViewById(R.id.activity_edit_flight).invalidate();
+                } else if (position == 1) {
+                    detailViewButton.setBackgroundResource(R.drawable.edit_flight_tab);
                     passengerViewButton.setBackgroundResource(R.drawable.edit_flight_tab_selected);
                     cargoViewButton.setBackgroundResource(R.drawable.edit_flight_tab);
                     findViewById(R.id.activity_edit_flight).invalidate();
                 } else {
+                    detailViewButton.setBackgroundResource(R.drawable.edit_flight_tab);
                     passengerViewButton.setBackgroundResource(R.drawable.edit_flight_tab);
                     cargoViewButton.setBackgroundResource(R.drawable.edit_flight_tab_selected);
                     findViewById(R.id.activity_edit_flight).invalidate();
@@ -121,14 +139,20 @@ public class ActivityEditFlight extends FragmentActivity {
     }
 
     public class TabAdapter extends FragmentPagerAdapter {
+        FragmentDetailsView detailsView;
         FragmentPassengerView passengerView;
         FragmentCargoView cargoView;
-        public TabAdapter(FragmentManager fm, Button passengerTab, Button cargoTab) {
+        public TabAdapter(FragmentManager fm, Button detailsTab, Button passengerTab, Button cargoTab) {
             super(fm);
+            detailsView = new FragmentDetailsView();
+            detailsView.setTabButton(detailsTab);
+            detailsView.setFlightManager(flightManager);
             passengerView = new FragmentPassengerView();
             passengerView.setTabButton(passengerTab);
+            passengerView.setFlightManager(flightManager);
             cargoView = new FragmentCargoView();
             cargoView.setTabButton(cargoTab);
+            cargoView.setFlightManager(flightManager);
         }
 
         @Override
@@ -138,11 +162,18 @@ public class ActivityEditFlight extends FragmentActivity {
 
         @Override
         public Fragment getItem(int position) {
-            if(position == 0) {
+            if (position == 0) {
+                detailsView.onHiddenChanged(false);
+                passengerView.onHiddenChanged(true);
+                cargoView.onHiddenChanged(true);
+                return detailsView;
+            } else if (position == 1) {
+                detailsView.onHiddenChanged(true);
                 passengerView.onHiddenChanged(false);
                 cargoView.onHiddenChanged(true);
                 return passengerView;
             } else {
+                detailsView.onHiddenChanged(true);
                 passengerView.onHiddenChanged(true);
                 cargoView.onHiddenChanged(false);
                 return cargoView;
@@ -162,74 +193,5 @@ public class ActivityEditFlight extends FragmentActivity {
     protected void generateReport(View v) {
         Intent reportIntent = new Intent(this, ActivityReport.class);
         this.startActivity(reportIntent);
-    }
-
-    public void editDetails(View view) {
-
-        View promptView = LayoutInflater.from(this).inflate(R.layout.flight_edit_details_dialog, null);
-        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
-        alertDialogBuilder.setView(promptView);
-        alertDialogBuilder.setTitle("Edit Flight Details");
-
-        final EditText name = (EditText) promptView.findViewById(R.id.PlaneName);
-        name.setText(curFlight.getPlane());
-
-        final EditText depart = (EditText) promptView.findViewById(R.id.DeptAirport);
-        depart.setText(curFlight.getDepartAirport());
-
-        final EditText arrive = (EditText) promptView.findViewById(R.id.ArrivalAirport);
-        arrive.setText(curFlight.getArriveAirport());
-
-        final EditText date = (EditText) promptView.findViewById(R.id.FlightDate);
-        date.setText(curFlight.getDate());
-
-        final EditText time = (EditText) promptView.findViewById(R.id.FlightTime);
-        time.setText(curFlight.getTime());
-
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        curFlight.setArriveAirport(arrive.getText().toString());
-                        curFlight.setDepartAirport(depart.getText().toString());
-
-                    }
-                });
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
-
-
-    private class ArrayAdapterWithHint<T> extends ArrayAdapter {
-        public ArrayAdapterWithHint(
-                Context c, int resource, List<T> objects) {
-            super(c, resource, objects);
-            this.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        }
-
-        @Override
-        public boolean isEnabled(int position) {
-            if (position == 0) {
-                // Disable the first item from Spinner
-                // First item will be use for hint
-                return false;
-            } else {
-                return true;
-            }
-        }
-
-        @Override
-        public View getDropDownView(int position, View convertView,
-                                    ViewGroup parent) {
-            View view = super.getDropDownView(position, convertView, parent);
-            TextView tv = (TextView) view;
-            if (position == 0) {
-                // Set the hint text color gray
-                tv.setTextColor(Color.GRAY);
-            } else {
-                tv.setTextColor(Color.BLACK);
-            }
-            return view;
-        }
     }
 }

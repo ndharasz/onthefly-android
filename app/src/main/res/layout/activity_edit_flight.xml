@@ -16,9 +16,6 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_marginBottom="@dimen/activity_title_table_margin">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/EditFlightTitle"
                 android:layout_height="wrap_content"
@@ -29,24 +26,26 @@
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/title_size"
                 android:textStyle="bold"
+                android:textAlignment="center"
                 />
-            <Button
-                android:layout_width="wrap_content"
-                android:hint="@string/editDetails"
-                android:textColorHint="@color/colorPrimary"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:onClick="editDetails"
-                android:layout_toRightOf="@id/EditFlightTitle"
-                android:layout_weight="1"
-                style="@style/accent_button"/>
-        </RelativeLayout>
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/details_view_button"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_flight_tab"
+            android:text="@string/edit_details"
+            android:textColor="@color/colorAccent"
+            android:textAllCaps="false"
+            android:textSize="@dimen/title3_size"/>
 
         <Button
             android:id="@+id/passenger_view_button"

@@ -1,7 +1,6 @@
 package com.example.noah.onthefly.activities;
 
-import android.app.DialogFragment;
-import android.content.Context;
+import android.support.v4.app.DialogFragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +22,7 @@ import com.example.noah.onthefly.interfaces.CallsTimePicker;
 import com.example.noah.onthefly.models.Plane;
 import com.example.noah.onthefly.models.Flight;
 import com.example.noah.onthefly.util.Airports;
+import com.example.noah.onthefly.util.ArrayAdapterWithHint;
 import com.example.noah.onthefly.util.CustomAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -103,43 +103,10 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
 
     }
 
-    private class ArrayAdapterWithHint<T> extends ArrayAdapter {
-        public ArrayAdapterWithHint(
-                Context c, int resource, List<T> objects) {
-            super(c, resource, objects);
-            this.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        }
-
-        @Override
-        public boolean isEnabled(int position) {
-            if (position == 0) {
-                // Disable the first item from Spinner
-                // First item will be use for hint
-                return false;
-            } else {
-                return true;
-            }
-        }
-
-        @Override
-        public View getDropDownView(int position, View convertView,
-                                    ViewGroup parent) {
-            View view = super.getDropDownView(position, convertView, parent);
-            TextView tv = (TextView) view;
-            if (position == 0) {
-                // Set the hint text color gray
-                tv.setTextColor(Color.GRAY);
-            } else {
-                tv.setTextColor(Color.BLACK);
-            }
-            return view;
-        }
-    }
-
     public void showDatePicker(View v) {
         if (datePickerFragment == null) {
             datePickerFragment = new FragmentDatePicker();
-            datePickerFragment.show(getFragmentManager(), "datePickerFragment");
+            datePickerFragment.show(getSupportFragmentManager(), "datePickerFragment");
         }
     }
 
@@ -157,11 +124,9 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
     public void showTimePicker(View v) {
         if (timePickerFragment == null) {
             timePickerFragment = new FragmentTimePicker();
-            timePickerFragment.show(getFragmentManager(), "datePickerFragment");
+            timePickerFragment.show(getSupportFragmentManager(), "datePickerFragment");
         }
     }
-
-
 
     public void hideTimePicker(String time) {
         if (timePickerFragment != null) {

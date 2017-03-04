@@ -31,8 +31,8 @@
     <string name="edit_flight_title">Edit Flight</string>
     <string name="gen_report_button">Generate Weight and Balance Report</string>
     <string name="add_passenger">Add Passenger</string>
-    <string name="passenger_view">Passenger View</string>
-    <string name="cargo_view">Cargo View</string>
+    <string name="passenger_view">Passengers</string>
+    <string name="cargo_view">Cargo</string>
     <string name="front_cargo">Front Cargo Hold</string>
     <string name="rear_cargo">Rear Cargo Hold</string>
     <string name="curr_weight">Current Weight:</string>
@@ -42,5 +42,5 @@
     <string name="your_email_hint">your@email.com</string>
     <string name="another_email">Send to a different email address:</string>
     <string name="back">Back</string>
-    <string name="editDetails">Edit Details</string>
+    <string name="edit_details">Details</string>
 </resources>

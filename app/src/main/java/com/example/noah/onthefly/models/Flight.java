@@ -8,6 +8,8 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class Flight implements Serializable {
+    private String key;
+
     private String plane;
     private String departAirport;
     private String arriveAirport;
@@ -74,5 +76,13 @@ public class Flight implements Serializable {
 
     public void setPlane(String plane) {
         this.plane = plane;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

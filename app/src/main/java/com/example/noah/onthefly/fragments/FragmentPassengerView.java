@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.models.Passenger;
+import com.example.noah.onthefly.util.FlightManager;
 import com.example.noah.onthefly.widgets.PlaneView;
 
 import java.util.Arrays;
@@ -21,6 +22,7 @@ public class FragmentPassengerView extends Fragment {
     Button tab;
     private PlaneView pilotView;
     private PlaneView passengerView;
+    private FlightManager flightManager;
 
     public FragmentPassengerView setTabButton(Button tab) {
 
@@ -59,6 +61,10 @@ public class FragmentPassengerView extends Fragment {
         pilotLayout.addView(pilotView);
         passengerLayout.addView(passengerView);
         return v;
+    }
+
+    public void setFlightManager(FlightManager flightManager) {
+        this.flightManager = flightManager;
     }
 
     public double calculateMoment() {
