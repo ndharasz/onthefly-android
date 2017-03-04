@@ -6,6 +6,7 @@ import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
 import android.icu.text.IDNA;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.DatePicker;
 
@@ -19,6 +20,7 @@ import java.util.Calendar;
  */
 
 public class FragmentDatePicker extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+    CallsDatePicker parent;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -38,11 +40,15 @@ public class FragmentDatePicker extends DialogFragment implements DatePickerDial
                 + String.format("%02d", d) + "-"
                 + String.format("%04d",y);
         Log.d("Tag", "onDateSet reached");
-        ((CallsDatePicker) getActivity()).hideDatePicker(date);
+        parent.hideDatePicker(date);
     }
 
     @Override
     public void onCancel(DialogInterface dialog) {
-        ((CallsDatePicker) getActivity()).hideDatePicker("");
+        parent.hideDatePicker("");
+    }
+
+    public void setParent(CallsDatePicker parent) {
+        this.parent = parent;
     }
 }

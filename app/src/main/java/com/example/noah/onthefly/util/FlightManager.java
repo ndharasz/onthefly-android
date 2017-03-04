@@ -41,6 +41,7 @@ public class FlightManager {
         firebaseDatabase = FirebaseDatabase.getInstance();
         ref = firebaseDatabase.getReference().child("flights").child(flight.getKey());
         flight.setKey(null);
+        this.flight = flight;
         Log.d(TAG, "Key: " + flight.getKey());
     }
 

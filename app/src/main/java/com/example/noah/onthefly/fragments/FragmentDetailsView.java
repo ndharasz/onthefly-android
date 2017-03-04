@@ -36,13 +36,14 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
     EditText flightDate;
     EditText departureTime;
 
-    private DialogFragment datePickerFragment;
-    private DialogFragment timePickerFragment;
+    private FragmentDatePicker datePickerFragment;
+    private FragmentTimePicker timePickerFragment;
 
     private FlightManager flightManager;
 
-    public void setTabButton(Button tab) {
+    public FragmentDetailsView setTabButton(Button tab) {
         this.tab = tab;
+        return new FragmentDetailsView();
     }
 
     @Override
@@ -86,10 +87,12 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
         final ArrayAdapter<String> planeArrayAdapter = new ArrayAdapterWithHint<String>(
                 view.getContext(), android.R.layout.simple_spinner_item, planesList);
 
+        // Set selected plane to the plane in the database
         planeSpinner.setAdapter(planeArrayAdapter);
         int selectedPlane = planesList.indexOf(flightManager.getPlane());
         planeSpinner.setSelection(selectedPlane);
 
+        // Set the date/time onClick listeners
         flightDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,11 +105,20 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
                 showTimePicker(v);
             }
         });
+
+        // Put the flight values in the corresponding fields
+        departureAirport.setText(flightManager.getDepartureAirport());
+        arrivalAirport.setText(flightManager.getArrivalAirport());
+        flightDate.setText(flightManager.getDate());
+        departureTime.setText(flightManager.getTime());
+
+
     }
 
     public void showDatePicker(View v) {
         if (datePickerFragment == null) {
             datePickerFragment = new FragmentDatePicker();
+            datePickerFragment.setParent(this);
             datePickerFragment.show(getFragmentManager(), "datePickerFragment");
         }
     }
@@ -126,6 +138,7 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
     public void showTimePicker(View v) {
         if (timePickerFragment == null) {
             timePickerFragment = new FragmentTimePicker();
+            timePickerFragment.setParent(this);
             timePickerFragment.show(getFragmentManager(), "datePickerFragment");
         }
     }

@@ -40,8 +40,8 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
     private Spinner plane_spinner;
     private EditText dateField;
     private EditText timeField;
-    private DialogFragment datePickerFragment;
-    private DialogFragment timePickerFragment;
+    private FragmentDatePicker datePickerFragment;
+    private FragmentTimePicker timePickerFragment;
     private AutoCompleteTextView departures;
     private AutoCompleteTextView arrivals;
     private String[] dept;
@@ -106,6 +106,7 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
     public void showDatePicker(View v) {
         if (datePickerFragment == null) {
             datePickerFragment = new FragmentDatePicker();
+            datePickerFragment.setParent(this);
             datePickerFragment.show(getSupportFragmentManager(), "datePickerFragment");
         }
     }
@@ -124,6 +125,7 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
     public void showTimePicker(View v) {
         if (timePickerFragment == null) {
             timePickerFragment = new FragmentTimePicker();
+            timePickerFragment.setParent(this);
             timePickerFragment.show(getSupportFragmentManager(), "datePickerFragment");
         }
     }

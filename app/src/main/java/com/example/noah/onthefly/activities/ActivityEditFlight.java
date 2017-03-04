@@ -54,7 +54,7 @@ public class ActivityEditFlight extends FragmentActivity {
 
         setupButtons();
         setupFlightManager();
-        setupPassengerCargoDetailViews();
+        setupTabs();
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
@@ -102,7 +102,7 @@ public class ActivityEditFlight extends FragmentActivity {
         genReportButton = (Button) findViewById(R.id.gen_report_button);
     }
 
-    protected void setupPassengerCargoDetailViews() {
+    protected void setupTabs() {
         tabAdapter = new TabAdapter(getSupportFragmentManager(),
                 detailViewButton, passengerViewButton, cargoViewButton);
 
@@ -120,6 +120,7 @@ public class ActivityEditFlight extends FragmentActivity {
                     passengerViewButton.setBackgroundResource(R.drawable.edit_flight_tab);
                     cargoViewButton.setBackgroundResource(R.drawable.edit_flight_tab);
                     findViewById(R.id.activity_edit_flight).invalidate();
+                    tabAdapter.getDetailsView().initializeFields();
                 } else if (position == 1) {
                     detailViewButton.setBackgroundResource(R.drawable.edit_flight_tab);
                     passengerViewButton.setBackgroundResource(R.drawable.edit_flight_tab_selected);
@@ -178,10 +179,12 @@ public class ActivityEditFlight extends FragmentActivity {
                 cargoView.onHiddenChanged(false);
                 return cargoView;
             }
+        }
 
+        public FragmentDetailsView getDetailsView() {
+            return detailsView;
         }
     }
-
 
     @Override
     public void onBackPressed() {
