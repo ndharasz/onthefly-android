@@ -1,5 +1,6 @@
 package com.example.noah.onthefly.fragments;
 
+import android.content.Context;
 import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,7 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -16,9 +20,13 @@ import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.interfaces.CallsDatePicker;
 import com.example.noah.onthefly.interfaces.CallsTimePicker;
 import com.example.noah.onthefly.models.Plane;
+import com.example.noah.onthefly.util.Airports;
 import com.example.noah.onthefly.util.ArrayAdapterWithHint;
+import com.example.noah.onthefly.util.CustomAdapter;
 import com.example.noah.onthefly.util.FlightManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,8 +39,8 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
     View view;
 
     Spinner planeSpinner;
-    EditText departureAirport;
-    EditText arrivalAirport;
+    AutoCompleteTextView departureAirport;
+    AutoCompleteTextView arrivalAirport;
     EditText flightDate;
     EditText departureTime;
 
@@ -73,10 +81,23 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
 
     private void setupFields(View parent) {
         this.planeSpinner = (Spinner) parent.findViewById(R.id.choose_plane_spinner);
-        this.departureAirport = (EditText) parent.findViewById(R.id.depPick);
-        this.arrivalAirport = (EditText) parent.findViewById(R.id.arrPick);
+        this.departureAirport = (AutoCompleteTextView) parent.findViewById(R.id.depPick);
+        this.arrivalAirport = (AutoCompleteTextView) parent.findViewById(R.id.arrPick);
         this.flightDate = (EditText) parent.findViewById(R.id.flight_date);
         this.departureTime = (EditText) parent.findViewById(R.id.flight_time);
+
+        String[] airports = Airports.getAirports();
+        CustomAdapter deptAdapter = new
+                CustomAdapter(getContext(),android.R.layout.simple_list_item_1, new ArrayList<String>(Arrays.asList(airports)));
+
+        departureAirport.setAdapter(deptAdapter);
+        departureAirport.setThreshold(2);
+
+        CustomAdapter arrAdapter = new
+                CustomAdapter(getContext(),android.R.layout.simple_list_item_1, new ArrayList<String>(Arrays.asList(airports)));
+
+        arrivalAirport.setAdapter(arrAdapter);
+        arrivalAirport.setThreshold(2);
     }
 
     public void initializeFields() {
@@ -89,7 +110,7 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
 
         // Set selected plane to the plane in the database
         planeSpinner.setAdapter(planeArrayAdapter);
-        int selectedPlane = planesList.indexOf(flightManager.getPlane());
+        final int selectedPlane = planesList.indexOf(flightManager.getPlane());
         planeSpinner.setSelection(selectedPlane);
 
         // Set the date/time onClick listeners
@@ -112,7 +133,41 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
         flightDate.setText(flightManager.getDate());
         departureTime.setText(flightManager.getTime());
 
-
+        // Set listeners to update the database
+        // Plane listener
+        planeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            int selection = selectedPlane;
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (selection != position) {
+                    Log.d(TAG, "Plane selection updating...");
+                    flightManager.setPlane((String) parent.getItemAtPosition(position));
+                }
+                selection = position;
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+        // Departure Airport listener
+        departureAirport.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "Dept Airport selection updating...");
+                flightManager.setDepartureAirport((String) parent.getItemAtPosition(position));
+                InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+            }
+        });
+        // Arrival Airport listener
+        arrivalAirport.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "Arr Airport selection updating...");
+                flightManager.setArrivalAirport((String) parent.getItemAtPosition(position));
+                InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+            }
+        });
     }
 
     public void showDatePicker(View v) {

@@ -62,16 +62,10 @@ public class ActivityEditFlight extends FragmentActivity {
         // Sets up the flight manager utility.  If a fragment alters the values, the listeners
         //   will update the title of the activity.
         flightManager = new FlightManager(curFlight, FirebaseAuth.getInstance().getCurrentUser().getUid());
-        flightManager.setDepartureAirportChangedListener(new FlightManager.ValueListener() {
+        flightManager.setAirportChangedListener(new FlightManager.AirportChangedListener() {
             @Override
-            public void onValueChanged(String value) {
-                title.setText(value + " \u2192 " + flightManager.getArrivalAirport());
-            }
-        });
-        flightManager.setArrivalAirportChangedListener(new FlightManager.ValueListener() {
-            @Override
-            public void onValueChanged(String value) {
-                title.setText(flightManager.getDepartureAirport() + " \u2192 " + value);
+            public void onAirportsChanged(String dep, String arr) {
+                title.setText(dep + " \u2192 " + arr);
             }
         });
     }

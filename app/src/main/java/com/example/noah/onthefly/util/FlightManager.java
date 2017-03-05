@@ -21,11 +21,10 @@ public class FlightManager {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference ref;
 
-    private ValueListener departureAirportChangedListener;
-    private ValueListener arrivalAirportChangedListener;
+    private AirportChangedListener airportChangedListener;
 
-    public interface ValueListener {
-        public void onValueChanged(String value);
+    public interface AirportChangedListener {
+        public void onAirportsChanged(String dep, String arr);
     }
 
     private class NoKeyError extends Error {
@@ -39,7 +38,7 @@ public class FlightManager {
             throw new NoKeyError();
         }
         firebaseDatabase = FirebaseDatabase.getInstance();
-        ref = firebaseDatabase.getReference().child("flights").child(flight.getKey());
+        ref = firebaseDatabase.getReference().child("flights").child(flight.getKey()).getRef();
         flight.setKey(null);
         this.flight = flight;
         Log.d(TAG, "Key: " + flight.getKey());
@@ -51,16 +50,17 @@ public class FlightManager {
      *  when someone updates information in the text boxes.
 
      */
-    public void setDepartureAirportChangedListener(ValueListener valueListener) {
-        departureAirportChangedListener = valueListener;
-    }
-
-    public void setArrivalAirportChangedListener(ValueListener valueListener) {
-        arrivalAirportChangedListener = valueListener;
+    public void setAirportChangedListener(AirportChangedListener airportChangedListener) {
+        this.airportChangedListener = airportChangedListener;
     }
 
     public String getPlane() {
         return flight.getPlane();
+    }
+
+    public void setPlane(String plane) {
+        flight.setPlane(plane);
+        save();
     }
 
     public String getDepartureAirport() {
@@ -70,7 +70,7 @@ public class FlightManager {
     public void setDepartureAirport(String departureAirport) {
         String newDepartureAirport = parsePlaneCode(departureAirport);
         flight.setDepartAirport(newDepartureAirport);
-        departureAirportChangedListener.onValueChanged(newDepartureAirport);
+        airportChangedListener.onAirportsChanged(newDepartureAirport, flight.getArriveAirport());
         save();
     }
 
@@ -81,7 +81,7 @@ public class FlightManager {
     public void setArrivalAirport(String arrivalAirport) {
         String newArrivalAirport = parsePlaneCode(arrivalAirport);
         flight.setArriveAirport(newArrivalAirport);
-        departureAirportChangedListener.onValueChanged(newArrivalAirport);
+        airportChangedListener.onAirportsChanged(flight.getDepartAirport(), newArrivalAirport);
         save();
     }
 
