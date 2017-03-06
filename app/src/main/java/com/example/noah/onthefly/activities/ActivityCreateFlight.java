@@ -1,7 +1,7 @@
 package com.example.noah.onthefly.activities;
 
-import android.app.DialogFragment;
 import android.content.Context;
+import android.support.v4.app.DialogFragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +23,7 @@ import com.example.noah.onthefly.interfaces.CallsTimePicker;
 import com.example.noah.onthefly.models.Plane;
 import com.example.noah.onthefly.models.Flight;
 import com.example.noah.onthefly.util.Airports;
+import com.example.noah.onthefly.util.ArrayAdapterWithHint;
 import com.example.noah.onthefly.util.CustomAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -40,8 +41,8 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
     private Spinner plane_spinner;
     private EditText dateField;
     private EditText timeField;
-    private DialogFragment datePickerFragment;
-    private DialogFragment timePickerFragment;
+    private FragmentDatePicker datePickerFragment;
+    private FragmentTimePicker timePickerFragment;
     private AutoCompleteTextView departures;
     private AutoCompleteTextView arrivals;
     private EditText duration;
@@ -107,7 +108,7 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         plane_spinner.setAdapter(planeArrayAdapter);
 
     }
-
+  
     protected void inputSetup() {
         duration = (EditText)findViewById(R.id.flight_duration);
         start_fuel = (EditText)findViewById(R.id.start_fuel);
@@ -151,7 +152,8 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
     public void showDatePicker(View v) {
         if (datePickerFragment == null) {
             datePickerFragment = new FragmentDatePicker();
-            datePickerFragment.show(getFragmentManager(), "datePickerFragment");
+            datePickerFragment.setParent(this);
+            datePickerFragment.show(getSupportFragmentManager(), "datePickerFragment");
         }
     }
 
@@ -169,11 +171,10 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
     public void showTimePicker(View v) {
         if (timePickerFragment == null) {
             timePickerFragment = new FragmentTimePicker();
-            timePickerFragment.show(getFragmentManager(), "datePickerFragment");
+            timePickerFragment.setParent(this);
+            timePickerFragment.show(getSupportFragmentManager(), "datePickerFragment");
         }
     }
-
-
 
     public void hideTimePicker(String time) {
         if (timePickerFragment != null) {
@@ -212,6 +213,7 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
             mDatabase.child("flights").push().setValue(newFlight);
             Log.d("TEST", "Reached3");
             Intent editFlightIntent = new Intent(this, ActivityEditFlight.class);
+            editFlightIntent.putExtra("FlightDetails", newFlight);
             this.startActivity(editFlightIntent);
         }
 

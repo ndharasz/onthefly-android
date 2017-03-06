@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.Serializable;
 import java.util.zip.Inflater;
 
 import static com.example.noah.onthefly.R.layout.item_flight;
@@ -55,7 +56,8 @@ public class ActivityFlightList extends AppCompatActivity {
         flightListReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Flight flight = (Flight) dataSnapshot.getValue(Flight.class);
+                final Flight flight = (Flight) dataSnapshot.getValue(Flight.class);
+                flight.setKey(dataSnapshot.getKey());
                 // ignore this data if it doesn't belong to this user
                 if (!flight.getUserid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                     return;
@@ -66,7 +68,9 @@ public class ActivityFlightList extends AppCompatActivity {
                 ((Button)v.findViewById(R.id.upcoming_flight_edit)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(ActivityFlightList.this, ActivityEditFlight.class));
+                        Intent intent = new Intent(ActivityFlightList.this, ActivityEditFlight.class);
+                        intent.putExtra("FlightDetails", flight);
+                        startActivity(intent);
                     }
                 });
 
@@ -142,13 +146,13 @@ public class ActivityFlightList extends AppCompatActivity {
         v.findViewById(R.id.label_wrapper2).setVisibility(View.VISIBLE);
         v.findViewById(R.id.detail_wrapper).setVisibility(View.VISIBLE);
         v.measure(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        int targetHeight = (int)(v.getMeasuredHeight()*.65);
+        int targetHeight = (int)(v.getMeasuredHeight()*.75);
         animate(startHeight, targetHeight, v);
     }
 
     protected void collapseItem(final View v) {
         v.measure(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        int startHeight = (int)(v.getMeasuredHeight()*.65);
+        int startHeight = (int)(v.getMeasuredHeight()*.75);
         ((TableRow)v.getParent()).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         v.findViewById(R.id.label_wrapper1).setVisibility(View.GONE);
         v.findViewById(R.id.label_wrapper2).setVisibility(View.GONE);

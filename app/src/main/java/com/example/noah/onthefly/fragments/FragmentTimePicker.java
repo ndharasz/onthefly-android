@@ -1,7 +1,7 @@
 package com.example.noah.onthefly.fragments;
 
 import android.app.Dialog;
-import android.app.DialogFragment;
+import android.support.v4.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import java.sql.Time;
  */
 
 public class FragmentTimePicker extends DialogFragment implements TimePickerDialog.OnTimeSetListener {
+    CallsTimePicker parent;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -33,12 +34,16 @@ public class FragmentTimePicker extends DialogFragment implements TimePickerDial
             date += "pm";
         else
             date += "am";
-        ((CallsTimePicker) getActivity()).hideTimePicker(date);
+        parent.hideTimePicker(date);
     }
 
     @Override
     public void onCancel(DialogInterface dialog) {
-        ((CallsTimePicker) getActivity()).hideTimePicker("");
+        parent.hideTimePicker("");
+    }
+
+    public void setParent(CallsTimePicker parent) {
+        this.parent = parent;
     }
 }
 

@@ -1,10 +1,15 @@
 package com.example.noah.onthefly.models;
 
+import java.io.Serializable;
+
 /**
  * Created by ndharasz on 2/6/2017.
  */
 
-public class Flight {
+@SuppressWarnings("serial")
+public class Flight implements Serializable {
+    private String key;
+
     private String plane;
     private String departAirport;
     private String arriveAirport;
@@ -81,6 +86,14 @@ public class Flight {
 
     public void setPlane(String plane) {
         this.plane = plane;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
     
     public String getFrontBaggageWeight() {

@@ -18,10 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
+import com.example.noah.onthefly.util.FlightManager;
 
 public class FragmentCargoView extends Fragment {
     Button tab;
 
+    private FlightManager flightManager;
     TextView frontDisplay;
     TextView rearDisplay;
 
@@ -45,6 +47,10 @@ public class FragmentCargoView extends Fragment {
 
         frontWeight = 0;
         rearWeight = 0;
+    }
+  
+    public void setFlightManager(FlightManager flightManager) {
+        this.flightManager = flightManager;
     }
 
     @Override
