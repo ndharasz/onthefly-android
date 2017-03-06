@@ -40,11 +40,11 @@ public class FlightManager {
         if (flight.getKey() == null) {
             throw new NoKeyError();
         }
+        Log.d(TAG, "Key: " + flight.getKey());
         firebaseDatabase = FirebaseDatabase.getInstance();
         ref = firebaseDatabase.getReference().child(GlobalVars.FLIGHT_DB).child(flight.getKey()).getRef();
         flight.setKey(null);
         this.flight = flight;
-        Log.d(TAG, "Key: " + flight.getKey());
     }
 
     /*
@@ -137,6 +137,42 @@ public class FlightManager {
     public void setPassenger(int seat, Passenger passenger) {
         flight.getPassengers().put("seat" + String.valueOf(seat), passenger);
         save();
+    }
+
+    public void setFlightDuration(double flightDuration) {
+        flight.setFlightDuration(flightDuration);
+        save();
+    }
+
+    public double getFlightDuration() {
+        return flight.getFlightDuration();
+    }
+
+    public void setStartFuel(double startFuel) {
+        flight.setStartFuel(startFuel);
+        save();
+    }
+
+    public double getStartFuel() {
+        return flight.getStartFuel();
+    }
+
+    public void setFuelFlow(double fuelFlow) {
+        flight.setFuelFlow(fuelFlow);
+        save();
+    }
+
+    public double getFuelFlow() {
+        return flight.getFuelFlow();
+    }
+
+    public void setTaxiFuelBurn(double taxiFuelBurn) {
+        flight.setTaxiFuelBurn(taxiFuelBurn);
+        save();
+    }
+
+    public double getTaxiFuelBurn() {
+        return flight.getTaxiFuelBurn();
     }
 
     private void save() {

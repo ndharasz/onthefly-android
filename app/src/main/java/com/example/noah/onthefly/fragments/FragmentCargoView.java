@@ -27,7 +27,6 @@ import com.google.firebase.database.FirebaseDatabase;
 public class FragmentCargoView extends Fragment {
     Button tab;
     private DatabaseReference dataRef;
-    private boolean initialized = false;
 
     private FlightManager flightManager;
     TextView frontDisplay;
@@ -121,13 +120,10 @@ public class FragmentCargoView extends Fragment {
     }
 
     public void initializeFields() {
-        if (!initialized) {
-            initialized = true;
-            frontWeight = flightManager.getFrontBaggageWeight();
-            frontDisplay.setText("Weight: " + frontWeight + " lbs");
-            rearWeight = flightManager.getAftBaggageWeight();
-            rearDisplay.setText("Weight: " + rearWeight + " lbs");
-        }
+        frontWeight = flightManager.getFrontBaggageWeight();
+        frontDisplay.setText("Weight: " + frontWeight + " lbs");
+        rearWeight = flightManager.getAftBaggageWeight();
+        rearDisplay.setText("Weight: " + rearWeight + " lbs");
     }
 
     protected void updateTotalFrontCargo() {

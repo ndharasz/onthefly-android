@@ -5,9 +5,11 @@ import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +17,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.interfaces.CallsDatePicker;
@@ -43,6 +46,10 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
     AutoCompleteTextView arrivalAirport;
     EditText flightDate;
     EditText departureTime;
+    EditText duration;
+    EditText fuelAmount;
+    EditText flowRate;
+    EditText taxiFuel;
 
     private FragmentDatePicker datePickerFragment;
     private FragmentTimePicker timePickerFragment;
@@ -85,6 +92,10 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
         this.arrivalAirport = (AutoCompleteTextView) parent.findViewById(R.id.arrPick);
         this.flightDate = (EditText) parent.findViewById(R.id.flight_date);
         this.departureTime = (EditText) parent.findViewById(R.id.flight_time);
+        this.duration = (EditText) parent.findViewById(R.id.flight_duration);
+        this.fuelAmount = (EditText) parent.findViewById(R.id.start_fuel);
+        this.flowRate = (EditText) parent.findViewById(R.id.fuel_flow);
+        this.taxiFuel = (EditText) parent.findViewById(R.id.taxi_fuel);
 
         String[] airports = Airports.getAirports();
         CustomAdapter deptAdapter = new
@@ -132,6 +143,10 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
         arrivalAirport.setText(flightManager.getArrivalAirport());
         flightDate.setText(flightManager.getDate());
         departureTime.setText(flightManager.getTime());
+        duration.setText(String.valueOf(flightManager.getFlightDuration()));
+        fuelAmount.setText(String.valueOf(flightManager.getStartFuel()));
+        flowRate.setText(String.valueOf(flightManager.getFuelFlow()));
+        taxiFuel.setText(String.valueOf(flightManager.getTaxiFuelBurn()));
 
         // Set listeners to update the database
         // Plane listener
@@ -166,6 +181,58 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
                 flightManager.setArrivalAirport((String) parent.getItemAtPosition(position));
                 InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+            }
+        });
+        // Duration listener
+        duration.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    flightManager.setFlightDuration(Double.parseDouble(duration.getText().toString()));
+                    InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
+        // FuelAmount listener
+        fuelAmount.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    flightManager.setStartFuel(Double.parseDouble(fuelAmount.getText().toString()));
+                    InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
+        // FlowRate listener
+        flowRate.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    flightManager.setFuelFlow(Double.parseDouble(flowRate.getText().toString()));
+                    InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                    return true;
+                }
+                return false;
+            }
+        });
+        // TaxiFuel listener
+        taxiFuel.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    flightManager.setTaxiFuelBurn(Double.parseDouble(taxiFuel.getText().toString()));
+                    InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                    return true;
+                }
+                return false;
             }
         });
     }

@@ -24,6 +24,7 @@ public class Plane implements Comparable<Plane>, Serializable {
     private static String TAG = "Plane";
 
     private String name;
+    private String tailNumber;
 
     private double dryWeight;
 
@@ -52,6 +53,14 @@ public class Plane implements Comparable<Plane>, Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getTailNumber() {
+        return tailNumber;
+    }
+
+    public void setTailNumber(String tailNumber) {
+        this.tailNumber = tailNumber;
     }
 
     public double getDryWeight() {
@@ -130,14 +139,14 @@ public class Plane implements Comparable<Plane>, Serializable {
         File dir = context.getFilesDir();
         File[] files = dir.listFiles();
         for (File f : files) {
-            if (f.getName().equals(name)) {
+            if (f.getName().equals(tailNumber)) {
                 Log.d(TAG, "Plane already exists locally");
                 return;
             }
         }
         ObjectOutputStream objectOut = null;
         try {
-            FileOutputStream fileOutputStream = context.openFileOutput(this.getName(), Activity.MODE_PRIVATE);
+            FileOutputStream fileOutputStream = context.openFileOutput(tailNumber, Activity.MODE_PRIVATE);
             objectOut = new ObjectOutputStream(fileOutputStream);
             objectOut.writeObject(this);
             fileOutputStream.getFD().sync();
@@ -157,7 +166,7 @@ public class Plane implements Comparable<Plane>, Serializable {
 
     public void deleteFile(Context context) {
         try {
-            context.deleteFile(name);
+            context.deleteFile(tailNumber);
         } catch (Exception e) {
             Log.d(TAG, "Plane did not exist");
         }

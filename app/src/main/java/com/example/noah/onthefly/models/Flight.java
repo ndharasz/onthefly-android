@@ -20,10 +20,10 @@ public class Flight implements Serializable {
     private String userid;
     private double frontBaggageWeight;
     private double aftBaggageWeight;
-    private String flightDuration;
-    private String startFuel;
-    private String fuelFlow;
-    private String taxiFuelBurn;
+    private double flightDuration;
+    private double startFuel;
+    private double fuelFlow;
+    private double taxiFuelBurn;
 
     private Map<String, Passenger> passengers;
 
@@ -32,8 +32,8 @@ public class Flight implements Serializable {
     }
 
     public Flight(String plane, String departAirport, String arriveAirport, String date,
-                  String time, String userid, String duration, String startFuel,
-                  String fuelFlow, String taxiFuelBurn) {
+                  String time, String userid, double duration, double startFuel,
+                  double fuelFlow, double taxiFuelBurn) {
         this.plane = plane;
         this.departAirport = departAirport;
         this.arriveAirport = arriveAirport;
@@ -124,35 +124,35 @@ public class Flight implements Serializable {
         this.aftBaggageWeight = aftBaggageWeight;
     }
 
-    public String getFlightDuration() {
+    public double getFlightDuration() {
         return flightDuration;
     }
 
-    public void setFlightDuration(String flightDuration) {
+    public void setFlightDuration(double flightDuration) {
         this.flightDuration = flightDuration;
     }
 
-    public String getStartFuel() {
+    public double getStartFuel() {
         return startFuel;
     }
 
-    public void setStartFuel(String startFuel) {
+    public void setStartFuel(double startFuel) {
         this.startFuel = startFuel;
     }
 
-    public String getFuelFlow() {
+    public double getFuelFlow() {
         return fuelFlow;
     }
 
-    public void setFuelFlow(String fuelFlow) {
+    public void setFuelFlow(double fuelFlow) {
         this.fuelFlow = fuelFlow;
     }
 
-    public String getTaxiFuelBurn() {
+    public double getTaxiFuelBurn() {
         return taxiFuelBurn;
     }
 
-    public void setTaxiFuelBurn(String taxiFuelBurn) {
+    public void setTaxiFuelBurn(double taxiFuelBurn) {
         this.taxiFuelBurn = taxiFuelBurn;
     }
 

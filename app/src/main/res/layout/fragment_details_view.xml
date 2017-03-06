@@ -15,8 +15,9 @@
         android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
+
             <Spinner
                 android:id="@+id/choose_plane_spinner"
                 android:layout_width="match_parent"
@@ -30,14 +31,12 @@
                 android:id="@+id/depPick"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="13dp"
-                android:ems="10"
                 android:inputType="textNoSuggestions"
-                android:paddingLeft="14dp"
-                android:paddingTop="13dp"
                 android:background="@color/colorAccent"
-                android:layout_marginTop="10dp"
-                android:hint="Departure Airport">
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:padding="@dimen/input_padding"
+                android:hint="Departure Airport"
+                android:cursorVisible="true">
                 <requestFocus />
             </AutoCompleteTextView>
 
@@ -45,36 +44,33 @@
                 android:id="@+id/arrPick"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:paddingTop="13dp"
-                android:paddingBottom="13dp"
                 android:focusable="true"
-                android:paddingLeft="14dp"
                 android:background="@color/colorAccent"
                 android:inputType="textNoSuggestions"
-                android:layout_marginTop="10dp"
+                android:padding="@dimen/input_padding"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:hint="Arrival Airport">
                 <requestFocus />
             </AutoCompleteTextView>
 
+            <EditText
+                android:id="@+id/flight_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:windowSoftInputMode="stateHidden"
+                android:background="@color/colorAccent"
+                android:padding="@dimen/input_padding"
+                android:focusable="false"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:hint="@string/flight_date"
+                android:editable="false"
+                android:onClick="showDatePicker"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="20dp"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/flight_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:windowSoftInputMode="stateHidden"
-                    android:background="@color/colorAccent"
-                    android:padding="@dimen/input_padding"
-                    android:focusable="false"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    android:hint="@string/flight_date"
-                    android:editable="false"/>
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
 
                 <EditText
                     android:id="@+id/flight_time"
@@ -86,9 +82,77 @@
                     android:background="@color/colorAccent"
                     android:padding="@dimen/input_padding"
                     android:hint="@string/dept_time"
-                    android:editable="false"/>
+                    android:editable="false"
+                    android:onClick="showTimePicker"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+
+                <EditText
+                    android:id="@+id/flight_duration"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:background="@color/colorAccent"
+                    android:padding="@dimen/input_padding"
+                    android:hint="@string/flight_duration"
+                    android:imeOptions="actionDone"
+                    android:imeActionLabel="Done"/>
 
             </LinearLayout>
+
+            <EditText
+                android:id="@+id/start_fuel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:background="@color/colorAccent"
+                android:padding="@dimen/input_padding"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:hint="@string/start_fuel"
+                android:imeOptions="actionDone"
+                android:imeActionLabel="Done"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/fuel_flow"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:background="@color/colorAccent"
+                    android:padding="@dimen/input_padding"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:hint="@string/fuel_flow"
+                    android:nextFocusDown="@+id/taxi_fuel"
+                    android:imeOptions="actionDone"
+                    android:imeActionLabel="Done"/>
+                <EditText
+                    android:id="@+id/taxi_fuel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:background="@color/colorAccent"
+                    android:padding="@dimen/input_padding"
+                    android:hint="@string/taxi_fuel_usage"
+                    android:imeOptions="actionDone"
+                    android:imeActionLabel="Done"/>
+            </LinearLayout>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/delete"
+                android:textColor="@color/colorAccent"
+                android:layout_margin="@dimen/activity_vertical_margin"
+                android:padding="@dimen/button_padding"
+                android:onClick="delete"
+                android:background="@color/colorWarn"/>
+
         </LinearLayout>
     </ScrollView>
 
