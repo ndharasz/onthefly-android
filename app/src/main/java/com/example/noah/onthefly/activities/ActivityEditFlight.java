@@ -131,6 +131,7 @@ public class ActivityEditFlight extends FragmentActivity {
             @Override
             public void onPageScrollStateChanged(int state) {}
         });
+        tabPager.setCurrentItem(1);
     }
 
     public class TabAdapter extends FragmentPagerAdapter {

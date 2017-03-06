@@ -146,13 +146,13 @@ public class ActivityFlightList extends AppCompatActivity {
         v.findViewById(R.id.label_wrapper2).setVisibility(View.VISIBLE);
         v.findViewById(R.id.detail_wrapper).setVisibility(View.VISIBLE);
         v.measure(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        int targetHeight = (int)(v.getMeasuredHeight()*.65);
+        int targetHeight = (int)(v.getMeasuredHeight()*.75);
         animate(startHeight, targetHeight, v);
     }
 
     protected void collapseItem(final View v) {
         v.measure(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        int startHeight = (int)(v.getMeasuredHeight()*.65);
+        int startHeight = (int)(v.getMeasuredHeight()*.75);
         ((TableRow)v.getParent()).setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         v.findViewById(R.id.label_wrapper1).setVisibility(View.GONE);
         v.findViewById(R.id.label_wrapper2).setVisibility(View.GONE);

@@ -9,7 +9,7 @@
 <LinearLayout
     android:id="@+id/item_wrapper"
     android:layout_width="0dp"
-    android:layout_weight="15"
+    android:layout_weight="9"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center_vertical">

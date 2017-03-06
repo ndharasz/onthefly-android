@@ -94,6 +94,7 @@ public class Flight implements Serializable {
 
     public void setKey(String key) {
         this.key = key;
+    }
     
     public String getFrontBaggageWeight() {
         return frontBaggageWeight;
