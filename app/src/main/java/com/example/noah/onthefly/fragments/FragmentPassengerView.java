@@ -42,9 +42,7 @@ public class FragmentPassengerView extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
         Double[] pilotArmsArray = {12.0};
         Double[] passengerArmsArray = {50.0, 60.0, 70.0, 80.0};
 
@@ -70,16 +68,4 @@ public class FragmentPassengerView extends Fragment {
     public double calculateMoment() {
         return pilotView.calculateMoment() + passengerView.calculateMoment();
     }
-
-
-//    @Override
-//    public void onHiddenChanged(boolean hidden) {
-//        super.onHiddenChanged(hidden);
-//        Log.d("Hidden called?", "YES");
-//        if(hidden) {
-//            tab.setBackgroundResource(R.drawable.edit_flight_tab);
-//        } else {
-//            tab.setBackgroundResource(R.drawable.edit_flight_tab_selected);
-//        }
-//    }
 }

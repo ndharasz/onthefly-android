@@ -16,18 +16,28 @@ public class Flight implements Serializable {
     private String date;
     private String time;
     private String userid;
+    private String frontBaggageWeight;
+    private String aftBaggageWeight;
+    private String flightDuration;
+    private String startFuel;
+    private String fuelFlow;
+    private String taxiFuelBurn;
 
     public Flight(){}
 
-    public Flight(String plane, String departAirport,
-                  String arriveAirport, String date,
-                  String time, String userid) {
+    public Flight(String plane, String departAirport, String arriveAirport, String date,
+                  String time, String userid, String duration, String startFuel,
+                  String fuelFlow, String taxiFuelBurn) {
         this.plane = plane;
         this.departAirport = departAirport;
         this.arriveAirport = arriveAirport;
         this.date = date;
         this.time = time;
         this.userid = userid;
+        this.flightDuration = duration;
+        this.startFuel = startFuel;
+        this.fuelFlow = fuelFlow;
+        this.taxiFuelBurn = taxiFuelBurn;
     }
 
     public String getUserid() {
@@ -84,5 +94,52 @@ public class Flight implements Serializable {
 
     public void setKey(String key) {
         this.key = key;
+    
+    public String getFrontBaggageWeight() {
+        return frontBaggageWeight;
+    }
+
+    public void setFrontBaggageWeight(String frontBaggageWeight) {
+        this.frontBaggageWeight = frontBaggageWeight;
+    }
+
+    public String getAftBaggageWeight() {
+        return aftBaggageWeight;
+    }
+
+    public void setAftBaggageWeight(String aftBaggageWeight) {
+        this.aftBaggageWeight = aftBaggageWeight;
+    }
+
+    public String getFlightDuration() {
+        return flightDuration;
+    }
+
+    public void setFlightDuration(String flightDuration) {
+        this.flightDuration = flightDuration;
+    }
+
+    public String getStartFuel() {
+        return startFuel;
+    }
+
+    public void setStartFuel(String startFuel) {
+        this.startFuel = startFuel;
+    }
+
+    public String getFuelFlow() {
+        return fuelFlow;
+    }
+
+    public void setFuelFlow(String fuelFlow) {
+        this.fuelFlow = fuelFlow;
+    }
+
+    public String getTaxiFuelBurn() {
+        return taxiFuelBurn;
+    }
+
+    public void setTaxiFuelBurn(String taxiFuelBurn) {
+        this.taxiFuelBurn = taxiFuelBurn;
     }
 }

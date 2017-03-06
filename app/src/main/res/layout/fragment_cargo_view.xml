@@ -19,28 +19,54 @@
             android:text="@string/front_cargo"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
-            android:textSize="@dimen/title2_size"
+            android:textSize="@dimen/title4_size"
             android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
         <TextView
-            android:id="@+id/front_cargo_weight_text"
+            android:id="@+id/front_cargo_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/title2_size"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="Weight: 0.0 lbs"
             android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
+
+            <Button
+                android:id="@+id/front_cargo_add_btn"
+                android:layout_width="@dimen/circle_button_size"
+                android:layout_height="@dimen/circle_button_size"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_add_button"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:text="+"
+                android:textSize="@dimen/title_size"/>
+
+            <Button
+                android:id="@+id/front_cargo_remove_btn"
+                android:layout_width="@dimen/circle_button_size"
+                android:layout_height="@dimen/circle_button_size"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_add_button"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:text="-"
+                android:textSize="@dimen/title_size"/>
+        </LinearLayout>
+
         <Button
-            android:id="@+id/front_cargo_add_btn"
-            android:layout_width="@dimen/circle_button_size"
-            android:layout_height="@dimen/circle_button_size"
-            android:layout_gravity="center"
-            android:background="@drawable/circle_add_button"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="+"
-            android:textSize="@dimen/title_size"/>
+            android:id="@+id/front_empty_cargo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:text="@string/clear_cargo"
+            style="@style/accent_button"/>
 
     </LinearLayout>
 
@@ -58,28 +84,55 @@
             android:text="@string/rear_cargo"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
-            android:textSize="@dimen/title2_size"
+            android:textSize="@dimen/title4_size"
             android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
         <TextView
-            android:id="@+id/rear_cargo_weight_text"
+            android:id="@+id/rear_cargo_display"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/title2_size"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="Weight: 0.0 lbs"
             android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/activity_vertical_margin">
+
+            <Button
+                android:id="@+id/rear_cargo_add_btn"
+                android:layout_width="@dimen/circle_button_size"
+                android:layout_height="@dimen/circle_button_size"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_add_button"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:text="+"
+                android:textSize="@dimen/title_size"/>
+
+            <Button
+                android:id="@+id/rear_cargo_remove_btn"
+                android:layout_width="@dimen/circle_button_size"
+                android:layout_height="@dimen/circle_button_size"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_add_button"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:text="-"
+                android:textSize="@dimen/title_size"/>
+        </LinearLayout>
+
         <Button
-            android:id="@+id/rear_cargo_add_btn"
-            android:layout_width="@dimen/circle_button_size"
-            android:layout_height="@dimen/circle_button_size"
-            android:layout_gravity="center"
-            android:background="@drawable/circle_add_button"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            android:text="+"
-            android:textSize="@dimen/title_size"/>
+            android:id="@+id/rear_empty_cargo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/activity_vertical_margin"
+            android:text="@string/clear_cargo"
+            style="@style/accent_button"
+            android:layout_gravity="bottom"/>
 
     </LinearLayout>
 

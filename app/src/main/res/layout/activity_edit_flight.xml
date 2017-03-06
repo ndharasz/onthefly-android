@@ -10,26 +10,19 @@
     android:orientation="vertical"
     tools:context="com.example.noah.onthefly.activities.ActivityEditFlight">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/EditFlightTitle"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginBottom="@dimen/activity_title_table_margin">
-
-            <TextView
-                android:id="@+id/EditFlightTitle"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_weight="3"
-                android:text="@string/edit_flight_title"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/title_size"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                />
-
-    </LinearLayout>
+        android:layout_width="wrap_content"
+        android:layout_weight="3"
+        android:text="@string/edit_flight_title"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/title_size"
+        android:textStyle="bold"
+        android:textAlignment="center"/>
+       
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -78,15 +71,16 @@
         android:layout_weight="1"
         android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
         <Button
             android:id="@+id/gen_report_button"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="7"
             android:layout_height="wrap_content"
             android:text="@string/gen_report_button"
-
             android:layout_marginBottom="@dimen/activity_vertical_margin"
             android:onClick="generateReport"
             style="@style/accent_button"/>
@@ -97,6 +91,6 @@
             android:layout_toRightOf="@id/gen_report_button"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:src="@drawable/trash"/>
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

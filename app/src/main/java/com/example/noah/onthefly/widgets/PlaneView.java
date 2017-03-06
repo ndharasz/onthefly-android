@@ -1,22 +1,18 @@
 package com.example.noah.onthefly.widgets;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.media.Image;
-import android.os.Build;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
@@ -24,15 +20,17 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.models.Passenger;
 import com.example.noah.onthefly.util.ImageDragShadowBuilder;
-
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 /**
@@ -45,9 +43,7 @@ public class PlaneView extends GridView {
     private int numSeats;
     private List<Double> rowArms;
     private Animation animation;
-
     private int replace;
-
 
     // This is the majority of the PlaneView.
     // Basically the PassengerViewAdapter is a mapping from Passengers to views which
@@ -68,7 +64,7 @@ public class PlaneView extends GridView {
             View view = convertView;
 
             if (view == null) {
-                view = createNewView(pos);
+                view = newPassenger(pos);
             }
 
             ((TextView) view.findViewById(R.id.passenger_name)).setText(getItem(currPos).getName());
@@ -80,7 +76,7 @@ public class PlaneView extends GridView {
             return view;
         }
 
-        private View createNewView(int pos) {
+        private View newPassenger(int pos) {
             animation = AnimationUtils.loadAnimation(getContext(),R.anim.shake);
             final int tInt = pos;
 
@@ -97,19 +93,23 @@ public class PlaneView extends GridView {
                     // pull up dialog to enter passenger names
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context, android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
                     alertDialogBuilder.setView(promptView);
-                    alertDialogBuilder.setTitle("New Passenger at Seat " + (tInt + 1));
+                    ((TextView)promptView.findViewById(R.id.dialog_title))
+                            .setText("New Passenger at Seat " + (tInt + 1));
                     final EditText name = (EditText) promptView.findViewById(R.id.passName);
-                    name.setHint("Name");
-
                     final EditText weight = (EditText) promptView.findViewById(R.id.passWeight);
-                    weight.setHint("Weight (Pounds)");
 
                     if (!getItem(tInt).equals(Passenger.EMPTY)) {
                         name.setText(getItem(tInt).getName());
                         weight.setText(String.valueOf(getItem(tInt).getWeight()));
                     }
 
-                    alertDialogBuilder.setCancelable(false)
+                    alertDialogBuilder
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            })
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -144,8 +144,18 @@ public class PlaneView extends GridView {
                                 }
                             });
                     AlertDialog alert = alertDialogBuilder.create();
+                    alert.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                    alert.getWindow().setBackgroundDrawable(
+                            new ColorDrawable(android.graphics.Color.TRANSPARENT));
                     alert.show();
-
+                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(
+                            ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(
+                            ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                            ContextCompat.getColor(getContext(), R.color.colorAccent));
+                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                            ContextCompat.getColor(getContext(), R.color.colorAccent));
                 }
             });
 
@@ -161,21 +171,17 @@ public class PlaneView extends GridView {
                         view.startDrag(data, shadowBuilder, view, 0);
 
                         switchAnimation(true);
-
                         return true;
                     } else {
                         return false;
                     }
                 }
             });
-
-
-
             // All the code for drag and drop is below
             layout.setOnDragListener(new OnDragListener() {
                 @Override
                 public boolean onDrag(View v, DragEvent event) {
-
+                    GridView owner = (GridView) v.getParent();
                     if (event.getAction() == DragEvent.ACTION_DRAG_STARTED) {
                         return true;
                     } else if (event.getAction() == DragEvent.ACTION_DROP) {
@@ -184,10 +190,8 @@ public class PlaneView extends GridView {
                         int endX = (int) v.getX();
                         int endY = (int) v.getY();
 
-                        GridView owner = (GridView) v.getParent();
                         for (int i = 0; i < owner.getChildCount(); i++) {
                             View passengerView = owner.getChildAt(i);
-
                             int left = (int)passengerView.getLeft();
                             int top = (int)passengerView.getTop();
 
@@ -203,10 +207,6 @@ public class PlaneView extends GridView {
                                 }
                                 return true;
 
-                            }
-
-                            if (!event.getResult()) {
-                                getChildAt(replace).setBackgroundColor(Color.RED);
                             }
                         }
 
@@ -233,14 +233,12 @@ public class PlaneView extends GridView {
                     return false;
                 }
             });
-
             return layout;
         }
 
         private void refreshView() {
             notifyDataSetChanged();
         }
-
         private Passenger viewToPassenger(RelativeLayout view) {
             try {
                 String name = ((TextView) view.findViewById(R.id.passenger_name)).getText().toString();
@@ -261,8 +259,7 @@ public class PlaneView extends GridView {
                 return;
             Passenger first = getItem(a);
             Passenger second = getItem(b);
-
-
+          
             if (second.getName() == "Add Passenger") {
                 getChildAt(a).findViewById(R.id.seat).setVisibility(INVISIBLE);
                 getChildAt(b).findViewById(R.id.seat).setVisibility(VISIBLE);
