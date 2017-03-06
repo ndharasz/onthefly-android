@@ -125,6 +125,7 @@ public class ActivityEditFlight extends FragmentActivity {
                     passengerViewButton.setBackgroundResource(R.drawable.edit_flight_tab);
                     cargoViewButton.setBackgroundResource(R.drawable.edit_flight_tab_selected);
                     findViewById(R.id.activity_edit_flight).invalidate();
+                    tabAdapter.getCargoView().initializeFields();
                 }
             }
 
@@ -178,6 +179,14 @@ public class ActivityEditFlight extends FragmentActivity {
 
         public FragmentDetailsView getDetailsView() {
             return detailsView;
+        }
+
+        public FragmentCargoView getCargoView() {
+            return cargoView;
+        }
+
+        public FragmentPassengerView getPassengerView() {
+            return passengerView;
         }
     }
 

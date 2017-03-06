@@ -43,6 +43,7 @@ public class FragmentPassengerView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        // TODO: make this not hardcoded, because that's stupid.
         Double[] pilotArmsArray = {12.0};
         Double[] passengerArmsArray = {50.0, 60.0, 70.0, 80.0};
 
@@ -58,6 +59,34 @@ public class FragmentPassengerView extends Fragment {
 
         pilotLayout.addView(pilotView);
         passengerLayout.addView(passengerView);
+
+        // Listen for passengers added
+        pilotView.setOnPassengerAddedListener(new PlaneView.PassengerAddedListener() {
+            @Override
+            public void onPassengerAdded(int seat, Passenger pilot) {
+                flightManager.setPassenger(seat + 1, pilot);
+            }
+        });
+        passengerView.setOnPassengerAddedListener(new PlaneView.PassengerAddedListener() {
+            @Override
+            public void onPassengerAdded(int seat, Passenger passenger) {
+                flightManager.setPassenger(seat + 3, passenger);
+            }
+        });
+
+        // Listen for passengers swapped
+        pilotView.setOnPassengerMovedListener(new PlaneView.PassengerMovedListener() {
+            @Override
+            public void onPassengerMoved(int newSeat, Passenger pilot) {
+                flightManager.setPassenger(newSeat + 1, pilot);
+            }
+        });
+        passengerView.setOnPassengerMovedListener(new PlaneView.PassengerMovedListener() {
+            @Override
+            public void onPassengerMoved(int newSeat, Passenger passenger) {
+                flightManager.setPassenger(newSeat + 3, passenger);
+            }
+        });
         return v;
     }
 

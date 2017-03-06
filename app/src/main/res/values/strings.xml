@@ -15,8 +15,8 @@
     <string name="clear">Clear</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="create_flight_title">Create Flight</string>
-    <string name="flight_date">Flight Date</string>
-    <string name="dept_time">Departure Time</string>
+    <string name="flight_date">Date</string>
+    <string name="dept_time">Time</string>
     <string name="button_submit">Submit</string>
     <string name="flights">Upcoming Flights</string>
     <string name="date">Date</string>
@@ -49,7 +49,7 @@
     <string name="start_fuel">Starting Fuel Amount (gal)</string>
     <string name="fuel_flow">Flow Rate (gal/hr)</string>
     <string name="taxi_fuel_usage">Taxi Fuel Usage</string>
-    <string name="dpt_time">Dpt Time</string>
+    <string name="dpt_time">Time</string>
     <string name="duration">Duration</string>
     <string name="ac_num">A/C No</string>
     <string name="dpt_arpt">Dpt Arpt</string>

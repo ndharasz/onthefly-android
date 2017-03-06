@@ -1,6 +1,8 @@
 package com.example.noah.onthefly.models;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by ndharasz on 2/6/2017.
@@ -16,14 +18,18 @@ public class Flight implements Serializable {
     private String date;
     private String time;
     private String userid;
-    private String frontBaggageWeight;
-    private String aftBaggageWeight;
+    private double frontBaggageWeight;
+    private double aftBaggageWeight;
     private String flightDuration;
     private String startFuel;
     private String fuelFlow;
     private String taxiFuelBurn;
 
-    public Flight(){}
+    private Map<String, Passenger> passengers;
+
+    public Flight(){
+        initializePassengers();
+    }
 
     public Flight(String plane, String departAirport, String arriveAirport, String date,
                   String time, String userid, String duration, String startFuel,
@@ -38,6 +44,11 @@ public class Flight implements Serializable {
         this.startFuel = startFuel;
         this.fuelFlow = fuelFlow;
         this.taxiFuelBurn = taxiFuelBurn;
+        initializePassengers();
+    }
+
+    private void initializePassengers() {
+        passengers = new HashMap<>();
     }
 
     public String getUserid() {
@@ -86,6 +97,7 @@ public class Flight implements Serializable {
 
     public void setPlane(String plane) {
         this.plane = plane;
+        initializePassengers();
     }
 
     public String getKey() {
@@ -96,19 +108,19 @@ public class Flight implements Serializable {
         this.key = key;
     }
     
-    public String getFrontBaggageWeight() {
+    public double getFrontBaggageWeight() {
         return frontBaggageWeight;
     }
 
-    public void setFrontBaggageWeight(String frontBaggageWeight) {
+    public void setFrontBaggageWeight(double frontBaggageWeight) {
         this.frontBaggageWeight = frontBaggageWeight;
     }
 
-    public String getAftBaggageWeight() {
+    public double getAftBaggageWeight() {
         return aftBaggageWeight;
     }
 
-    public void setAftBaggageWeight(String aftBaggageWeight) {
+    public void setAftBaggageWeight(double aftBaggageWeight) {
         this.aftBaggageWeight = aftBaggageWeight;
     }
 
@@ -142,5 +154,9 @@ public class Flight implements Serializable {
 
     public void setTaxiFuelBurn(String taxiFuelBurn) {
         this.taxiFuelBurn = taxiFuelBurn;
+    }
+
+    public Map<String, Passenger> getPassengers() {
+        return passengers;
     }
 }

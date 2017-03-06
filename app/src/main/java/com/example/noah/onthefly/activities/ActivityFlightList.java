@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.models.Flight;
+import com.example.noah.onthefly.util.GlobalVars;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -52,7 +53,7 @@ public class ActivityFlightList extends AppCompatActivity {
         flightTable = (TableLayout) findViewById(R.id.flight_table);
 
         firebaseDatabase = FirebaseDatabase.getInstance();
-        flightListReference = firebaseDatabase.getReference("flights");
+        flightListReference = firebaseDatabase.getReference(GlobalVars.FLIGHT_DB);
         flightListReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

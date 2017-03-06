@@ -209,6 +209,7 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
             Log.d("TEST", "Reached2");
             String parsed_dept_loc = parsePlaneCode(dept_loc);
             String parsed_arr_loc = parsePlaneCode(arr_loc);
+
             Flight newFlight = new Flight(plane, parsed_dept_loc, parsed_arr_loc, date, time,
                     mAuth.getCurrentUser().getUid(), flight_duration, starting_fuel, fuel_flow, taxi_usage);
             DatabaseReference pushRef = mDatabase.child(GlobalVars.FLIGHT_DB).push();

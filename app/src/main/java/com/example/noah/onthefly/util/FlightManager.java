@@ -3,8 +3,11 @@ package com.example.noah.onthefly.util;
 import android.util.Log;
 
 import com.example.noah.onthefly.models.Flight;
+import com.example.noah.onthefly.models.Passenger;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Map;
 
 /**
  * Created by brian on 3/3/17.
@@ -100,6 +103,39 @@ public class FlightManager {
 
     public void setTime(String time) {
         flight.setTime(time);
+        save();
+    }
+
+    public double getFrontBaggageWeight() {
+        return flight.getFrontBaggageWeight();
+    }
+
+    public void setFrontBaggageWeight(double weight) {
+        flight.setFrontBaggageWeight(weight);
+        save();
+    }
+
+    public double getAftBaggageWeight() {
+        return flight.getAftBaggageWeight();
+    }
+
+    public void setAftBaggageWeight(double weight) {
+        flight.setAftBaggageWeight(weight);
+        save();
+    }
+
+    public Passenger getPassenger(int seat) {
+        Map<String, Passenger> passengers = flight.getPassengers();
+        String seatName = "seat" + String.valueOf(seat);
+        Passenger passenger = passengers.get(seatName);
+        if (passenger == null) {
+            passenger = new Passenger("Add Passenger", 0);
+        }
+        return passenger;
+    }
+
+    public void setPassenger(int seat, Passenger passenger) {
+        flight.getPassengers().put("seat" + String.valueOf(seat), passenger);
         save();
     }
 
