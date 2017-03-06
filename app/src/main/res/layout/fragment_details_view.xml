@@ -18,6 +18,14 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/title2_size"
+                android:text="@string/plane"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
             <Spinner
                 android:id="@+id/choose_plane_spinner"
                 android:layout_width="match_parent"
@@ -26,6 +34,14 @@
                 android:padding="@dimen/input_padding"
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:background="@color/colorAccent"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/title2_size"
+                android:text="@string/departLoc"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
             <AutoCompleteTextView
                 android:id="@+id/depPick"
@@ -40,6 +56,14 @@
                 <requestFocus />
             </AutoCompleteTextView>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/title2_size"
+                android:text="@string/arriveLoc"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
             <AutoCompleteTextView
                 android:id="@+id/arrPick"
                 android:layout_width="match_parent"
@@ -53,6 +77,14 @@
                 <requestFocus />
             </AutoCompleteTextView>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/title2_size"
+                android:text="@string/date"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
             <EditText
                 android:id="@+id/flight_date"
                 android:layout_width="match_parent"
@@ -65,6 +97,30 @@
                 android:hint="@string/flight_date"
                 android:editable="false"
                 android:onClick="showDatePicker"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/title2_size"
+                    android:text="@string/dept_time"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/title2_size"
+                    android:text="@string/duration"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -100,6 +156,14 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/title2_size"
+                android:text="@string/start_fuel"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
             <EditText
                 android:id="@+id/start_fuel"
                 android:layout_width="match_parent"
@@ -111,6 +175,30 @@
                 android:hint="@string/start_fuel"
                 android:imeOptions="actionDone"
                 android:imeActionLabel="Done"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/title2_size"
+                    android:text="@string/fuel_flow"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/title2_size"
+                    android:text="@string/taxi_fuel_usage"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.interfaces.CallsDatePicker;
@@ -157,6 +158,7 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
                 if (selection != position) {
                     Log.d(TAG, "Plane selection updating...");
                     flightManager.setPlane((String) parent.getItemAtPosition(position));
+                    Toast.makeText(getContext(), "Plane updated.", Toast.LENGTH_SHORT).show();
                 }
                 selection = position;
             }
@@ -169,8 +171,7 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "Dept Airport selection updating...");
                 flightManager.setDepartureAirport((String) parent.getItemAtPosition(position));
-                InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                confirmSelection();
             }
         });
         // Arrival Airport listener
@@ -179,8 +180,7 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "Arr Airport selection updating...");
                 flightManager.setArrivalAirport((String) parent.getItemAtPosition(position));
-                InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                confirmSelection();
             }
         });
         // Duration listener
@@ -188,9 +188,13 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    flightManager.setFlightDuration(Double.parseDouble(duration.getText().toString()));
-                    InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                    try {
+                        flightManager.setFlightDuration(Double.parseDouble(duration.getText().toString()));
+                        confirmSelection();
+                    } catch (Throwable t) {
+                        errorMessage();
+                        duration.setText(String.valueOf(flightManager.getFlightDuration()));
+                    }
                     return true;
                 }
                 return false;
@@ -201,9 +205,13 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    flightManager.setStartFuel(Double.parseDouble(fuelAmount.getText().toString()));
-                    InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                    try {
+                        flightManager.setStartFuel(Double.parseDouble(fuelAmount.getText().toString()));
+                        confirmSelection();
+                    } catch (Throwable t) {
+                        errorMessage();
+                        fuelAmount.setText(String.valueOf(flightManager.getStartFuel()));
+                    }
                     return true;
                 }
                 return false;
@@ -214,9 +222,14 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    flightManager.setFuelFlow(Double.parseDouble(flowRate.getText().toString()));
-                    InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                    try {
+                        flightManager.setFuelFlow(Double.parseDouble(flowRate.getText().toString()));
+                        confirmSelection();
+                    } catch (Throwable t) {
+                        errorMessage();
+                        flowRate.setText(String.valueOf(flightManager.getFuelFlow()));
+                    }
+
                     return true;
                 }
                 return false;
@@ -227,14 +240,28 @@ public class FragmentDetailsView extends Fragment implements CallsDatePicker, Ca
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    flightManager.setTaxiFuelBurn(Double.parseDouble(taxiFuel.getText().toString()));
-                    InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+                    try {
+                        flightManager.setTaxiFuelBurn(Double.parseDouble(taxiFuel.getText().toString()));
+                        confirmSelection();
+                    } catch (Throwable t) {
+                        errorMessage();
+                        taxiFuel.setText(String.valueOf(flightManager.getTaxiFuelBurn()));
+                    }
                     return true;
                 }
                 return false;
             }
         });
+    }
+
+    private void confirmSelection() {
+        InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        in.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+        Toast.makeText(getContext(), "Flight updated successfully.", Toast.LENGTH_SHORT).show();
+    }
+
+    private void errorMessage() {
+        Toast.makeText(getContext(), "Invalid format", Toast.LENGTH_SHORT).show();
     }
 
     public void showDatePicker(View v) {
