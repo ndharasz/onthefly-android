@@ -25,6 +25,7 @@ import com.example.noah.onthefly.models.Flight;
 import com.example.noah.onthefly.util.Airports;
 import com.example.noah.onthefly.util.ArrayAdapterWithHint;
 import com.example.noah.onthefly.util.CustomAdapter;
+import com.example.noah.onthefly.util.GlobalVars;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -210,7 +211,9 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
             String parsed_arr_loc = parsePlaneCode(arr_loc);
             Flight newFlight = new Flight(plane, parsed_dept_loc, parsed_arr_loc, date, time,
                     mAuth.getCurrentUser().getUid(), flight_duration, starting_fuel, fuel_flow, taxi_usage);
-            mDatabase.child("flights").push().setValue(newFlight);
+            DatabaseReference pushRef = mDatabase.child(GlobalVars.FLIGHT_DB).push();
+            pushRef.setValue(newFlight);
+            newFlight.setKey(pushRef.getKey());
             Log.d("TEST", "Reached3");
             Intent editFlightIntent = new Intent(this, ActivityEditFlight.class);
             editFlightIntent.putExtra("FlightDetails", newFlight);

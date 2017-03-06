@@ -38,7 +38,7 @@ public class FlightManager {
             throw new NoKeyError();
         }
         firebaseDatabase = FirebaseDatabase.getInstance();
-        ref = firebaseDatabase.getReference().child("flights").child(flight.getKey()).getRef();
+        ref = firebaseDatabase.getReference().child(GlobalVars.FLIGHT_DB).child(flight.getKey()).getRef();
         flight.setKey(null);
         this.flight = flight;
         Log.d(TAG, "Key: " + flight.getKey());

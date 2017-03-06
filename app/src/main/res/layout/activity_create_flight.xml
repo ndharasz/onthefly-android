@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_acivity_create_flight"
     android:layout_width="match_parent"
@@ -9,9 +9,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.noah.onthefly.activities.ActivityCreateFlight"
-    android:orientation="vertical"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    android:scrollbars="none">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <TextView
         android:paddingBottom="@dimen/title_padding"
         android:layout_width="match_parent"
@@ -146,4 +150,6 @@
         android:onClick="submit"
         style="@style/accent_button"/>
 
-</LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
