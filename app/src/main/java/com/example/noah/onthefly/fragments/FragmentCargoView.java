@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -19,9 +20,13 @@ import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.util.FlightManager;
+import com.example.noah.onthefly.util.GlobalVars;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class FragmentCargoView extends Fragment {
     Button tab;
+    private DatabaseReference dataRef;
 
     private FlightManager flightManager;
     TextView frontDisplay;
@@ -114,12 +119,22 @@ public class FragmentCargoView extends Fragment {
         return view;
     }
 
+    public void initializeFields() {
+        frontWeight = flightManager.getFrontBaggageWeight();
+        frontDisplay.setText("Weight: " + frontWeight + " lbs");
+        rearWeight = flightManager.getAftBaggageWeight();
+        rearDisplay.setText("Weight: " + rearWeight + " lbs");
+    }
+
     protected void updateTotalFrontCargo() {
         frontDisplay.setText("Weight: " + frontWeight + " lbs");
+        flightManager.setFrontBaggageWeight(frontWeight);
     }
 
     protected void updateTotalRearCargo() {
         rearDisplay.setText("Weight: " + rearWeight + " lbs");
+        flightManager.setAftBaggageWeight(rearWeight);
+
     }
 
     protected void addFrontCargo(View v) {

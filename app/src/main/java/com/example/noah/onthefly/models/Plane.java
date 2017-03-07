@@ -21,22 +21,27 @@ import java.util.Map;
 
 public class Plane implements Comparable<Plane>, Serializable {
     static final long serialVersionUID = -5203400849366852220L;
-    private static String TAG = "Plane";
+    private static final String TAG = "Plane";
 
     private String name;
+    private String tailNumber;
 
-    private double dryWeight;
+    private double emptyWeight;
+    private double emptyWeightArm;
 
     private double frontBaggageArm;
-    private double rearBaggageArm;
+    private double aftBaggageArm;
     private double wingBaggageArm;
     private double pilotSeatsArm;
     private List<Double> rowArms;
-
     private double fuelArm;
-    private double auxTankArm;
 
-    private List<String> cgEnvelope;
+    private double maxRampWeight;
+    private double maxTakeoffWeight;
+
+    private int numSeats;
+
+    private Map<String, List<Double>> centerOfGravityEnvelope;
 
     // Empty constructor for Firebase just in case
     public Plane() {}
@@ -45,7 +50,6 @@ public class Plane implements Comparable<Plane>, Serializable {
         return this.name.compareTo(other.name);
     }
 
-    // Auto-generated getters and setters for firebase
     public String getName() {
         return name;
     }
@@ -54,12 +58,28 @@ public class Plane implements Comparable<Plane>, Serializable {
         this.name = name;
     }
 
-    public double getDryWeight() {
-        return dryWeight;
+    public String getTailNumber() {
+        return tailNumber;
     }
 
-    public void setDryWeight(double dryWeight) {
-        this.dryWeight = dryWeight;
+    public void setTailNumber(String tailNumber) {
+        this.tailNumber = tailNumber;
+    }
+
+    public double getEmptyWeight() {
+        return emptyWeight;
+    }
+
+    public void setEmptyWeight(double emptyWeight) {
+        this.emptyWeight = emptyWeight;
+    }
+
+    public double getEmptyWeightArm() {
+        return emptyWeightArm;
+    }
+
+    public void setEmptyWeightArm(double emptyWeightArm) {
+        this.emptyWeightArm = emptyWeightArm;
     }
 
     public double getFrontBaggageArm() {
@@ -70,12 +90,12 @@ public class Plane implements Comparable<Plane>, Serializable {
         this.frontBaggageArm = frontBaggageArm;
     }
 
-    public double getRearBaggageArm() {
-        return rearBaggageArm;
+    public double getAftBaggageArm() {
+        return aftBaggageArm;
     }
 
-    public void setRearBaggageArm(double rearBaggageArm) {
-        this.rearBaggageArm = rearBaggageArm;
+    public void setAftBaggageArm(double aftBaggageArm) {
+        this.aftBaggageArm = aftBaggageArm;
     }
 
     public double getWingBaggageArm() {
@@ -110,34 +130,50 @@ public class Plane implements Comparable<Plane>, Serializable {
         this.fuelArm = fuelArm;
     }
 
-    public double getAuxTankArm() {
-        return auxTankArm;
+    public double getMaxRampWeight() {
+        return maxRampWeight;
     }
 
-    public void setAuxTankArm(double auxTankArm) {
-        this.auxTankArm = auxTankArm;
+    public void setMaxRampWeight(double maxRampWeight) {
+        this.maxRampWeight = maxRampWeight;
     }
 
-    public List<String> getCgEnvelope() {
-        return cgEnvelope;
+    public double getMaxTakeoffWeight() {
+        return maxTakeoffWeight;
     }
 
-    public void setCgEnvelope(List<String> cgEnvelope) {
-        this.cgEnvelope = cgEnvelope;
+    public void setMaxTakeoffWeight(double maxTakeoffWeight) {
+        this.maxTakeoffWeight = maxTakeoffWeight;
+    }
+
+    public int getNumSeats() {
+        return numSeats;
+    }
+
+    public void setNumSeats(int numSeats) {
+        this.numSeats = numSeats;
+    }
+
+    public Map<String, List<Double>> getCenterOfGravityEnvelope() {
+        return centerOfGravityEnvelope;
+    }
+
+    public void setCenterOfGravityEnvelope(Map<String, List<Double>> centerOfGravityEnvelope) {
+        this.centerOfGravityEnvelope = centerOfGravityEnvelope;
     }
 
     public void writeToFile(Context context) {
         File dir = context.getFilesDir();
         File[] files = dir.listFiles();
         for (File f : files) {
-            if (f.getName().equals(name)) {
+            if (f.getName().equals(tailNumber)) {
                 Log.d(TAG, "Plane already exists locally");
                 return;
             }
         }
         ObjectOutputStream objectOut = null;
         try {
-            FileOutputStream fileOutputStream = context.openFileOutput(this.getName(), Activity.MODE_PRIVATE);
+            FileOutputStream fileOutputStream = context.openFileOutput(tailNumber, Activity.MODE_PRIVATE);
             objectOut = new ObjectOutputStream(fileOutputStream);
             objectOut.writeObject(this);
             fileOutputStream.getFD().sync();
@@ -157,7 +193,7 @@ public class Plane implements Comparable<Plane>, Serializable {
 
     public void deleteFile(Context context) {
         try {
-            context.deleteFile(name);
+            context.deleteFile(tailNumber);
         } catch (Exception e) {
             Log.d(TAG, "Plane did not exist");
         }

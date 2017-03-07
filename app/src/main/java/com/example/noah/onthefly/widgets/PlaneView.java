@@ -45,6 +45,28 @@ public class PlaneView extends GridView {
     private Animation animation;
     private int replace;
 
+    private PassengerMovedListener passengerMovedListener =  new PassengerMovedListener() {
+        @Override
+        public void onPassengerMoved(int newSeat, Passenger passenger) {
+            return;
+        }
+    };
+
+    private PassengerAddedListener passengerAddedListener = new PassengerAddedListener() {
+        @Override
+        public void onPassengerAdded(int seat, Passenger passenger) {
+            return;
+        }
+    };
+
+    public interface PassengerMovedListener {
+        public void onPassengerMoved(int newSeat, Passenger passenger);
+    }
+
+    public interface PassengerAddedListener {
+        public void onPassengerAdded(int seat, Passenger passenger);
+    }
+
     // This is the majority of the PlaneView.
     // Basically the PassengerViewAdapter is a mapping from Passengers to views which
     //   are displayed on screen.
@@ -127,13 +149,14 @@ public class PlaneView extends GridView {
                                             if (getChildAt(tInt) != null) {
                                                 ImageView iv = (ImageView) getChildAt(tInt).findViewById(R.id.seat);
                                                 iv.setVisibility(VISIBLE);
-                                                if (iv.getVisibility() == INVISIBLE) {
-                                                    iv.setVisibility(VISIBLE);
-                                                    refreshView();
-                                                }
+                                                //if (iv.getVisibility() == INVISIBLE) {
+                                                //    iv.setVisibility(VISIBLE);
+                                                //    refreshView();
+                                                //}
                                             }
                                         }
 
+                                        passengerAddedListener.onPassengerAdded(tInt, new Passenger(passName, passWeight));
                                         refreshView();
                                         temp.setAlpha(1);
                                     } catch (Exception e) {
@@ -220,6 +243,7 @@ public class PlaneView extends GridView {
                             getChildAt(replace).setBackgroundResource(R.drawable.passenger_box);
                             getChildAt(replace).findViewById(R.id.seat).setVisibility(INVISIBLE);
                             Passenger.swap(new Passenger("Add Passenger", 0), getItem(replace));
+                            passengerMovedListener.onPassengerMoved(replace, Passenger.EMPTY);
                             refreshView();
                         } else {
                             getChildAt(replace).setBackgroundResource(R.drawable.passenger_box);
@@ -233,6 +257,11 @@ public class PlaneView extends GridView {
                     return false;
                 }
             });
+            if (getItem(pos).equals(Passenger.EMPTY)) {
+                layout.findViewById(R.id.seat).setVisibility(INVISIBLE);
+            } else {
+                layout.findViewById(R.id.seat).setVisibility(VISIBLE);
+            }
             return layout;
         }
 
@@ -260,18 +289,25 @@ public class PlaneView extends GridView {
             Passenger first = getItem(a);
             Passenger second = getItem(b);
           
-            if (second.getName() == "Add Passenger") {
+            if (second.equals(Passenger.EMPTY)) {
                 getChildAt(a).findViewById(R.id.seat).setVisibility(INVISIBLE);
                 getChildAt(b).findViewById(R.id.seat).setVisibility(VISIBLE);
             }
-            if (first.getName() == "Add Passenger") {
+            if (first.equals(Passenger.EMPTY)) {
                 getChildAt(b).findViewById(R.id.seat).setVisibility(INVISIBLE);
                 getChildAt(a).findViewById(R.id.seat).setVisibility(VISIBLE);
             }
 
             Passenger.swap(first, second);
 
+            passengerMovedListener.onPassengerMoved(a, first);
+            passengerMovedListener.onPassengerMoved(b, second);
             notifyDataSetChanged();
+        }
+
+        public void setPassenger(int a, Passenger passenger) {
+            getItem(a).setName(passenger.getName());
+            getItem(a).setWeight(passenger.getWeight());
         }
     }
     /*
@@ -299,6 +335,18 @@ public class PlaneView extends GridView {
         this.setVerticalSpacing(10);
         this.setHorizontalSpacing(20);
         this.setPadding(20, 20, 20, 20);
+    }
+
+    public void setOnPassengerMovedListener(PassengerMovedListener passengerMovedListener) {
+        this.passengerMovedListener = passengerMovedListener;
+    }
+
+    public void setOnPassengerAddedListener(PassengerAddedListener passengerAddedListener) {
+        this.passengerAddedListener = passengerAddedListener;
+    }
+
+    public void setPassenger(int loc, Passenger passenger) {
+        ((PassengerViewAdapter) getAdapter()).setPassenger(loc, passenger);
     }
 
     public double calculateMoment() {

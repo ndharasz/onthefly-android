@@ -7,4 +7,5 @@
     <color name="colorSpecial">#35DB32</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
+    <color name="colorWarn">#FF6666</color>
 </resources>

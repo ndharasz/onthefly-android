@@ -1,6 +1,8 @@
 package com.example.noah.onthefly.models;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by ndharasz on 2/6/2017.
@@ -16,18 +18,21 @@ public class Flight implements Serializable {
     private String date;
     private String time;
     private String userid;
-    private String frontBaggageWeight;
-    private String aftBaggageWeight;
-    private String flightDuration;
-    private String startFuel;
-    private String fuelFlow;
-    private String taxiFuelBurn;
+    private double frontBaggageWeight;
+    private double aftBaggageWeight;
+    private double flightDuration;
+    private double startFuel;
+    private double fuelFlow;
+    private double taxiFuelBurn;
 
-    public Flight(){}
+    private Map<String, Passenger> passengers;
+
+    public Flight(){
+    }
 
     public Flight(String plane, String departAirport, String arriveAirport, String date,
-                  String time, String userid, String duration, String startFuel,
-                  String fuelFlow, String taxiFuelBurn) {
+                  String time, String userid, double duration, double startFuel,
+                  double fuelFlow, double taxiFuelBurn) {
         this.plane = plane;
         this.departAirport = departAirport;
         this.arriveAirport = arriveAirport;
@@ -38,6 +43,10 @@ public class Flight implements Serializable {
         this.startFuel = startFuel;
         this.fuelFlow = fuelFlow;
         this.taxiFuelBurn = taxiFuelBurn;
+    }
+
+    private void initializePassengers() {
+        passengers = new HashMap<>();
     }
 
     public String getUserid() {
@@ -96,51 +105,65 @@ public class Flight implements Serializable {
         this.key = key;
     }
     
-    public String getFrontBaggageWeight() {
+    public double getFrontBaggageWeight() {
         return frontBaggageWeight;
     }
 
-    public void setFrontBaggageWeight(String frontBaggageWeight) {
+    public void setFrontBaggageWeight(double frontBaggageWeight) {
         this.frontBaggageWeight = frontBaggageWeight;
     }
 
-    public String getAftBaggageWeight() {
+    public double getAftBaggageWeight() {
         return aftBaggageWeight;
     }
 
-    public void setAftBaggageWeight(String aftBaggageWeight) {
+    public void setAftBaggageWeight(double aftBaggageWeight) {
         this.aftBaggageWeight = aftBaggageWeight;
     }
 
-    public String getFlightDuration() {
+    public double getFlightDuration() {
         return flightDuration;
     }
 
-    public void setFlightDuration(String flightDuration) {
+    public void setFlightDuration(double flightDuration) {
         this.flightDuration = flightDuration;
     }
 
-    public String getStartFuel() {
+    public double getStartFuel() {
         return startFuel;
     }
 
-    public void setStartFuel(String startFuel) {
+    public void setStartFuel(double startFuel) {
         this.startFuel = startFuel;
     }
 
-    public String getFuelFlow() {
+    public double getFuelFlow() {
         return fuelFlow;
     }
 
-    public void setFuelFlow(String fuelFlow) {
+    public void setFuelFlow(double fuelFlow) {
         this.fuelFlow = fuelFlow;
     }
 
-    public String getTaxiFuelBurn() {
+    public double getTaxiFuelBurn() {
         return taxiFuelBurn;
     }
 
-    public void setTaxiFuelBurn(String taxiFuelBurn) {
+    public void setTaxiFuelBurn(double taxiFuelBurn) {
         this.taxiFuelBurn = taxiFuelBurn;
+    }
+
+    public void setPassengers(Map<String, Passenger> passengers) {
+        if (passengers == null) {
+            passengers = new HashMap<>();
+        }
+        this.passengers = passengers;
+    }
+
+    public Map<String, Passenger> getPassengers() {
+        if (passengers == null) {
+            passengers = new HashMap<>();
+        }
+        return passengers;
     }
 }
