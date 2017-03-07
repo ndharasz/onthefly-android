@@ -50,6 +50,10 @@ public class Passenger implements Serializable {
         this.weight = weight;
     }
 
+    public static Passenger deepCopy(Passenger p) {
+        return new Passenger(p.name, p.weight);
+    }
+
     public static void swap(Passenger p1, Passenger p2) {
         String p2name = p2.name;
         double p2weight = p2.weight;

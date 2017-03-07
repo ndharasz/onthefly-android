@@ -45,9 +45,9 @@ public class PlaneView extends GridView {
     private Animation animation;
     private int replace;
 
-    private PassengerMovedListener passengerMovedListener =  new PassengerMovedListener() {
+    private PassengerRemovedListener passengerRemovedListener =  new PassengerRemovedListener() {
         @Override
-        public void onPassengerMoved(int newSeat, Passenger passenger) {
+        public void onPassengerRemoved(int seat) {
             return;
         }
     };
@@ -59,8 +59,8 @@ public class PlaneView extends GridView {
         }
     };
 
-    public interface PassengerMovedListener {
-        public void onPassengerMoved(int newSeat, Passenger passenger);
+    public interface PassengerRemovedListener {
+        public void onPassengerRemoved(int seat);
     }
 
     public interface PassengerAddedListener {
@@ -243,7 +243,7 @@ public class PlaneView extends GridView {
                             getChildAt(replace).setBackgroundResource(R.drawable.passenger_box);
                             getChildAt(replace).findViewById(R.id.seat).setVisibility(INVISIBLE);
                             Passenger.swap(new Passenger("Add Passenger", 0), getItem(replace));
-                            passengerMovedListener.onPassengerMoved(replace, Passenger.EMPTY);
+                            passengerRemovedListener.onPassengerRemoved(replace);
                             refreshView();
                         } else {
                             getChildAt(replace).setBackgroundResource(R.drawable.passenger_box);
@@ -288,20 +288,24 @@ public class PlaneView extends GridView {
                 return;
             Passenger first = getItem(a);
             Passenger second = getItem(b);
-          
+
             if (second.equals(Passenger.EMPTY)) {
+                passengerRemovedListener.onPassengerRemoved(a);
                 getChildAt(a).findViewById(R.id.seat).setVisibility(INVISIBLE);
                 getChildAt(b).findViewById(R.id.seat).setVisibility(VISIBLE);
+            } else {
+                passengerAddedListener.onPassengerAdded(a, second);
             }
             if (first.equals(Passenger.EMPTY)) {
+                passengerRemovedListener.onPassengerRemoved(b);
                 getChildAt(b).findViewById(R.id.seat).setVisibility(INVISIBLE);
                 getChildAt(a).findViewById(R.id.seat).setVisibility(VISIBLE);
+            } else {
+                passengerAddedListener.onPassengerAdded(b, first);
             }
 
             Passenger.swap(first, second);
 
-            passengerMovedListener.onPassengerMoved(a, first);
-            passengerMovedListener.onPassengerMoved(b, second);
             notifyDataSetChanged();
         }
 
@@ -337,8 +341,8 @@ public class PlaneView extends GridView {
         this.setPadding(20, 20, 20, 20);
     }
 
-    public void setOnPassengerMovedListener(PassengerMovedListener passengerMovedListener) {
-        this.passengerMovedListener = passengerMovedListener;
+    public void setOnPassengerRemovedListener(PassengerRemovedListener passengerRemovedListener) {
+        this.passengerRemovedListener = passengerRemovedListener;
     }
 
     public void setOnPassengerAddedListener(PassengerAddedListener passengerAddedListener) {

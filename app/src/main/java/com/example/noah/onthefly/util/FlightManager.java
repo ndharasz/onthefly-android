@@ -146,7 +146,13 @@ public class FlightManager {
     }
 
     public void setPassenger(int seat, Passenger passenger) {
+        passenger = Passenger.deepCopy(passenger);
         flight.getPassengers().put("seat" + String.valueOf(seat), passenger);
+        save();
+    }
+
+    public void removePassenger(int seat) {
+        flight.getPassengers().remove("seat" + seat);
         save();
     }
 
