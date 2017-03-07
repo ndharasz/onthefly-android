@@ -18,6 +18,7 @@ import com.example.noah.onthefly.fragments.FragmentCargoView;
 import com.example.noah.onthefly.fragments.FragmentDetailsView;
 import com.example.noah.onthefly.fragments.FragmentPassengerView;
 import com.example.noah.onthefly.models.Flight;
+import com.example.noah.onthefly.models.Plane;
 import com.example.noah.onthefly.util.FlightManager;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -125,6 +126,7 @@ public class ActivityEditFlight extends FragmentActivity {
                     passengerViewButton.setBackgroundResource(R.drawable.edit_flight_tab);
                     cargoViewButton.setBackgroundResource(R.drawable.edit_flight_tab_selected);
                     findViewById(R.id.activity_edit_flight).invalidate();
+                    tabAdapter.getCargoView().initializeFields();
                 }
             }
 
@@ -179,6 +181,14 @@ public class ActivityEditFlight extends FragmentActivity {
         public FragmentDetailsView getDetailsView() {
             return detailsView;
         }
+
+        public FragmentCargoView getCargoView() {
+            return cargoView;
+        }
+
+        public FragmentPassengerView getPassengerView() {
+            return passengerView;
+        }
     }
 
     @Override
@@ -191,5 +201,16 @@ public class ActivityEditFlight extends FragmentActivity {
     protected void generateReport(View v) {
         Intent reportIntent = new Intent(this, ActivityReport.class);
         this.startActivity(reportIntent);
+    }
+
+    public FlightManager getFlightManager() {
+        return flightManager;
+    }
+
+    protected void delete(View v) {
+        flightManager.delete();
+        Intent flightListIntent = new Intent(this, ActivityFlightList.class);
+        startActivity(flightListIntent);
+        finish();
     }
 }

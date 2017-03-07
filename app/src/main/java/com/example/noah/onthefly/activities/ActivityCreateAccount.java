@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.models.User;
+import com.example.noah.onthefly.util.GlobalVars;
 import com.example.noah.onthefly.util.Mailer;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -200,7 +201,7 @@ public class ActivityCreateAccount extends AppCompatActivity {
                                 // Save user data after authentication is proven
                                 String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                DatabaseReference dRef = database.getReference("users");
+                                DatabaseReference dRef = database.getReference(GlobalVars.USER_DB);
                                 dRef.child(uid).setValue(new User(firstName, lastName, email));
 
                                 // Redirect to the login screen

@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.models.Plane;
+import com.example.noah.onthefly.util.GlobalVars;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -83,7 +84,7 @@ public class ActivityLogin extends AppCompatActivity {
             public void run() {
                 Log.d(TAG, "Searching for new planes");
                 FirebaseDatabase db = FirebaseDatabase.getInstance();
-                DatabaseReference ref = db.getReference("planes");
+                DatabaseReference ref = db.getReference(GlobalVars.PLANE_DB);
                 ref.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -179,7 +180,7 @@ public class ActivityLogin extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                Log.d(TAG, "sucess");
+                                Log.d(TAG, "success");
                                 if (rememberMe.isChecked()) {
                                     loginPrefsEditor.putBoolean("saveLogin", true);
                                     loginPrefsEditor.putString("username", username);

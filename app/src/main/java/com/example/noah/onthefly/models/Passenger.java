@@ -7,10 +7,11 @@ import java.util.Objects;
  * Created by brian on 2/21/17.
  */
 
-
-
-public class Passenger {
+public class Passenger implements Serializable {
     public static Passenger EMPTY = new Passenger("Add Passenger", 0);
+
+    public Passenger() {}
+
     public String getName() {
         return name;
     }

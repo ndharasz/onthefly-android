@@ -1,7 +1,5 @@
 package com.example.noah.onthefly.activities;
 
-import android.content.Context;
-import android.support.v4.app.DialogFragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +23,7 @@ import com.example.noah.onthefly.models.Flight;
 import com.example.noah.onthefly.util.Airports;
 import com.example.noah.onthefly.util.ArrayAdapterWithHint;
 import com.example.noah.onthefly.util.CustomAdapter;
+import com.example.noah.onthefly.util.GlobalVars;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -116,39 +115,6 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         taxi_fuel = (EditText)findViewById(R.id.taxi_fuel);
     }
 
-    private class ArrayAdapterWithHint<T> extends ArrayAdapter {
-        public ArrayAdapterWithHint(
-                Context c, int resource, List<T> objects) {
-            super(c, resource, objects);
-            this.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        }
-
-        @Override
-        public boolean isEnabled(int position) {
-            if (position == 0) {
-                // Disable the first item from Spinner
-                // First item will be use for hint
-                return false;
-            } else {
-                return true;
-            }
-        }
-
-        @Override
-        public View getDropDownView(int position, View convertView,
-                                    ViewGroup parent) {
-            View view = super.getDropDownView(position, convertView, parent);
-            TextView tv = (TextView) view;
-            if (position == 0) {
-                // Set the hint text color gray
-                tv.setTextColor(Color.GRAY);
-            } else {
-                tv.setTextColor(Color.BLACK);
-            }
-            return view;
-        }
-    }
-
     public void showDatePicker(View v) {
         if (datePickerFragment == null) {
             datePickerFragment = new FragmentDatePicker();
@@ -192,10 +158,10 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
         String time = timeField.getText().toString();
         String dept_loc = departures.getText().toString();
         String arr_loc = arrivals.getText().toString();
-        String flight_duration = duration.getText().toString();
-        String starting_fuel = start_fuel.getText().toString();
-        String fuel_flow = flow_rate.getText().toString();
-        String taxi_usage = taxi_fuel.getText().toString();
+        double flight_duration = Double.parseDouble(duration.getText().toString());
+        double starting_fuel = Double.parseDouble(start_fuel.getText().toString());
+        double fuel_flow = Double.parseDouble(flow_rate.getText().toString());
+        double taxi_usage = Double.parseDouble(taxi_fuel.getText().toString());
         Log.d("TEST", Boolean.toString(dateAfterToday()));
 
         if (dept_loc.matches("") || arr_loc.matches("") ||
@@ -208,9 +174,12 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
             Log.d("TEST", "Reached2");
             String parsed_dept_loc = parsePlaneCode(dept_loc);
             String parsed_arr_loc = parsePlaneCode(arr_loc);
+
             Flight newFlight = new Flight(plane, parsed_dept_loc, parsed_arr_loc, date, time,
                     mAuth.getCurrentUser().getUid(), flight_duration, starting_fuel, fuel_flow, taxi_usage);
-            mDatabase.child("flights").push().setValue(newFlight);
+            DatabaseReference pushRef = mDatabase.child(GlobalVars.FLIGHT_DB).push();
+            pushRef.setValue(newFlight);
+            newFlight.setKey(pushRef.getKey());
             Log.d("TEST", "Reached3");
             Intent editFlightIntent = new Intent(this, ActivityEditFlight.class);
             editFlightIntent.putExtra("FlightDetails", newFlight);

@@ -3,8 +3,11 @@ package com.example.noah.onthefly.util;
 import android.util.Log;
 
 import com.example.noah.onthefly.models.Flight;
+import com.example.noah.onthefly.models.Passenger;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Map;
 
 /**
  * Created by brian on 3/3/17.
@@ -21,7 +24,12 @@ public class FlightManager {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference ref;
 
-    private AirportChangedListener airportChangedListener;
+    private AirportChangedListener airportChangedListener = new AirportChangedListener() {
+        @Override
+        public void onAirportsChanged(String dep, String arr) {
+            return;
+        }
+    };
 
     public interface AirportChangedListener {
         public void onAirportsChanged(String dep, String arr);
@@ -37,11 +45,16 @@ public class FlightManager {
         if (flight.getKey() == null) {
             throw new NoKeyError();
         }
+        Log.d(TAG, "Key: " + flight.getKey());
         firebaseDatabase = FirebaseDatabase.getInstance();
-        ref = firebaseDatabase.getReference().child("flights").child(flight.getKey()).getRef();
+        ref = firebaseDatabase.getReference().child(GlobalVars.FLIGHT_DB).child(flight.getKey()).getRef();
         flight.setKey(null);
         this.flight = flight;
-        Log.d(TAG, "Key: " + flight.getKey());
+    }
+
+    public void delete() {
+        Log.d(TAG, "Deleting flight from records");
+        ref.removeValue();
     }
 
     /*
@@ -101,6 +114,76 @@ public class FlightManager {
     public void setTime(String time) {
         flight.setTime(time);
         save();
+    }
+
+    public double getFrontBaggageWeight() {
+        return flight.getFrontBaggageWeight();
+    }
+
+    public void setFrontBaggageWeight(double weight) {
+        flight.setFrontBaggageWeight(weight);
+        save();
+    }
+
+    public double getAftBaggageWeight() {
+        return flight.getAftBaggageWeight();
+    }
+
+    public void setAftBaggageWeight(double weight) {
+        flight.setAftBaggageWeight(weight);
+        save();
+    }
+
+    public Passenger getPassenger(int seat) {
+        seat += 1;
+        Map<String, Passenger> passengers = flight.getPassengers();
+        String seatName = "seat" + String.valueOf(seat);
+        Passenger passenger = passengers.get(seatName);
+        if (passenger == null) {
+            passenger = new Passenger("Add Passenger", 0);
+        }
+        return passenger;
+    }
+
+    public void setPassenger(int seat, Passenger passenger) {
+        flight.getPassengers().put("seat" + String.valueOf(seat), passenger);
+        save();
+    }
+
+    public void setFlightDuration(double flightDuration) {
+        flight.setFlightDuration(flightDuration);
+        save();
+    }
+
+    public double getFlightDuration() {
+        return flight.getFlightDuration();
+    }
+
+    public void setStartFuel(double startFuel) {
+        flight.setStartFuel(startFuel);
+        save();
+    }
+
+    public double getStartFuel() {
+        return flight.getStartFuel();
+    }
+
+    public void setFuelFlow(double fuelFlow) {
+        flight.setFuelFlow(fuelFlow);
+        save();
+    }
+
+    public double getFuelFlow() {
+        return flight.getFuelFlow();
+    }
+
+    public void setTaxiFuelBurn(double taxiFuelBurn) {
+        flight.setTaxiFuelBurn(taxiFuelBurn);
+        save();
+    }
+
+    public double getTaxiFuelBurn() {
+        return flight.getTaxiFuelBurn();
     }
 
     private void save() {
