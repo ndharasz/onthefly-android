@@ -18,6 +18,7 @@ import com.example.noah.onthefly.fragments.FragmentCargoView;
 import com.example.noah.onthefly.fragments.FragmentDetailsView;
 import com.example.noah.onthefly.fragments.FragmentPassengerView;
 import com.example.noah.onthefly.models.Flight;
+import com.example.noah.onthefly.models.Plane;
 import com.example.noah.onthefly.util.FlightManager;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -200,5 +201,16 @@ public class ActivityEditFlight extends FragmentActivity {
     protected void generateReport(View v) {
         Intent reportIntent = new Intent(this, ActivityReport.class);
         this.startActivity(reportIntent);
+    }
+
+    public FlightManager getFlightManager() {
+        return flightManager;
+    }
+
+    protected void delete(View v) {
+        flightManager.delete();
+        Intent flightListIntent = new Intent(this, ActivityFlightList.class);
+        startActivity(flightListIntent);
+        finish();
     }
 }

@@ -24,7 +24,12 @@ public class FlightManager {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference ref;
 
-    private AirportChangedListener airportChangedListener;
+    private AirportChangedListener airportChangedListener = new AirportChangedListener() {
+        @Override
+        public void onAirportsChanged(String dep, String arr) {
+            return;
+        }
+    };
 
     public interface AirportChangedListener {
         public void onAirportsChanged(String dep, String arr);
@@ -45,6 +50,11 @@ public class FlightManager {
         ref = firebaseDatabase.getReference().child(GlobalVars.FLIGHT_DB).child(flight.getKey()).getRef();
         flight.setKey(null);
         this.flight = flight;
+    }
+
+    public void delete() {
+        Log.d(TAG, "Deleting flight from records");
+        ref.removeValue();
     }
 
     /*
@@ -125,6 +135,7 @@ public class FlightManager {
     }
 
     public Passenger getPassenger(int seat) {
+        seat += 1;
         Map<String, Passenger> passengers = flight.getPassengers();
         String seatName = "seat" + String.valueOf(seat);
         Passenger passenger = passengers.get(seatName);

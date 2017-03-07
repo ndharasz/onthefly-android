@@ -28,7 +28,6 @@ public class Flight implements Serializable {
     private Map<String, Passenger> passengers;
 
     public Flight(){
-        initializePassengers();
     }
 
     public Flight(String plane, String departAirport, String arriveAirport, String date,
@@ -44,7 +43,6 @@ public class Flight implements Serializable {
         this.startFuel = startFuel;
         this.fuelFlow = fuelFlow;
         this.taxiFuelBurn = taxiFuelBurn;
-        initializePassengers();
     }
 
     private void initializePassengers() {
@@ -97,7 +95,6 @@ public class Flight implements Serializable {
 
     public void setPlane(String plane) {
         this.plane = plane;
-        initializePassengers();
     }
 
     public String getKey() {
@@ -156,7 +153,17 @@ public class Flight implements Serializable {
         this.taxiFuelBurn = taxiFuelBurn;
     }
 
+    public void setPassengers(Map<String, Passenger> passengers) {
+        if (passengers == null) {
+            passengers = new HashMap<>();
+        }
+        this.passengers = passengers;
+    }
+
     public Map<String, Passenger> getPassengers() {
+        if (passengers == null) {
+            passengers = new HashMap<>();
+        }
         return passengers;
     }
 }

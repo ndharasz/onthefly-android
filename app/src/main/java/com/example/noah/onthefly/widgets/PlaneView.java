@@ -149,10 +149,10 @@ public class PlaneView extends GridView {
                                             if (getChildAt(tInt) != null) {
                                                 ImageView iv = (ImageView) getChildAt(tInt).findViewById(R.id.seat);
                                                 iv.setVisibility(VISIBLE);
-                                                if (iv.getVisibility() == INVISIBLE) {
-                                                    iv.setVisibility(VISIBLE);
-                                                    refreshView();
-                                                }
+                                                //if (iv.getVisibility() == INVISIBLE) {
+                                                //    iv.setVisibility(VISIBLE);
+                                                //    refreshView();
+                                                //}
                                             }
                                         }
 
@@ -257,6 +257,11 @@ public class PlaneView extends GridView {
                     return false;
                 }
             });
+            if (getItem(pos).equals(Passenger.EMPTY)) {
+                layout.findViewById(R.id.seat).setVisibility(INVISIBLE);
+            } else {
+                layout.findViewById(R.id.seat).setVisibility(VISIBLE);
+            }
             return layout;
         }
 
@@ -299,6 +304,11 @@ public class PlaneView extends GridView {
             passengerMovedListener.onPassengerMoved(b, second);
             notifyDataSetChanged();
         }
+
+        public void setPassenger(int a, Passenger passenger) {
+            getItem(a).setName(passenger.getName());
+            getItem(a).setWeight(passenger.getWeight());
+        }
     }
     /*
      * This is merely a drag and drop grid where you can click on each
@@ -333,6 +343,10 @@ public class PlaneView extends GridView {
 
     public void setOnPassengerAddedListener(PassengerAddedListener passengerAddedListener) {
         this.passengerAddedListener = passengerAddedListener;
+    }
+
+    public void setPassenger(int loc, Passenger passenger) {
+        ((PassengerViewAdapter) getAdapter()).setPassenger(loc, passenger);
     }
 
     public double calculateMoment() {

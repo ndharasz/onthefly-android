@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.noah.onthefly.fragments.FragmentPassengerView"
-    android:background="@drawable/edit_flight_tab">
+    android:background="@color/colorPrimary">
 
 
     <LinearLayout

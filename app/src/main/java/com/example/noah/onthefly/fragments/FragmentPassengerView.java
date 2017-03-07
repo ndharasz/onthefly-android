@@ -11,7 +11,9 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.example.noah.onthefly.R;
+import com.example.noah.onthefly.activities.ActivityEditFlight;
 import com.example.noah.onthefly.models.Passenger;
+import com.example.noah.onthefly.models.Plane;
 import com.example.noah.onthefly.util.FlightManager;
 import com.example.noah.onthefly.widgets.PlaneView;
 
@@ -43,19 +45,22 @@ public class FragmentPassengerView extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        // TODO: make this not hardcoded, because that's stupid.
-        Double[] pilotArmsArray = {12.0};
-        Double[] passengerArmsArray = {50.0, 60.0, 70.0, 80.0};
+        flightManager = ((ActivityEditFlight) getActivity()).getFlightManager();
+        Plane plane = Plane.readFromFile(getContext(), flightManager.getPlane());
+
+        Double[] pilotArmsArray = {plane.getPilotSeatsArm()};
 
         List<Double> pilotArms = Arrays.asList(pilotArmsArray);
-        List<Double> passengerArms = Arrays.asList(passengerArmsArray);
+        List<Double> passengerArms = plane.getRowArms();
 
         View v = inflater.inflate(R.layout.fragment_passenger_view, container, false);
         LinearLayout pilotLayout = (LinearLayout) v.findViewById(R.id.pilot_view);
         LinearLayout passengerLayout = (LinearLayout) v.findViewById(R.id.passenger_view);
 
-        pilotView = new PlaneView(getContext(), 2, 2, pilotArms);
-        passengerView = new PlaneView(getContext(), 2, 8, passengerArms);
+        int numPilotSeats = 2; // Are we to assume this will always be 2?
+        int numColumns = 2; // likewise..
+        pilotView = new PlaneView(getContext(), numColumns, numPilotSeats, pilotArms);
+        passengerView = new PlaneView(getContext(), numColumns, plane.getNumSeats() - numPilotSeats, passengerArms);
 
         pilotLayout.addView(pilotView);
         passengerLayout.addView(passengerView);
@@ -87,6 +92,17 @@ public class FragmentPassengerView extends Fragment {
                 flightManager.setPassenger(newSeat + 3, passenger);
             }
         });
+
+        for (int i = 0; i < numPilotSeats; i++) {
+            Passenger passenger = flightManager.getPassenger(i);
+            pilotView.setPassenger(i, passenger);
+        }
+
+        for (int i = 0; i < plane.getNumSeats() - numPilotSeats; i++) {
+            Passenger passenger = flightManager.getPassenger(i + numPilotSeats);
+            passengerView.setPassenger(i, passenger);
+        }
+
         return v;
     }
 
