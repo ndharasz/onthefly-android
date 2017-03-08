@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -27,6 +29,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
+import com.example.noah.onthefly.activities.ActivityEditFlight;
+import com.example.noah.onthefly.fragments.FragmentPassengerView;
 import com.example.noah.onthefly.models.Passenger;
 import com.example.noah.onthefly.util.ImageDragShadowBuilder;
 import java.util.ArrayList;
@@ -44,6 +48,7 @@ public class PlaneView extends GridView {
     private List<Double> rowArms;
     private Animation animation;
     private int replace;
+    private int[] viewSize;
 
     private PassengerRemovedListener passengerRemovedListener =  new PassengerRemovedListener() {
         @Override
@@ -205,6 +210,14 @@ public class PlaneView extends GridView {
                 @Override
                 public boolean onDrag(View v, DragEvent event) {
                     GridView owner = (GridView) v.getParent();
+
+                    int width = Resources.getSystem().getDisplayMetrics().widthPixels;
+                    int height = Resources.getSystem().getDisplayMetrics().heightPixels;
+
+
+                    if (event.getY() > 1400) {
+                        getChildAt(replace).setBackgroundColor(Color.RED);
+                    }
                     if (event.getAction() == DragEvent.ACTION_DRAG_STARTED) {
                         return true;
                     } else if (event.getAction() == DragEvent.ACTION_DROP) {
@@ -234,23 +247,28 @@ public class PlaneView extends GridView {
                         }
 
                         return true;
+                    } else if (event.getAction() == DragEvent.ACTION_DRAG_EXITED) {
+                        getChildAt(replace).setBackgroundColor(Color.RED);
+
                     } else if (event.getAction() == DragEvent.ACTION_DRAG_ENDED) {
                         switchAnimation(false);
+                        Log.d(TAG, "X = " + event.getX() + " Y = " + event.getY());
                         v.setAlpha(1);
                         v.clearAnimation();
 
-                        if (!event.getResult()) {
+
+                        if (!event.getResult() && event.getY() > (height - 200)) {
+
                             getChildAt(replace).setBackgroundResource(R.drawable.passenger_box);
                             getChildAt(replace).findViewById(R.id.seat).setVisibility(INVISIBLE);
                             Passenger.swap(new Passenger("Add Passenger", 0), getItem(replace));
                             passengerRemovedListener.onPassengerRemoved(replace);
+
                             refreshView();
                         } else {
                             getChildAt(replace).setBackgroundResource(R.drawable.passenger_box);
                         }
 
-                    } else if (event.getAction() == DragEvent.ACTION_DRAG_EXITED) {
-                        getChildAt(replace).setBackgroundColor(Color.RED);
                     } else if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
                         getChildAt(replace).setBackgroundResource(R.drawable.passenger_box);
                     }
@@ -327,6 +345,10 @@ public class PlaneView extends GridView {
         this.rowArms = rowArms;
         this.numSeats = numSeats;
         this.numColumns = columnsPerRow;
+        viewSize = new int[2];
+
+
+
 
         ArrayList<Passenger> passengers = new ArrayList<>(numSeats);
         for (int i = 0; i < numSeats; i++) {

@@ -28,6 +28,9 @@ public class FragmentPassengerView extends Fragment {
     private PlaneView passengerView;
     private FlightManager flightManager;
 
+    private static int fragHeight;
+    private static int fragWidth;
+
     public FragmentPassengerView setTabButton(Button tab) {
 
         this.tab = tab;
@@ -62,6 +65,10 @@ public class FragmentPassengerView extends Fragment {
         int numColumns = 2; // Are we to assume this will always be 2?..
         passengerView = new PlaneView(getContext(), numColumns, plane.getNumSeats(), passengerArms);
 
+        fragHeight = this.getHeight();
+        fragWidth = this.getWidth();
+        Log.d("FRAGMENT DIMENS", + fragHeight + " " + fragWidth);
+
         passengerLayout.addView(passengerView);
 
         passengerView.setOnPassengerAddedListener(new PlaneView.PassengerAddedListener() {
@@ -92,5 +99,13 @@ public class FragmentPassengerView extends Fragment {
 
     public double calculateMoment() {
         return passengerView.calculateMoment();
+    }
+
+    public static int getHeight() {
+        return fragHeight;
+    }
+
+    public static int getWidth() {
+        return fragWidth;
     }
 }
