@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.activities.ActivityEditFlight;
@@ -20,10 +21,10 @@ import com.example.noah.onthefly.widgets.PlaneView;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.locks.ReadWriteLock;
 
 public class FragmentPassengerView extends Fragment {
     Button tab;
-    private PlaneView pilotView;
     private PlaneView passengerView;
     private FlightManager flightManager;
 
@@ -55,8 +56,8 @@ public class FragmentPassengerView extends Fragment {
             passengerArms.add(arm);
         }
 
-        View v = inflater.inflate(R.layout.fragment_passenger_view, container, false);
-        LinearLayout passengerLayout = (LinearLayout) v.findViewById(R.id.passenger_view);
+        RelativeLayout passengerLayout = (RelativeLayout)inflater.inflate(
+                R.layout.fragment_passenger_view, container, false);
 
         int numColumns = 2; // Are we to assume this will always be 2?..
         passengerView = new PlaneView(getContext(), numColumns, plane.getNumSeats(), passengerArms);
@@ -82,7 +83,7 @@ public class FragmentPassengerView extends Fragment {
             passengerView.setPassenger(i, passenger);
         }
 
-        return v;
+        return passengerLayout;
     }
 
     public void setFlightManager(FlightManager flightManager) {
@@ -90,6 +91,6 @@ public class FragmentPassengerView extends Fragment {
     }
 
     public double calculateMoment() {
-        return pilotView.calculateMoment() + passengerView.calculateMoment();
+        return passengerView.calculateMoment();
     }
 }
