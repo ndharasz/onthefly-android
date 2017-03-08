@@ -18,6 +18,7 @@ import com.example.noah.onthefly.util.FlightManager;
 import com.example.noah.onthefly.widgets.PlaneView;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 public class FragmentPassengerView extends Fragment {
@@ -48,58 +49,36 @@ public class FragmentPassengerView extends Fragment {
         flightManager = ((ActivityEditFlight) getActivity()).getFlightManager();
         Plane plane = Plane.readFromFile(getContext(), flightManager.getPlane());
 
-        Double[] pilotArmsArray = {plane.getPilotSeatsArm()};
-
-        List<Double> pilotArms = Arrays.asList(pilotArmsArray);
-        List<Double> passengerArms = plane.getRowArms();
+        List<Double> passengerArms = new LinkedList<>();
+        passengerArms.add(plane.getPilotSeatsArm());
+        for (Double arm : plane.getRowArms()) {
+            passengerArms.add(arm);
+        }
 
         View v = inflater.inflate(R.layout.fragment_passenger_view, container, false);
-        LinearLayout pilotLayout = (LinearLayout) v.findViewById(R.id.pilot_view);
         LinearLayout passengerLayout = (LinearLayout) v.findViewById(R.id.passenger_view);
 
-        int numPilotSeats = 2; // Are we to assume this will always be 2?
-        int numColumns = 2; // likewise..
-        pilotView = new PlaneView(getContext(), numColumns, numPilotSeats, pilotArms);
-        passengerView = new PlaneView(getContext(), numColumns, plane.getNumSeats() - numPilotSeats, passengerArms);
+        int numColumns = 2; // Are we to assume this will always be 2?..
+        passengerView = new PlaneView(getContext(), numColumns, plane.getNumSeats(), passengerArms);
 
-        pilotLayout.addView(pilotView);
         passengerLayout.addView(passengerView);
 
-        // Listen for passengers added
-        pilotView.setOnPassengerAddedListener(new PlaneView.PassengerAddedListener() {
-            @Override
-            public void onPassengerAdded(int seat, Passenger pilot) {
-                flightManager.setPassenger(seat + 1, pilot);
-            }
-        });
         passengerView.setOnPassengerAddedListener(new PlaneView.PassengerAddedListener() {
             @Override
             public void onPassengerAdded(int seat, Passenger passenger) {
-                flightManager.setPassenger(seat + 3, passenger);
+                flightManager.setPassenger(seat + 1, passenger);
             }
         });
 
-        // Listen for passengers swapped
-        pilotView.setOnPassengerMovedListener(new PlaneView.PassengerMovedListener() {
+        passengerView.setOnPassengerRemovedListener(new PlaneView.PassengerRemovedListener() {
             @Override
-            public void onPassengerMoved(int newSeat, Passenger pilot) {
-                flightManager.setPassenger(newSeat + 1, pilot);
-            }
-        });
-        passengerView.setOnPassengerMovedListener(new PlaneView.PassengerMovedListener() {
-            @Override
-            public void onPassengerMoved(int newSeat, Passenger passenger) {
-                flightManager.setPassenger(newSeat + 3, passenger);
+            public void onPassengerRemoved(int newSeat) {
+                flightManager.removePassenger(newSeat + 1);
             }
         });
 
-        for (int i = 0; i < numPilotSeats; i++) {
+        for (int i = 0; i < plane.getNumSeats(); i++) {
             Passenger passenger = flightManager.getPassenger(i);
-            pilotView.setPassenger(i, passenger);
-        }
-
-        for (int i = 0; i < plane.getNumSeats() - numPilotSeats; i++) {
-            Passenger passenger = flightManager.getPassenger(i + numPilotSeats);
             passengerView.setPassenger(i, passenger);
         }
 
