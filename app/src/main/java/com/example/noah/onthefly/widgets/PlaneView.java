@@ -336,7 +336,7 @@ public class PlaneView extends GridView {
         this.setAdapter(passengerAdapter);
 
         this.setNumColumns(columnsPerRow);
-        this.setVerticalSpacing(10);
+        this.setVerticalSpacing(40);
         this.setHorizontalSpacing(20);
         this.setPadding(20, 20, 20, 20);
     }
