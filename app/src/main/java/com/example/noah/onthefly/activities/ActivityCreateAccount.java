@@ -135,15 +135,33 @@ public class ActivityCreateAccount extends AppCompatActivity {
     }
 
     protected void addPassListener(final EditText pass, final EditText confirm) {
+        pass.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (pass.getText().toString().length() < 8) {
+                        pass.setTextColor(RED);
+                        confirm.setTextColor(RED);
+                        Toast.makeText(v.getContext(), "Password must be longer than 8 characters", Toast.LENGTH_SHORT).show();
+                    } else {
+                        pass.setTextColor(BLACK);
+                        confirm.setTextColor(BLACK);
+                    }
+                }
+            }
+        });
         confirm.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             public void onFocusChange(View v, boolean hasFocus) {
                 if(!hasFocus) {
+                    String passText = pass.getText().toString();
+                    String confirmText = confirm.getText().toString();
 
-                    if (!(pass.getText().toString().equals(confirm.getText().toString())) && !pass.getText().toString().matches("")
-                            && !confirm.getText().toString().matches("")) {
+                    if ((!passText.equals(confirmText)) && (!passText.equals(""))
+                            && (!confirmText.equals(""))) {
                         pass.setTextColor(RED);
                         confirm.setTextColor(RED);
+                        Toast.makeText(v.getContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
 
                     } else {
                         pass.setTextColor(BLACK);
@@ -180,7 +198,7 @@ public class ActivityCreateAccount extends AppCompatActivity {
         } else if (!validPassword(password)) {
 
             Toast.makeText(ActivityCreateAccount.this,
-                    "Password must have at least 8 characters.", Toast.LENGTH_SHORT).show();
+                    "An account cannot be created with this email and password", Toast.LENGTH_SHORT).show();
         } else if (!(password.equals(conf_pass))) {
 
             pass_input.setTextColor(RED);
