@@ -33,6 +33,9 @@ import com.example.noah.onthefly.activities.ActivityEditFlight;
 import com.example.noah.onthefly.fragments.FragmentPassengerView;
 import com.example.noah.onthefly.models.Passenger;
 import com.example.noah.onthefly.util.ImageDragShadowBuilder;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
@@ -47,8 +50,7 @@ public class PlaneView extends GridView {
     private int numSeats;
     private List<Double> rowArms;
     private Animation animation;
-    private int replace;
-    private int[] viewSize;
+    private PassengerViewAdapter passengerAdapter;
 
     private PassengerRemovedListener passengerRemovedListener =  new PassengerRemovedListener() {
         @Override
@@ -70,6 +72,66 @@ public class PlaneView extends GridView {
 
     public interface PassengerAddedListener {
         public void onPassengerAdded(int seat, Passenger passenger);
+    }
+
+    private class PassengerDragListener implements OnDragListener {
+        private Passenger passenger;
+        private int position;
+
+        private boolean dropped = false;
+
+        public PassengerDragListener(int position, Passenger passenger) {
+            this.position = position;
+            this.passenger = passenger;
+        }
+
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+            if (event.getAction() == DragEvent.ACTION_DRAG_STARTED) {
+                dropped = false;
+                return true;
+            } else if (event.getAction() == DragEvent.ACTION_DROP) {
+                // The ClipData holds the index of the originally dragged object.
+                int newPos = Integer.parseInt(event.getClipData().getItemAt(0).getText().toString());
+                Passenger replace = passengerAdapter.getItem(newPos);
+
+                // Update Database
+                if (!passenger.equals(Passenger.EMPTY)) {
+                    passengerRemovedListener.onPassengerRemoved(position);
+                }
+                passengerRemovedListener.onPassengerRemoved(newPos);
+                if (!passenger.equals(Passenger.EMPTY)) {
+                    passengerAddedListener.onPassengerAdded(newPos, passenger);
+                }
+                passengerAddedListener.onPassengerAdded(position, replace);
+
+                // Update views
+                Passenger.swap(passenger, replace);
+                passengerAdapter.refreshView();
+                dropped = true;
+                return true;
+            } else if (event.getAction() == DragEvent.ACTION_DRAG_ENDED) {
+                switchAnimation(false);
+                v.setAlpha(1);
+                v.clearAnimation();
+
+                if (!dropped) {
+                    int draggedFrom = 0; // this doesn't work?? :( Integer.parseInt(event.getClipData().getItemAt(0).getText().toString());
+                    getChildAt(draggedFrom).setBackgroundResource(R.drawable.passenger_box);
+                    getChildAt(draggedFrom).findViewById(R.id.seat).setVisibility(INVISIBLE);
+                    Passenger passengerFrom = passengerAdapter.getItem(draggedFrom);
+                    passengerRemovedListener.onPassengerRemoved(draggedFrom);
+                    Passenger.swap(new Passenger("Add Passenger", 0), passengerFrom);
+                    passengerAdapter.refreshView();
+                    return true;
+                } else {
+                    getChildAt(position).setBackgroundResource(R.drawable.passenger_box);
+                    return true;
+                }
+
+            }
+            return false;
+        }
     }
 
     // This is the majority of the PlaneView.
@@ -95,198 +157,36 @@ public class PlaneView extends GridView {
             }
 
             ((TextView) view.findViewById(R.id.passenger_name)).setText(getItem(currPos).getName());
-            if (getItem(currPos).getWeight() != 0) {
-                ((TextView) view.findViewById(R.id.passenger_weight)).setText(String.valueOf(getItem(currPos).getWeight()));
-            } else {
+
+            if (getItem(pos).equals(Passenger.EMPTY)) {
+                view.findViewById(R.id.seat).setVisibility(INVISIBLE);
                 ((TextView) view.findViewById(R.id.passenger_weight)).setText("");
+            } else {
+                view.findViewById(R.id.seat).setVisibility(VISIBLE);
+                ((TextView) view.findViewById(R.id.passenger_weight)).setText(String.valueOf(getItem(currPos).getWeight()));
             }
             return view;
         }
 
         private View newPassenger(int pos) {
             animation = AnimationUtils.loadAnimation(getContext(),R.anim.shake);
-            final int tInt = pos;
 
             LayoutInflater inflater = LayoutInflater.from(context);
             final RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.item_passenger_view, null);
             final ImageView seat = (ImageView) layout.findViewById(R.id.seat);
 
-            // OnClickListener for each passenger, to pull up a dialog and input information
-            layout.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final View temp = v;
-                    View promptView = LayoutInflater.from(context).inflate(R.layout.passenger_info_dialog, null);
-                    // pull up dialog to enter passenger names
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context, android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
-                    alertDialogBuilder.setView(promptView);
-                    ((TextView)promptView.findViewById(R.id.dialog_title))
-                            .setText("New Passenger at Seat " + (tInt + 1));
-                    final EditText name = (EditText) promptView.findViewById(R.id.passName);
-                    final EditText weight = (EditText) promptView.findViewById(R.id.passWeight);
-
-                    if (!getItem(tInt).equals(Passenger.EMPTY)) {
-                        name.setText(getItem(tInt).getName());
-                        weight.setText(String.valueOf(getItem(tInt).getWeight()));
-                    }
-
-                    alertDialogBuilder
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    try {
-                                        Log.d(TAG, "Clicked on pos = " + tInt);
-                                        replace = tInt;
-                                        String passName = name.getText().toString().trim();
-                                        double passWeight = Double.parseDouble(weight.getText().toString().trim());
-
-                                        getItem(tInt).setWeight(passWeight);
-                                        getItem(tInt).setName(passName);
-
-
-                                        if (passName != "Add Passenger") {
-                                            if (getChildAt(tInt) != null) {
-                                                ImageView iv = (ImageView) getChildAt(tInt).findViewById(R.id.seat);
-                                                iv.setVisibility(VISIBLE);
-                                                //if (iv.getVisibility() == INVISIBLE) {
-                                                //    iv.setVisibility(VISIBLE);
-                                                //    refreshView();
-                                                //}
-                                            }
-                                        }
-
-                                        passengerAddedListener.onPassengerAdded(tInt, new Passenger(passName, passWeight));
-                                        refreshView();
-                                        temp.setAlpha(1);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        Toast.makeText(context, "One or more fields were input incorrectly.", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                }
-                            });
-                    AlertDialog alert = alertDialogBuilder.create();
-                    alert.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-                    alert.getWindow().setBackgroundDrawable(
-                            new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                    alert.show();
-                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(
-                            ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(
-                            ContextCompat.getColor(getContext(), R.color.colorPrimary));
-                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                            ContextCompat.getColor(getContext(), R.color.colorAccent));
-                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                            ContextCompat.getColor(getContext(), R.color.colorAccent));
-                }
-            });
-
-            // This listener starts the drag and drop.
-            layout.setOnLongClickListener(new OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    Passenger passenger = viewToPassenger((RelativeLayout) view);
-                    if (!passenger.equals(Passenger.EMPTY)) {
-                        replace = tInt;
-                        ClipData data = ClipData.newPlainText("Dragged Object", passenger.toString());
-                        ImageDragShadowBuilder shadowBuilder = new ImageDragShadowBuilder(view);
-                        view.startDrag(data, shadowBuilder, view, 0);
-
-                        switchAnimation(true);
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            });
             // All the code for drag and drop is below
-            layout.setOnDragListener(new OnDragListener() {
-                @Override
-                public boolean onDrag(View v, DragEvent event) {
-                    GridView owner = (GridView) v.getParent();
+            PassengerDragListener passengerDragListener = new PassengerDragListener(pos, getItem(pos));
+            layout.setOnDragListener(passengerDragListener);
 
-                    int width = Resources.getSystem().getDisplayMetrics().widthPixels;
-                    int height = Resources.getSystem().getDisplayMetrics().heightPixels;
-
-
-                    if (event.getY() > 1400) {
-                        getChildAt(replace).setBackgroundColor(Color.RED);
-                    }
-                    if (event.getAction() == DragEvent.ACTION_DRAG_STARTED) {
-                        return true;
-                    } else if (event.getAction() == DragEvent.ACTION_DROP) {
-                        // Find view at location
-
-                        int endX = (int) v.getX();
-                        int endY = (int) v.getY();
-
-                        for (int i = 0; i < owner.getChildCount(); i++) {
-                            View passengerView = owner.getChildAt(i);
-                            int left = (int)passengerView.getLeft();
-                            int top = (int)passengerView.getTop();
-
-                            String passengerDragged = event.getClipData().getItemAt(0).getText().toString();
-
-                            if (left == endX && top == endY) {
-                                passengerView.setAlpha(1);
-                                swapViews(passengerDragged, i);
-
-                                for (int j = 0; j < getChildCount(); j++) {
-                                    getChildAt(j).setVisibility(VISIBLE);
-                                    getChildAt(j).setAlpha(1);
-                                }
-                                return true;
-
-                            }
-                        }
-
-                        return true;
-                    } else if (event.getAction() == DragEvent.ACTION_DRAG_EXITED) {
-                        getChildAt(replace).setBackgroundColor(Color.RED);
-
-                    } else if (event.getAction() == DragEvent.ACTION_DRAG_ENDED) {
-                        switchAnimation(false);
-                        Log.d(TAG, "X = " + event.getX() + " Y = " + event.getY());
-                        v.setAlpha(1);
-                        v.clearAnimation();
-
-
-                        if (!event.getResult() && event.getY() > (height - 200)) {
-
-                            getChildAt(replace).setBackgroundResource(R.drawable.passenger_box);
-                            getChildAt(replace).findViewById(R.id.seat).setVisibility(INVISIBLE);
-                            Passenger.swap(new Passenger("Add Passenger", 0), getItem(replace));
-                            passengerRemovedListener.onPassengerRemoved(replace);
-
-                            refreshView();
-                        } else {
-                            getChildAt(replace).setBackgroundResource(R.drawable.passenger_box);
-                        }
-
-                    } else if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
-                        getChildAt(replace).setBackgroundResource(R.drawable.passenger_box);
-                    }
-                    return false;
-                }
-            });
-            if (getItem(pos).equals(Passenger.EMPTY)) {
-                layout.findViewById(R.id.seat).setVisibility(INVISIBLE);
-            } else {
-                layout.findViewById(R.id.seat).setVisibility(VISIBLE);
-            }
             return layout;
         }
 
         private void refreshView() {
             notifyDataSetChanged();
         }
-        private Passenger viewToPassenger(RelativeLayout view) {
+
+        private Passenger viewToPassenger(View view) {
             try {
                 String name = ((TextView) view.findViewById(R.id.passenger_name)).getText().toString();
                 double weight = Double.parseDouble(((TextView) view.findViewById(R.id.passenger_weight)).getText().toString());
@@ -296,35 +196,6 @@ public class PlaneView extends GridView {
                 Log.d(TAG, e.getMessage());
                 return Passenger.EMPTY;
             }
-        }
-
-        private void swapViews(String passengerDragged, int b) {
-            int a = getPosition(Passenger.reconstructPassenger(passengerDragged));
-            // A value less than a signals that a view was dragged outside its boundaries
-            //   so we'll just ignore that request
-            if (a < 0)
-                return;
-            Passenger first = getItem(a);
-            Passenger second = getItem(b);
-
-            if (second.equals(Passenger.EMPTY)) {
-                passengerRemovedListener.onPassengerRemoved(a);
-                getChildAt(a).findViewById(R.id.seat).setVisibility(INVISIBLE);
-                getChildAt(b).findViewById(R.id.seat).setVisibility(VISIBLE);
-            } else {
-                passengerAddedListener.onPassengerAdded(a, second);
-            }
-            if (first.equals(Passenger.EMPTY)) {
-                passengerRemovedListener.onPassengerRemoved(b);
-                getChildAt(b).findViewById(R.id.seat).setVisibility(INVISIBLE);
-                getChildAt(a).findViewById(R.id.seat).setVisibility(VISIBLE);
-            } else {
-                passengerAddedListener.onPassengerAdded(b, first);
-            }
-
-            Passenger.swap(first, second);
-
-            notifyDataSetChanged();
         }
 
         public void setPassenger(int a, Passenger passenger) {
@@ -345,17 +216,105 @@ public class PlaneView extends GridView {
         this.rowArms = rowArms;
         this.numSeats = numSeats;
         this.numColumns = columnsPerRow;
-        viewSize = new int[2];
-
-
 
 
         ArrayList<Passenger> passengers = new ArrayList<>(numSeats);
         for (int i = 0; i < numSeats; i++) {
             passengers.add(new Passenger("Add Passenger", 0));
         }
-        PassengerViewAdapter passengerAdapter = new PassengerViewAdapter(context, R.layout.item_passenger_view, passengers);
+        passengerAdapter = new PassengerViewAdapter(context, R.layout.item_passenger_view, passengers);
         this.setAdapter(passengerAdapter);
+
+        setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final int tInt = position;
+                final Passenger passenger = (Passenger) parent.getItemAtPosition(position);
+
+                View promptView = LayoutInflater.from(getContext()).inflate(R.layout.passenger_info_dialog, null);
+                // pull up dialog to enter passenger names
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        getContext(), android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
+                alertDialogBuilder.setView(promptView);
+                ((TextView)promptView.findViewById(R.id.dialog_title))
+                        .setText("New Passenger at Seat " + (position + 1));
+                final EditText name = (EditText) promptView.findViewById(R.id.passName);
+                final EditText weight = (EditText) promptView.findViewById(R.id.passWeight);
+
+                if (!parent.getItemAtPosition(position).equals(Passenger.EMPTY)) {
+                    name.setText(passenger.getName());
+                    weight.setText(String.valueOf(passenger.getWeight()));
+                }
+
+                alertDialogBuilder
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                try {
+                                    Log.d(TAG, "Clicked on pos = " + tInt);
+                                    String passName = name.getText().toString().trim();
+                                    double passWeight = Double.parseDouble(weight.getText().toString().trim());
+
+                                    passenger.setWeight(passWeight);
+                                    passenger.setName(passName);
+
+
+                                    if (passName != "Add Passenger") {
+                                        if (getChildAt(tInt) != null) {
+                                            ImageView iv = (ImageView) getChildAt(tInt).findViewById(R.id.seat);
+                                            iv.setVisibility(VISIBLE);
+                                        }
+                                    }
+
+                                    passengerAddedListener.onPassengerAdded(tInt, new Passenger(passName, passWeight));
+                                    passengerAdapter.refreshView();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(getContext(), "One or more fields were input incorrectly.", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                        });
+                AlertDialog alert = alertDialogBuilder.create();
+                alert.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                alert.getWindow().setBackgroundDrawable(
+                        new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                alert.show();
+                alert.getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundColor(
+                        ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                alert.getButton(AlertDialog.BUTTON_POSITIVE).setBackgroundColor(
+                        ContextCompat.getColor(getContext(), R.color.colorPrimary));
+                alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                        ContextCompat.getColor(getContext(), R.color.colorAccent));
+                alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                        ContextCompat.getColor(getContext(), R.color.colorAccent));
+            }
+        });
+
+        setOnItemLongClickListener(new OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "Long click at: " + position);
+
+                Passenger passenger = passengerAdapter.viewToPassenger((RelativeLayout) view);
+                if (!passenger.equals(Passenger.EMPTY)) {
+                    ClipData data = ClipData.newPlainText("Position", String.valueOf(position));
+                    ImageDragShadowBuilder shadowBuilder = new ImageDragShadowBuilder(view);
+                    view.startDrag(data, shadowBuilder, view, 0);
+
+                    switchAnimation(true);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
 
         this.setNumColumns(columnsPerRow);
         this.setVerticalSpacing(40);
