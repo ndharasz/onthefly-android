@@ -142,7 +142,7 @@ public class ActivityCreateAccount extends AppCompatActivity {
                     if (pass.getText().toString().length() < 8) {
                         pass.setTextColor(RED);
                         confirm.setTextColor(RED);
-                        Toast.makeText(v.getContext(), "Password must be longer than 8 characters", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "Password must be at least 8 characters", Toast.LENGTH_SHORT).show();
                     } else {
                         pass.setTextColor(BLACK);
                         confirm.setTextColor(BLACK);
