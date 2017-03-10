@@ -1,15 +1,18 @@
 package com.example.noah.onthefly.activities;
 
 import android.content.Intent;
+import android.media.Image;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +42,8 @@ public class ActivityEditFlight extends FragmentActivity {
     Button passengerViewButton;
     Button cargoViewButton;
     Button genReportButton;
+
+    private int[] trashCoords;
 
     TextView title;
 
@@ -212,5 +217,9 @@ public class ActivityEditFlight extends FragmentActivity {
         Intent flightListIntent = new Intent(this, ActivityFlightList.class);
         startActivity(flightListIntent);
         finish();
+    }
+
+    public int[] getTrashCoords() {
+        return trashCoords;
     }
 }
