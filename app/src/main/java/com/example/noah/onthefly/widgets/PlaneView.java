@@ -114,20 +114,8 @@ public class PlaneView extends GridView {
                 switchAnimation(false);
                 v.setAlpha(1);
                 v.clearAnimation();
-
-                if (!dropped) {
-                    int draggedFrom = 0; // this doesn't work?? :( Integer.parseInt(event.getClipData().getItemAt(0).getText().toString());
-                    getChildAt(draggedFrom).setBackgroundResource(R.drawable.passenger_box);
-                    getChildAt(draggedFrom).findViewById(R.id.seat).setVisibility(INVISIBLE);
-                    Passenger passengerFrom = passengerAdapter.getItem(draggedFrom);
-                    passengerRemovedListener.onPassengerRemoved(draggedFrom);
-                    Passenger.swap(new Passenger("Add Passenger", 0), passengerFrom);
-                    passengerAdapter.refreshView();
-                    return true;
-                } else {
-                    getChildAt(position).setBackgroundResource(R.drawable.passenger_box);
-                    return true;
-                }
+                getChildAt(position).setBackgroundResource(R.drawable.passenger_box);
+                return true;
 
             }
             return false;
