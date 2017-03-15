@@ -2,6 +2,8 @@ package com.example.noah.onthefly.activities;
 
 import android.content.Intent;
 import android.media.Image;
+import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -25,9 +27,33 @@ import com.example.noah.onthefly.models.Plane;
 import com.example.noah.onthefly.util.FlightManager;
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.itextpdf.text.Anchor;
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chapter;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.List;
+import com.itextpdf.text.ListItem;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Section;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Date;
+
+import static com.itextpdf.text.Annotation.FILE;
 
 public class ActivityEditFlight extends FragmentActivity {
     static final int NUM_TABS = 3;
@@ -49,6 +75,7 @@ public class ActivityEditFlight extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_flight);
 
@@ -204,6 +231,33 @@ public class ActivityEditFlight extends FragmentActivity {
     }
 
     protected void generateReport(View v) {
+        //PDF CREATION
+        try {
+            Log.d("PDF Creation ", "Starting...");
+
+            File pdfFolder = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_DOCUMENTS), "pdfdemo");
+            if (!pdfFolder.exists()) {
+                pdfFolder.mkdir();
+                Log.i("PDF Creation ", "Pdf Directory created");
+            }
+
+            Date date = new Date();
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
+
+            FileOutputStream fos = new FileOutputStream(new File(getFilesDir(), "WeightBalance" + timeStamp + ".pdf"));
+
+            Document document = new Document();
+            PdfWriter.getInstance(document, fos);
+            document.open();
+            document.add(new Chunk(""));
+            document.addTitle("Weight and Balance Report");
+            document.addSubject(date.toString());
+            document.addAuthor("On the Fly - Android");
+            document.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Intent reportIntent = new Intent(this, ActivityReport.class);
         this.startActivity(reportIntent);
     }
