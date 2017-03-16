@@ -237,6 +237,7 @@ public class ActivityEditFlight extends FragmentActivity {
 
             File pdfFolder = new File(Environment.getExternalStoragePublicDirectory(
                     Environment.DIRECTORY_DOCUMENTS), "pdfdemo");
+
             if (!pdfFolder.exists()) {
                 pdfFolder.mkdir();
                 Log.i("PDF Creation ", "Pdf Directory created");
