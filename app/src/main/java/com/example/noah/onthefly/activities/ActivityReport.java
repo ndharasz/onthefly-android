@@ -1,5 +1,4 @@
 package com.example.noah.onthefly.activities;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
-import com.example.noah.onthefly.util.GraphView;
+import com.example.noah.onthefly.util.Grapher;
 import com.example.noah.onthefly.util.Mailer;
 
 public class ActivityReport extends AppCompatActivity {
@@ -25,7 +24,7 @@ public class ActivityReport extends AppCompatActivity {
         setContentView(R.layout.activity_report);
 
         LinearLayout layout = (LinearLayout)findViewById(R.id.activity_report);
-        layout.addView(new GraphView(this));
+        layout.addView(new Grapher(this));
 
         checkboxSetup();
         otherEmailInput = (EditText)findViewById(R.id.user_input_email);

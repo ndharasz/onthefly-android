@@ -1,4 +1,4 @@
-package com.example.noah.onthefly.util;
+package com.example.noah.onthefly.widgets;
 
 import android.content.Context;
 import android.graphics.Bitmap;
