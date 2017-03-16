@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -36,6 +37,10 @@ import android.view.View;
             int width = v.getWidth();
             shadowSize.set(width, height);
             shadowTouchPoint.set((width / 2), (height / 2));
+            Log.d("SHADOW AT ", shadowTouchPoint.x + " " + shadowTouchPoint.y );
+            if (shadowSize.y > v.getHeight()) {
+                greyBox.setAlpha(0);
+            }
         }
     }
 
