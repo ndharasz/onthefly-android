@@ -41,7 +41,7 @@ public class Plane implements Comparable<Plane>, Serializable {
 
     private int numSeats;
 
-    private Map<String, List<Double>> centerOfGravityEnvelope;
+    private List<Coordinate> centerOfGravityEnvelope;
 
     // Empty constructor for Firebase just in case
     public Plane() {}
@@ -154,11 +154,11 @@ public class Plane implements Comparable<Plane>, Serializable {
         this.numSeats = numSeats;
     }
 
-    public Map<String, List<Double>> getCenterOfGravityEnvelope() {
+    public List<Coordinate> getCenterOfGravityEnvelope() {
         return centerOfGravityEnvelope;
     }
 
-    public void setCenterOfGravityEnvelope(Map<String, List<Double>> centerOfGravityEnvelope) {
+    public void setCenterOfGravityEnvelope(List<Coordinate> centerOfGravityEnvelope) {
         this.centerOfGravityEnvelope = centerOfGravityEnvelope;
     }
 
