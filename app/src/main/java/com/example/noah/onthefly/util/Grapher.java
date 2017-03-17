@@ -1,23 +1,16 @@
 package com.example.noah.onthefly.util;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.util.Log;
-import android.view.View;
 
 import com.example.noah.onthefly.models.Coordinate;
 import com.example.noah.onthefly.models.Flight;
 import com.example.noah.onthefly.models.Plane;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
