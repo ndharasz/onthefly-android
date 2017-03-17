@@ -9,8 +9,12 @@ import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.activation.MailcapCommandMap;
+import javax.mail.Address;
+import javax.mail.Authenticator;
 import javax.mail.BodyPart;
+import javax.mail.Message;
 import javax.mail.Multipart;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -23,11 +27,14 @@ import javax.mail.internet.MimeMultipart;
  */
 
 public class Mailer extends javax.mail.Authenticator{
+    private final String user = "";
+    private final String pass = "";
+    private final boolean auth = true;
     private String host;
     private String port;
     private String sport;
     private String from;
-    private String[] to;
+    private String to;
     private String subject;
     private String body;
     private Multipart multipart;
@@ -36,9 +43,9 @@ public class Mailer extends javax.mail.Authenticator{
         host = "smtp.gmail.com";
         port = "465";
         sport = "465";
-        from = "ontheflyapp@gmail.com";
+        from = "ontheflyapp@android.com";
         subject = "[NO REPLY]";
-        body = "";
+        body = "Test";
         multipart = new MimeMultipart();
 
         MailcapCommandMap mc = (MailcapCommandMap) CommandMap.getDefaultCommandMap();
@@ -50,39 +57,56 @@ public class Mailer extends javax.mail.Authenticator{
         CommandMap.setDefaultCommandMap(mc);
     }
 
+    @Override
+    protected PasswordAuthentication getPasswordAuthentication() {
+        return new PasswordAuthentication(user, pass);
+    }
+
     public boolean send() throws Exception {
         Properties props = new Properties();
-
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.port", port);
         props.put("mail.smtp.socketFactory.port", sport);
         props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         props.put("mail.smtp.socketFactory.fallback", "false");
+        props.setProperty("mail.smtp.user", user);
+        props.setProperty("mail.smtp.password", pass);
+        props.setProperty("mail.smtp.auth", Boolean.toString(auth));
+        props.setProperty("debuggable", "true");
 
-        if(to.length > 0 && !from.equals("") && !subject.equals("") && !body.equals("")) {
-            Session session = Session.getInstance(props, this);
+        if(to.length() > 0 && !from.equals("") && !subject.equals("") && !body.equals("")) {
+            Session session = Session.getInstance(props, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(user, pass);
+                }
+            });
 
-            MimeMessage msg = new MimeMessage(session);
-
+            final Message msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress(from));
-
-            InternetAddress[] addressTo = new InternetAddress[to.length];
-            for (int i = 0; i < to.length; i++) {
-                addressTo[i] = new InternetAddress(to[i]);
-            }
-            msg.setRecipients(MimeMessage.RecipientType.TO, addressTo);
-
+            msg.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
             msg.setSubject(subject);
             msg.setSentDate(new Date());
 
             BodyPart messageBodyPart = new MimeBodyPart();
             messageBodyPart.setText(body);
             multipart.addBodyPart(messageBodyPart);
-
             msg.setContent(multipart);
 
-            Transport.send(msg);
-
+            Thread t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Address[] recipient = {new InternetAddress(to)};
+                        Transport.send(msg, recipient);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        //throw this so that activity can catch a failure
+                        throw new RuntimeException("Could not send.");
+                    }
+                }
+            });
+            t.start();
             return true;
         } else {
             return false;
@@ -117,11 +141,11 @@ public class Mailer extends javax.mail.Authenticator{
         return false;
     }
 
-    public String[] getTo() {
+    public String getTo() {
         return to;
     }
 
-    public void setTo(String[] to) {
+    public void setTo(String to) {
         this.to = to;
     }
 

@@ -21,6 +21,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -58,9 +59,19 @@ public class ActivityReport extends AppCompatActivity {
         if(sendtoOtherCheckbox.isChecked()) {
             if (!email.equals("")) {
                 if(Mailer.isEmailValid(email)) {
-                    Toast.makeText(this,
-                            "Your weight and balance report has been sent to " + email + ".",
-                            Toast.LENGTH_LONG).show();
+                    Mailer mailer = new Mailer();
+                    mailer.setTo(email);
+                    try {
+                        mailer.send();
+                        Toast.makeText(this,
+                                "Your weight and balance report has been sent to " + email + ".",
+                                Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(this,
+                                "Unable to Send report to " + email + ".",
+                                Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     Toast.makeText(this, "Email invalid.", Toast.LENGTH_LONG).show();
                     return;
