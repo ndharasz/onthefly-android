@@ -231,36 +231,9 @@ public class ActivityEditFlight extends FragmentActivity {
     }
 
     protected void generateReport(View v) {
-        //PDF CREATION
-        try {
-            Log.d("PDF Creation ", "Starting...");
-
-            File pdfFolder = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DOCUMENTS), "pdfdemo");
-
-            if (!pdfFolder.exists()) {
-                pdfFolder.mkdir();
-                Log.i("PDF Creation ", "Pdf Directory created");
-            }
-
-            Date date = new Date();
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
-
-            FileOutputStream fos = new FileOutputStream(new File(getFilesDir(), "WeightBalance" + timeStamp + ".pdf"));
-
-            Document document = new Document();
-            PdfWriter.getInstance(document, fos);
-            document.open();
-            document.add(new Chunk(""));
-            document.addTitle("Weight and Balance Report");
-            document.addSubject(date.toString());
-            document.addAuthor("On the Fly - Android");
-            document.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         Intent reportIntent = new Intent(this, ActivityReport.class);
-        this.startActivity(reportIntent);
+        reportIntent.putExtra("flight", curFlight);
+        startActivity(reportIntent);
     }
 
     public FlightManager getFlightManager() {
