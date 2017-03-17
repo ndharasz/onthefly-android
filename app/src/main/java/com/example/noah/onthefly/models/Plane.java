@@ -41,7 +41,7 @@ public class Plane implements Comparable<Plane>, Serializable {
 
     private int numSeats;
 
-    private Map<String, List<Double>> centerOfGravityEnvelope;
+    private List<Coordinate> centerOfGravityEnvelope;
 
     // Empty constructor for Firebase just in case
     public Plane() {}
@@ -154,11 +154,11 @@ public class Plane implements Comparable<Plane>, Serializable {
         this.numSeats = numSeats;
     }
 
-    public Map<String, List<Double>> getCenterOfGravityEnvelope() {
+    public List<Coordinate> getCenterOfGravityEnvelope() {
         return centerOfGravityEnvelope;
     }
 
-    public void setCenterOfGravityEnvelope(Map<String, List<Double>> centerOfGravityEnvelope) {
+    public void setCenterOfGravityEnvelope(List<Coordinate> centerOfGravityEnvelope) {
         this.centerOfGravityEnvelope = centerOfGravityEnvelope;
     }
 
@@ -206,6 +206,11 @@ public class Plane implements Comparable<Plane>, Serializable {
             FileInputStream fileInputStream = context.openFileInput(name);
             objectIn = new ObjectInputStream(fileInputStream);
             plane = (Plane) objectIn.readObject();
+            if(plane.getCenterOfGravityEnvelope() == null) {
+                Log.d(TAG, "NULL ENV");
+            } else {
+                Log.d(TAG, "not null");
+            }
         } catch (IOException e) {
             Log.d(TAG, e.getMessage());
         } catch (ClassNotFoundException e) {
