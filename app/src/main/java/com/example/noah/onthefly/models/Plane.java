@@ -167,8 +167,7 @@ public class Plane implements Comparable<Plane>, Serializable {
         File[] files = dir.listFiles();
         for (File f : files) {
             if (f.getName().equals(tailNumber)) {
-                Log.d(TAG, "Plane already exists locally");
-                return;
+                Log.d(TAG, "Plane already exists locally, overwriting.");
             }
         }
         ObjectOutputStream objectOut = null;
