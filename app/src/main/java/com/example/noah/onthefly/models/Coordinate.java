@@ -1,10 +1,12 @@
 package com.example.noah.onthefly.models;
 
+import java.io.Serializable;
+
 /**
  * Created by ndharasz on 3/16/2017.
  */
 
-public class Coordinate {
+public class Coordinate implements Serializable {
     long x;
     long y;
 
