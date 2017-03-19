@@ -16,6 +16,7 @@ import android.view.View;
 
 
     public class ImageDragShadowBuilder extends View.DragShadowBuilder {
+        public static final String TAG = "ImageDragShadowBuilder";
         View greyBox;
 
         public ImageDragShadowBuilder(View view) {
@@ -37,7 +38,7 @@ import android.view.View;
             int width = v.getWidth();
             shadowSize.set(width, height);
             shadowTouchPoint.set((width / 2), (height / 2));
-            Log.d("SHADOW AT ", shadowTouchPoint.x + " " + shadowTouchPoint.y );
+            Log.d(TAG, "Shadow at: " + shadowTouchPoint.x + " " + shadowTouchPoint.y );
             if (shadowSize.y > v.getHeight()) {
                 greyBox.setAlpha(0);
             }
