@@ -5,29 +5,29 @@ package com.example.noah.onthefly.models;
  */
 
 public class Coordinate {
-    String x;
-    String y;
+    long x;
+    long y;
 
     public Coordinate(){}
 
-    public Coordinate(String x, String y) {
+    public Coordinate(long x, long y) {
         this.x = x;
         this.y = y;
     }
 
-    public String getX() {
+    public long getX() {
         return x;
     }
 
-    public void setX(String x) {
+    public void setX(long x) {
         this.x = x;
     }
 
-    public String getY() {
+    public long getY() {
         return y;
     }
 
-    public void setY(String y) {
+    public void setY(long y) {
         this.y = y;
     }
 }
