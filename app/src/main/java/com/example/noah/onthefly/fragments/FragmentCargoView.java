@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class FragmentCargoView extends Fragment {
+    private static final String TAG = "FragmentCargoView";
+
     Button tab;
     private DatabaseReference dataRef;
 
@@ -195,6 +197,14 @@ public class FragmentCargoView extends Fragment {
     protected void emptyRearCargo(View v) {
         rearWeight = 0;
         updateTotalRearCargo();
+    }
+
+    public void warn(boolean b) {
+        if (b) {
+            Log.d(TAG, "DANGER! Plane cannot fly as is");
+        } else {
+            Log.d(TAG, "Plane is safe to fly");
+        }
     }
 
     private void changeCargo(String which, final DialogCloseListener dialogCloseListener) {

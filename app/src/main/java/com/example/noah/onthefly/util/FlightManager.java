@@ -1,12 +1,17 @@
 package com.example.noah.onthefly.util;
 
+import android.content.Context;
 import android.util.Log;
 
+import com.example.noah.onthefly.models.Coordinate;
 import com.example.noah.onthefly.models.Flight;
 import com.example.noah.onthefly.models.Passenger;
+import com.example.noah.onthefly.models.Plane;
+import com.example.noah.onthefly.models.WeightAndBalance;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,9 +29,19 @@ public class FlightManager {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference ref;
 
+    private CalculationManager calculationManager;
+    private Context context;
+
     private AirportChangedListener airportChangedListener = new AirportChangedListener() {
         @Override
         public void onAirportsChanged(String dep, String arr) {
+            return;
+        }
+    };
+
+    private WarnListener warnListener = new WarnListener() {
+        @Override
+        public void onWarn(boolean b) {
             return;
         }
     };
@@ -35,21 +50,27 @@ public class FlightManager {
         public void onAirportsChanged(String dep, String arr);
     }
 
+    public interface WarnListener {
+        public void onWarn(boolean b);
+    }
+
     private class NoKeyError extends Error {
         public NoKeyError() {
             super();
         }
     }
 
-    public FlightManager(Flight flight, String uid) {
+    public FlightManager(Context context, Flight flight) {
         if (flight.getKey() == null) {
             throw new NoKeyError();
         }
+        this.context = context;
         Log.d(TAG, "Key: " + flight.getKey());
         firebaseDatabase = FirebaseDatabase.getInstance();
         ref = firebaseDatabase.getReference().child(GlobalVars.FLIGHT_DB).child(flight.getKey()).getRef();
         flight.setKey(null);
         this.flight = flight;
+        calculationManager = new CalculationManager(context, flight);
     }
 
     public void delete() {
@@ -65,6 +86,10 @@ public class FlightManager {
      */
     public void setAirportChangedListener(AirportChangedListener airportChangedListener) {
         this.airportChangedListener = airportChangedListener;
+    }
+
+    public void setWarnListener(WarnListener warnListener) {
+        this.warnListener = warnListener;
     }
 
     public String getPlane() {
@@ -192,8 +217,14 @@ public class FlightManager {
         return flight.getTaxiFuelBurn();
     }
 
+    public List<Coordinate> getEnvelope() {
+        Plane plane = Plane.readFromFile(context, getPlane());
+        return plane.getCenterOfGravityEnvelope();
+    }
+
     private void save() {
         ref.setValue(flight);
+        check();
     }
 
     private static String parsePlaneCode(String airport) {
@@ -203,5 +234,16 @@ public class FlightManager {
         } else {
             return airport;
         }
+    }
+
+    private void check() {
+        // after every update of the database, send out a yes/no value to warn if the
+        // plane can fly
+        boolean warn = !getCalculationCoordinates().allCoordinatesInEnvelope(getEnvelope());
+        warnListener.onWarn(warn);
+    }
+
+    public WeightAndBalance getCalculationCoordinates() {
+        return calculationManager.calculate();
     }
 }

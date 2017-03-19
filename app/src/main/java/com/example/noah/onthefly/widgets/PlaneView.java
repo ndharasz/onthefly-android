@@ -327,18 +327,6 @@ public class PlaneView extends GridView {
         ((PassengerViewAdapter) getAdapter()).setPassenger(loc, passenger);
     }
 
-    public double calculateMoment() {
-        // iterate through the rows and multiply the corresponding moment
-        double totalMoment = 0.0;
-        for (int row = 0; row < numSeats; row++) {
-            for (int col = 0; col < numColumns; col++) {
-                Passenger curPassenger =  ((PassengerViewAdapter) getAdapter()).getItem(row * numColumns + col);
-                totalMoment += rowArms.get(row) * curPassenger.getWeight();
-            }
-        }
-        return 0;
-    }
-
     private void switchAnimation(boolean turnOn) {
 
         for (int i = 0; i < getChildCount(); i++) {
