@@ -1,5 +1,7 @@
 package com.example.noah.onthefly.models;
 
+import android.util.Log;
+
 import java.util.List;
 
 /**
@@ -7,6 +9,8 @@ import java.util.List;
  */
 
 public class WeightAndBalance {
+    private static final String TAG = "WeightAndBalance";
+
     private Coordinate startCoordinate;
     private Coordinate endCoordinate;
     private Coordinate dryCoordinate;
@@ -52,13 +56,16 @@ public class WeightAndBalance {
                     long y = (c2.getY() - c1.getY()) / (c2.getX() - c1.getX())
                             * (x - c1.getX()) + c1.getY();
                     if (coordinate.getY() < y) {
+                        Log.d(TAG, "Coordinate is within the bounds");
                         return true;
                     } else {
+                        Log.d(TAG, "Coordinate is not within the bounds");
                         return false;
                     }
                 }
             }
         }
+        Log.d(TAG, "Coordinate is not within the bounds");
         return false;
     }
 }
