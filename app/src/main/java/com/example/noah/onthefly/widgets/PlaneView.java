@@ -182,7 +182,7 @@ public class PlaneView extends GridView {
             } catch (Exception e) {
                 // to avoid crashes, if a view is bad, return an empty passenger.
                 Log.d(TAG, e.getMessage());
-                return Passenger.EMPTY;
+                return Passenger.deepCopy(Passenger.EMPTY);
             }
         }
 
@@ -232,12 +232,17 @@ public class PlaneView extends GridView {
                 if (!parent.getItemAtPosition(position).equals(Passenger.EMPTY)) {
                     name.setText(passenger.getName());
                     weight.setText(String.valueOf(passenger.getWeight()));
+                } else {
+                    name.setText("Passenger");
                 }
 
                 alertDialogBuilder
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                passengerRemovedListener.onPassengerRemoved(tInt);
+                                Passenger.swap(passenger, Passenger.deepCopy(Passenger.EMPTY));
+                                passengerAdapter.refreshView();
                                 dialog.dismiss();
                             }
                         })

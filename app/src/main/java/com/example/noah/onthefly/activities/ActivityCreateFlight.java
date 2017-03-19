@@ -185,7 +185,6 @@ public class ActivityCreateFlight extends AppCompatActivity implements CallsDate
             editFlightIntent.putExtra("FlightDetails", newFlight);
             this.startActivity(editFlightIntent);
         }
-
     }
 
     protected boolean dateAfterToday() {
