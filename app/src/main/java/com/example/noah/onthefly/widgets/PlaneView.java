@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -17,27 +16,23 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
-import com.example.noah.onthefly.activities.ActivityEditFlight;
-import com.example.noah.onthefly.fragments.FragmentPassengerView;
 import com.example.noah.onthefly.models.Passenger;
-import com.example.noah.onthefly.util.ImageDragShadowBuilder;
+import com.example.noah.onthefly.widgets.ImageDragShadowBuilder;
 
 import org.w3c.dom.Text;
 
+
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 /**

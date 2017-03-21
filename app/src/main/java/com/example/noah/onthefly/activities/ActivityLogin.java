@@ -50,6 +50,9 @@ public class ActivityLogin extends AppCompatActivity {
     private SharedPreferences.Editor loginPrefsEditor;
     Boolean saveLogin;
 
+    private static String userEmail;
+    private static String userName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,7 +159,8 @@ public class ActivityLogin extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    // User is logged in
+                    userEmail = user.getEmail();
+                    userName = user.getDisplayName();
                 } else {
                     // Display error message?
                 }
@@ -214,5 +218,13 @@ public class ActivityLogin extends AppCompatActivity {
     protected void createAccount(View v) {
         Intent createAccountIntent = new Intent(this, ActivityCreateAccount.class);
         this.startActivity(createAccountIntent);
+    }
+
+    public static String getName() {
+        return userName;
+    }
+
+    public static String getUserEmail() {
+        return userEmail;
     }
 }
