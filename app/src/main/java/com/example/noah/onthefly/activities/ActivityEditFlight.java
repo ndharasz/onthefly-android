@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,6 +85,14 @@ public class ActivityEditFlight extends FragmentActivity {
             public void onWarn(boolean b) {
                 tabAdapter.getPassengerView().warn(b);
                 tabAdapter.getCargoView().warn(b);
+
+                LinearLayout background = (LinearLayout) findViewById(R.id.activity_edit_flight);
+                if (b) {
+                    background.setBackgroundResource(R.color.colorWarn);
+                    Toast.makeText(ActivityEditFlight.this, "Plane is not safe to fly with this configuration", Toast.LENGTH_SHORT).show();
+                } else {
+                    background.setBackgroundResource(R.color.colorPrimary);
+                }
             }
         });
     }

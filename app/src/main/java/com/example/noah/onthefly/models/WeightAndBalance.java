@@ -59,7 +59,7 @@ public class WeightAndBalance {
                         Log.d(TAG, "Coordinate is within the bounds");
                         return true;
                     } else {
-                        Log.d(TAG, "Coordinate is not within the bounds");
+                        Log.d(TAG, "Plane is too heavy for its given CG");
                         return false;
                     }
                 }

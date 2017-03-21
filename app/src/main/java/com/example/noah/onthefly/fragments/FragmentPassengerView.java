@@ -102,8 +102,10 @@ public class FragmentPassengerView extends Fragment {
 
     public void warn(boolean b) {
         if (b) {
+
             Log.d(TAG, "DANGER! Plane cannot fly as is");
         } else {
+            
             Log.d(TAG, "Plane is safe to fly");
         }
     }
