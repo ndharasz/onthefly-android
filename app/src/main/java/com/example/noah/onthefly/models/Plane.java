@@ -205,6 +205,11 @@ public class Plane implements Comparable<Plane>, Serializable {
             FileInputStream fileInputStream = context.openFileInput(name);
             objectIn = new ObjectInputStream(fileInputStream);
             plane = (Plane) objectIn.readObject();
+            if(plane.getCenterOfGravityEnvelope() == null) {
+                Log.d(TAG, "NULL ENV");
+            } else {
+                Log.d(TAG, "not null");
+            }
         } catch (IOException e) {
             Log.d(TAG, e.getMessage());
         } catch (ClassNotFoundException e) {

@@ -6,30 +6,30 @@ import java.io.Serializable;
  * Created by ndharasz on 3/16/2017.
  */
 
-public class Coordinate implements Serializable {
-    long x;
-    long y;
+public class Coordinate implements Serializable{
+    float x;
+    float y;
 
     public Coordinate(){}
 
-    public Coordinate(long x, long y) {
+    public Coordinate(float x, float y) {
         this.x = x;
         this.y = y;
     }
 
-    public long getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(long x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public long getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(long y) {
+    public void setY(float y) {
         this.y = y;
     }
 }

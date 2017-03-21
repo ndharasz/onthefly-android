@@ -3,6 +3,9 @@ package com.example.noah.onthefly.activities;
 import android.content.Intent;
 import android.media.Image;
 import android.provider.ContactsContract;
+
+import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -27,9 +30,33 @@ import com.example.noah.onthefly.models.Plane;
 import com.example.noah.onthefly.util.FlightManager;
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.itextpdf.text.Anchor;
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chapter;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.List;
+import com.itextpdf.text.ListItem;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Section;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Date;
+
+import static com.itextpdf.text.Annotation.FILE;
 
 public class ActivityEditFlight extends FragmentActivity {
     static final String TAG = "ActivityEditFlight";
@@ -54,6 +81,7 @@ public class ActivityEditFlight extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_flight);
 
@@ -210,7 +238,8 @@ public class ActivityEditFlight extends FragmentActivity {
 
     protected void generateReport(View v) {
         Intent reportIntent = new Intent(this, ActivityReport.class);
-        this.startActivity(reportIntent);
+        reportIntent.putExtra("flight", curFlight);
+        startActivity(reportIntent);
     }
 
     public FlightManager getFlightManager() {

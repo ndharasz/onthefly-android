@@ -11,6 +11,7 @@
     <string name="sendToRegEMail">Send to user registered email address.</string>
     <string name="email">youremailaddress@email.com</string>
     <string name="saveLocal">Save Report Locally</string>
+    <string name="returnHome">Return to Flights</string>
     <string name="send">Send</string>
     <string name="clear">Clear</string>
     <string name="forgot_password">Forgot Password?</string>
