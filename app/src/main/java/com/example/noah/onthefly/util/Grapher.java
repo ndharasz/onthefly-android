@@ -22,7 +22,9 @@ import java.util.List;
 public class Grapher {
     final String TAG = "Grapher";
     final int leftMargin = 150;
-    final int bottomMargin = 50;
+    final int bottomMargin = 60;
+    final int rightMargin = 10;
+    final int topMargin = 10;
 
     Context context;
     Flight flight;
@@ -45,8 +47,8 @@ public class Grapher {
         plane = Plane.readFromFile(context, flight.getPlane());
         envelope = plane.getCenterOfGravityEnvelope();
 
-        width = size + leftMargin;
-        height = size + bottomMargin;
+        width = size + leftMargin + rightMargin;
+        height = size + bottomMargin + topMargin;
 
         minX = Integer.MAX_VALUE;
         maxX = 0;
@@ -60,11 +62,13 @@ public class Grapher {
         }
         minX -= minX * .1;
         maxX += maxX * .1;
+        minY -= minY * .1;
         maxY += maxY * .1;
 
         Bitmap.Config conf = Bitmap.Config.ARGB_4444;
         bmp = Bitmap.createBitmap(width, height, conf);
         canvas = new Canvas(bmp);
+        canvas.drawColor(Color.WHITE);
 
         drawAxes();
         drawGrid();
@@ -95,23 +99,22 @@ public class Grapher {
         gridPaint.setStyle(Paint.Style.STROKE);
 
         Paint textStyle = new Paint();
-        textStyle.setColor(Color.WHITE);
+        textStyle.setColor(Color.BLACK);
         textStyle.setTextSize(60);
-        textStyle.setStrokeWidth(2);
-        textStyle.setStyle(Paint.Style.STROKE);
+        textStyle.setStyle(Paint.Style.FILL);
 
 
         Path grid = new Path();
         textStyle.setTextAlign(Paint.Align.CENTER);
         for(int x = minX; x < maxX; x += (maxX - minX)/10) {
             grid.moveTo(convertX(x), height - bottomMargin);
-            grid.lineTo(convertX(x), 0);
+            grid.lineTo(convertX(x), 0 + topMargin);
             canvas.drawText(Integer.toString(x), convertX(x), height, textStyle);
         }
         textStyle.setTextAlign(Paint.Align.LEFT);
         for(int y = minY; y < maxY; y += (maxY - minY)/10) {
             grid.moveTo(leftMargin, convertY(y));
-            grid.lineTo(width, convertY(y));
+            grid.lineTo(width - rightMargin, convertY(y));
             canvas.drawText(Integer.toString(y), 0, convertY(y), textStyle);
         }
         canvas.drawPath(grid, gridPaint);
@@ -119,7 +122,7 @@ public class Grapher {
 
     private void drawEnvelope() {
         Paint envPaint = new Paint();
-        envPaint.setColor(Color.WHITE);
+        envPaint.setColor(Color.parseColor("#4A75FF"));
         envPaint.setStrokeWidth(20);
         envPaint.setStyle(Paint.Style.STROKE);
 
@@ -141,11 +144,11 @@ public class Grapher {
     }
 
     private int convertX(float x) {
-        return Math.round((x-minX) * (((float)width - leftMargin)/((float)maxX - minX))) + leftMargin;
+        return Math.round((x-minX) * (((float)width - leftMargin - rightMargin)/((float)maxX - minX))) + leftMargin;
     }
 
     private int convertY(float y) {
-        return height - (Math.round((y-minY) * (((float)height - bottomMargin)/((float)maxY - minY))) + bottomMargin);
+        return height - (Math.round((y-minY) * (((float)height - bottomMargin - topMargin)/((float)maxY - minY))) + bottomMargin);
     }
 }
 

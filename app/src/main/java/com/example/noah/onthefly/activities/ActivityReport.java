@@ -1,14 +1,19 @@
 package com.example.noah.onthefly.activities;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
@@ -17,51 +22,100 @@ import com.example.noah.onthefly.util.Grapher;
 import com.example.noah.onthefly.util.Mailer;
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfWriter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ActivityReport extends AppCompatActivity {
+    private final int WRITE_PERMISSION_REQUEST_CODE = 1;
+    private final String WRITE_PERMISSION = android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
     CheckBox sendToSavedCheckbox;
     CheckBox sendtoOtherCheckbox;
     EditText otherEmailInput;
     CheckBox saveReportCheckbox;
     Flight flight;
+    Bitmap graphImage;
+    String reportFileName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         flight = (Flight) getIntent().getSerializableExtra("flight");
-        ImageView graph = (ImageView) findViewById(R.id.graph);
-        Grapher grapher = new Grapher();
-        int size = getWindowManager().getDefaultDisplay().getWidth();
-        graph.setImageBitmap(grapher.drawGraph(this, flight, size));
-
-        checkboxSetup();
         otherEmailInput = (EditText)findViewById(R.id.user_input_email);
-
-
+        checkboxSetup();
+        displayAndCreate();
     }
 
     protected void checkboxSetup() {
         sendToSavedCheckbox = (CheckBox)findViewById(R.id.send_to_reg_checkbox);
         sendtoOtherCheckbox = (CheckBox)findViewById(R.id.send_to_other_checkbox);
         saveReportCheckbox = (CheckBox)findViewById(R.id.save_report_checkbox);
+        saveReportCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    if(ContextCompat.checkSelfPermission(getBaseContext(), WRITE_PERMISSION) !=
+                            getPackageManager().PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions((Activity)saveReportCheckbox.getContext(),
+                                new String[]{WRITE_PERMISSION}, WRITE_PERMISSION_REQUEST_CODE);
+
+                    }
+                }
+            }
+        });
+    }
+    
+    private void displayAndCreate() {
+        ImageView graph = (ImageView) findViewById(R.id.graph);
+        Grapher grapher = new Grapher();
+        int size = getWindowManager().getDefaultDisplay().getWidth();
+        graphImage = grapher.drawGraph(this, flight, size);
+        graph.setImageBitmap(graphImage);
+        //insert more stuff
+
+        Date date = new Date();
+        reportFileName = getFilesDir() + "report.pdf";
+        try {
+            FileOutputStream fos = new FileOutputStream(reportFileName);
+            Document report = new Document();
+            PdfWriter.getInstance(report, fos);
+            report.open();
+            report.add(new Chunk(""));
+            report.addTitle("Weight and Balance Report");
+            report.addSubject(date.toString());
+            report.addAuthor("On the Fly - Android");
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            graphImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            Image pdfGraph = Image.getInstance(stream.toByteArray());
+            float scaler = ((report.getPageSize().getWidth() - report.leftMargin()
+                    - report.rightMargin()) / pdfGraph.getWidth()) * 100;
+            pdfGraph.scalePercent(scaler);
+            report.add(pdfGraph);
+            //insert more stuff
+            report.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "PDF creation failed.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void send(View inputButton) {
         String email = otherEmailInput.getText().toString();
+        
         if(sendtoOtherCheckbox.isChecked()) {
             if (!email.equals("")) {
                 if(Mailer.isEmailValid(email)) {
                     Mailer mailer = new Mailer();
-                    mailer.setTo(email);
                     try {
+                        mailer.addAttachment(reportFileName);
+                        mailer.setTo(email);
                         mailer.send();
                         Toast.makeText(this,
                                 "Your weight and balance report has been sent to " + email + ".",
@@ -69,7 +123,7 @@ public class ActivityReport extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                         Toast.makeText(this,
-                                "Unable to Send report to " + email + ".",
+                                "Unable to Send report.",
                                 Toast.LENGTH_LONG).show();
                     }
                 } else {
@@ -84,33 +138,15 @@ public class ActivityReport extends AppCompatActivity {
         Intent intent = new Intent(ActivityReport.this, ActivityFlightList.class);
         startActivity(intent);
     }
+
     private void Save() {
-        try {
-            Log.d("PDF Creation ", "Starting...");
-
-            File pdfFolder = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_DOCUMENTS), "pdfdemo");
-
-            if (!pdfFolder.exists()) {
-                pdfFolder.mkdir();
+        File pdfFolder = new File( Environment.getExternalStorageDirectory(), "On The Fly Reports");
+        if (!pdfFolder.exists()) {
+            if(pdfFolder.mkdirs()) {
                 Log.i("PDF Creation ", "Pdf Directory created");
+            } else {
+                Log.i("PDF Creation ", "Directory Creation Failed");
             }
-
-            Date date = new Date();
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(date);
-
-            FileOutputStream fos = new FileOutputStream(new File(getFilesDir(), "WeightBalance" + timeStamp + ".pdf"));
-
-            Document document = new Document();
-            PdfWriter.getInstance(document, fos);
-            document.open();
-            document.add(new Chunk(""));
-            document.addTitle("Weight and Balance Report");
-            document.addSubject(date.toString());
-            document.addAuthor("On the Fly - Android");
-            document.close();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

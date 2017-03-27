@@ -1,5 +1,8 @@
 package com.example.noah.onthefly.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Date;
@@ -27,8 +30,8 @@ import javax.mail.internet.MimeMultipart;
  */
 
 public class Mailer extends javax.mail.Authenticator{
-    private final String user = "";
-    private final String pass = "";
+    private final String user = "ontheflyapp@gmail.com";
+    private final String pass = "Lozi3rL0vesTrump";
     private final boolean auth = true;
     private String host;
     private String port;
@@ -45,7 +48,7 @@ public class Mailer extends javax.mail.Authenticator{
         sport = "465";
         from = "ontheflyapp@android.com";
         subject = "[NO REPLY]";
-        body = "Test";
+        body = "";
         multipart = new MimeMultipart();
 
         MailcapCommandMap mc = (MailcapCommandMap) CommandMap.getDefaultCommandMap();
@@ -114,12 +117,11 @@ public class Mailer extends javax.mail.Authenticator{
     }
 
     public void addAttachment(String filename) throws Exception {
-//        BodyPart messageBodyPart = new MimeBodyPart();
-//        DataSource source = new Data;
-//        messageBodyPart.setDataHandler(new DataHandler(source));
-//        messageBodyPart.setFileName(filename);
-//
-//        multipart.addBodyPart(messageBodyPart);
+        BodyPart messageBodyPart = new MimeBodyPart();
+        DataSource source = new FileDataSource(filename);
+        messageBodyPart.setDataHandler(new DataHandler(source));
+        messageBodyPart.setFileName(filename);
+        multipart.addBodyPart(messageBodyPart);
     }
 
     public static boolean isEmailValid(String email){
