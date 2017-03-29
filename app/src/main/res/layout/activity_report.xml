@@ -14,12 +14,10 @@
     android:orientation="vertical"
     android:gravity="center">
 
-
-    <ImageView
-        android:id="@+id/graph"
+    <RelativeLayout
+        android:id="@+id/report_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY"/>
+        android:layout_height="wrap_content"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

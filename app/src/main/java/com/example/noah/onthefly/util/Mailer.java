@@ -30,8 +30,8 @@ import javax.mail.internet.MimeMultipart;
  */
 
 public class Mailer extends javax.mail.Authenticator{
-    private final String user = "ontheflyapp@gmail.com";
-    private final String pass = "Lozi3rL0vesTrump";
+    private final String user = "";
+    private final String pass = "";
     private final boolean auth = true;
     private String host;
     private String port;

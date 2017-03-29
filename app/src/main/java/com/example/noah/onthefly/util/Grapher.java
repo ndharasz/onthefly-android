@@ -1,6 +1,7 @@
 package com.example.noah.onthefly.util;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -21,10 +22,12 @@ import java.util.List;
 
 public class Grapher {
     final String TAG = "Grapher";
-    final int leftMargin = 150;
-    final int bottomMargin = 60;
-    final int rightMargin = 10;
-    final int topMargin = 10;
+    int leftMargin;
+    int bottomMargin = 65;
+    int rightMargin = 10;
+    int topMargin = 10;
+    int xdiv = 5;
+    int ydiv = 5;
 
     Context context;
     Flight flight;
@@ -47,9 +50,6 @@ public class Grapher {
         plane = Plane.readFromFile(context, flight.getPlane());
         envelope = plane.getCenterOfGravityEnvelope();
 
-        width = size + leftMargin + rightMargin;
-        height = size + bottomMargin + topMargin;
-
         minX = Integer.MAX_VALUE;
         maxX = 0;
         minY = Integer.MAX_VALUE;
@@ -60,15 +60,24 @@ public class Grapher {
             minY = coord.getY() < minY ? Math.round(coord.getY()) : minY;
             maxY = coord.getY() > maxY ? Math.round(coord.getY()) : maxY;
         }
-        minX -= minX * .1;
-        maxX += maxX * .1;
-        minY -= minY * .1;
-        maxY += maxY * .1;
+        double xmod = (maxX - minX) / xdiv;
+        double ymod = (maxY - minY) / ydiv;
+
+        minX -= xmod;
+        maxX += xmod;
+        minY -= ymod;
+        maxY += ymod;
+
+        int numdigits = Integer.toString(maxY).length();
+        leftMargin = numdigits * 40;
+        width = size + leftMargin + rightMargin;
+        height = size + bottomMargin + topMargin;
 
         Bitmap.Config conf = Bitmap.Config.ARGB_4444;
         bmp = Bitmap.createBitmap(width, height, conf);
         canvas = new Canvas(bmp);
-        canvas.drawColor(Color.WHITE);
+        canvas.drawColor(Color.parseColor("4A75FF"));
+
 
         drawAxes();
         drawGrid();
@@ -86,43 +95,46 @@ public class Grapher {
 
         Path axes = new Path();
         axes.moveTo(leftMargin, height - bottomMargin);
-        axes.lineTo(leftMargin, 0);
-        axes.moveTo(leftMargin, bmp.getHeight() - bottomMargin);
-        axes.lineTo(width, bmp.getHeight() - bottomMargin);
+        axes.lineTo(leftMargin, topMargin);
+        axes.moveTo(leftMargin, height - bottomMargin);
+        axes.lineTo(width - rightMargin, height - bottomMargin);
         canvas.drawPath(axes, axesPaint);
     }
 
     private void drawGrid() {
         Paint gridPaint = new Paint();
         gridPaint.setColor(Color.BLACK);
-        gridPaint.setStrokeWidth(1);
+        gridPaint.setStrokeWidth(5);
         gridPaint.setStyle(Paint.Style.STROKE);
 
         Paint textStyle = new Paint();
         textStyle.setColor(Color.BLACK);
         textStyle.setTextSize(60);
         textStyle.setStyle(Paint.Style.FILL);
-
+        textStyle.setFakeBoldText(true);
 
         Path grid = new Path();
+
         textStyle.setTextAlign(Paint.Align.CENTER);
-        for(int x = minX; x < maxX; x += (maxX - minX)/10) {
+        for(int x = minX; x < maxX; x += (maxX - minX)/xdiv) {
             grid.moveTo(convertX(x), height - bottomMargin);
-            grid.lineTo(convertX(x), 0 + topMargin);
+            grid.lineTo(convertX(x), topMargin);
             canvas.drawText(Integer.toString(x), convertX(x), height, textStyle);
         }
+
         textStyle.setTextAlign(Paint.Align.LEFT);
-        for(int y = minY; y < maxY; y += (maxY - minY)/10) {
+        for(int y = minY; y < maxY; y += (maxY - minY)/ydiv) {
             grid.moveTo(leftMargin, convertY(y));
             grid.lineTo(width - rightMargin, convertY(y));
             canvas.drawText(Integer.toString(y), 0, convertY(y), textStyle);
         }
+
         canvas.drawPath(grid, gridPaint);
     }
 
     private void drawEnvelope() {
         Paint envPaint = new Paint();
-        envPaint.setColor(Color.parseColor("#4A75FF"));
+        envPaint.setColor(Color.WHITE);
         envPaint.setStrokeWidth(20);
         envPaint.setStyle(Paint.Style.STROKE);
 
@@ -131,6 +143,8 @@ public class Grapher {
         for(Coordinate coord : envelope) {
             envPath.lineTo(convertX(coord.getX()), convertY(coord.getY()));
         }
+        envPath.lineTo(convertX(envelope.get(0).getX()), convertY(envelope.get(0).getY()));
+
         canvas.drawPath(envPath, envPaint);
     }
 
@@ -144,11 +158,11 @@ public class Grapher {
     }
 
     private int convertX(float x) {
-        return Math.round((x-minX) * (((float)width - leftMargin - rightMargin)/((float)maxX - minX))) + leftMargin;
+        return leftMargin + Math.round((x-minX) * (((float)width - leftMargin - rightMargin)/((float)maxX - minX)));
     }
 
     private int convertY(float y) {
-        return height - (Math.round((y-minY) * (((float)height - bottomMargin - topMargin)/((float)maxY - minY))) + bottomMargin);
+        return height - bottomMargin - Math.round((y-minY) * (((float)height - bottomMargin - topMargin)/((float)maxY - minY)));
     }
 }
 

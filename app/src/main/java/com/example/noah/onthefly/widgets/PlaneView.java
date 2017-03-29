@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -210,7 +208,7 @@ public class PlaneView extends GridView {
                 final int tInt = position;
                 final Passenger passenger = (Passenger) parent.getItemAtPosition(position);
 
-                View promptView = LayoutInflater.from(getContext()).inflate(R.layout.passenger_info_dialog, null);
+                View promptView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_passenger_info, null);
                 // pull up dialog to enter passenger names
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         getContext(), android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
