@@ -2,7 +2,6 @@ package com.example.noah.onthefly.activities;
 
 import android.content.Intent;
 import android.media.Image;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -27,10 +26,6 @@ import com.example.noah.onthefly.models.Plane;
 import com.example.noah.onthefly.util.FlightManager;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class ActivityEditFlight extends FragmentActivity {
     static final String TAG = "ActivityEditFlight";
     static final int NUM_TABS = 3;
@@ -54,6 +49,7 @@ public class ActivityEditFlight extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_flight);
 
@@ -210,7 +206,8 @@ public class ActivityEditFlight extends FragmentActivity {
 
     protected void generateReport(View v) {
         Intent reportIntent = new Intent(this, ActivityReport.class);
-        this.startActivity(reportIntent);
+        reportIntent.putExtra("flight", curFlight);
+        startActivity(reportIntent);
     }
 
     public FlightManager getFlightManager() {

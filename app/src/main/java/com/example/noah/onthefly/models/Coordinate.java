@@ -16,7 +16,6 @@ public class Coordinate implements Serializable {
         this.x = x;
         this.y = y;
     }
-
     public long getX() {
         return x;
     }

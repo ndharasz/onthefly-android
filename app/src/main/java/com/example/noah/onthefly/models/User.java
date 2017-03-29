@@ -2,12 +2,14 @@ package com.example.noah.onthefly.models;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.io.Serializable;
+
 /**
  * Created by brian on 2/4/17.
  */
 
 @IgnoreExtraProperties
-public class User {
+public class User implements Serializable {
     private String firstName;
     private String lastName;
     private String email;

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/graph"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"/>
+
+    <TableLayout
+        android:id="@+id/report_table"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary">
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Aircraft Tail Number"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+            <TextView
+                android:id="@+id/ac_num"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="BEW"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+            <TextView
+                android:id="@+id/bew"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Total Weight of Passengers"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+            <TextView
+                android:id="@+id/total_pass_weight"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Front Cargo Hold"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+            <TextView
+                android:id="@+id/front_cargo"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Aft Cargo Hold"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+            <TextView
+                android:id="@+id/aft_cargo"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Fuel Units"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Gallons"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Start Fuel"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+            <TextView
+                android:id="@+id/start_fuel"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Fuel Burn"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+            <TextView
+                android:id="@+id/fuel_burn"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Taxi Fuel Burn"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+            <TextView
+                android:id="@+id/taxi_fuel"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Max Takeoff Weight"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+            <TextView
+                android:id="@+id/takeoff_weight"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Zero Fuel Weight"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+            <TextView
+                android:id="@+id/zero_fuel_weight"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorAccent"
+                android:padding="@dimen/button_padding"/>
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

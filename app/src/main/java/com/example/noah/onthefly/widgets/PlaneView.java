@@ -4,11 +4,8 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -17,27 +14,19 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
-import com.example.noah.onthefly.activities.ActivityEditFlight;
-import com.example.noah.onthefly.fragments.FragmentPassengerView;
 import com.example.noah.onthefly.models.Passenger;
-import com.example.noah.onthefly.util.ImageDragShadowBuilder;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 
 /**
@@ -219,7 +208,7 @@ public class PlaneView extends GridView {
                 final int tInt = position;
                 final Passenger passenger = (Passenger) parent.getItemAtPosition(position);
 
-                View promptView = LayoutInflater.from(getContext()).inflate(R.layout.passenger_info_dialog, null);
+                View promptView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_passenger_info, null);
                 // pull up dialog to enter passenger names
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                         getContext(), android.R.style.Theme_Holo_Light_Dialog_NoActionBar);

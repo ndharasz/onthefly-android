@@ -51,6 +51,7 @@ public class FragmentPassengerView extends Fragment {
                              Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         flightManager = ((ActivityEditFlight) getActivity()).getFlightManager();
+        Log.d("Plane Read", flightManager.getPlane());
         Plane plane = Plane.readFromFile(getContext(), flightManager.getPlane());
 
         List<Double> passengerArms = new LinkedList<>();
