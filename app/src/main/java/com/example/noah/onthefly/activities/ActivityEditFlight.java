@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,11 +69,26 @@ public class ActivityEditFlight extends FragmentActivity {
     protected void setupFlightManager() {
         // Sets up the flight manager utility.  If a fragment alters the values, the listeners
         //   will update the title of the activity.
-        flightManager = new FlightManager(curFlight, FirebaseAuth.getInstance().getCurrentUser().getUid());
+        flightManager = new FlightManager(ActivityEditFlight.this, curFlight);
         flightManager.setAirportChangedListener(new FlightManager.AirportChangedListener() {
             @Override
             public void onAirportsChanged(String dep, String arr) {
                 title.setText(dep + " \u2192 " + arr);
+            }
+        });
+        flightManager.setWarnListener(new FlightManager.WarnListener() {
+            @Override
+            public void onWarn(boolean b) {
+                tabAdapter.getPassengerView().warn(b);
+                tabAdapter.getCargoView().warn(b);
+
+                LinearLayout background = (LinearLayout) findViewById(R.id.activity_edit_flight);
+                if (b) {
+                    background.setBackgroundResource(R.color.colorWarn);
+                    Toast.makeText(ActivityEditFlight.this, "Plane is not safe to fly with this configuration", Toast.LENGTH_SHORT).show();
+                } else {
+                    background.setBackgroundResource(R.color.colorPrimary);
+                }
             }
         });
     }

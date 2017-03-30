@@ -171,7 +171,7 @@ public class PlaneView extends GridView {
             } catch (Exception e) {
                 // to avoid crashes, if a view is bad, return an empty passenger.
                 Log.d(TAG, e.getMessage());
-                return Passenger.EMPTY;
+                return Passenger.deepCopy(Passenger.EMPTY);
             }
         }
 
@@ -221,12 +221,17 @@ public class PlaneView extends GridView {
                 if (!parent.getItemAtPosition(position).equals(Passenger.EMPTY)) {
                     name.setText(passenger.getName());
                     weight.setText(String.valueOf(passenger.getWeight()));
+                } else {
+                    name.setText("Passenger");
                 }
 
                 alertDialogBuilder
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
+                                passengerRemovedListener.onPassengerRemoved(tInt);
+                                Passenger.swap(passenger, Passenger.deepCopy(Passenger.EMPTY));
+                                passengerAdapter.refreshView();
                                 dialog.dismiss();
                             }
                         })
@@ -309,18 +314,6 @@ public class PlaneView extends GridView {
 
     public void setPassenger(int loc, Passenger passenger) {
         ((PassengerViewAdapter) getAdapter()).setPassenger(loc, passenger);
-    }
-
-    public double calculateMoment() {
-        // iterate through the rows and multiply the corresponding moment
-        double totalMoment = 0.0;
-        for (int row = 0; row < numSeats; row++) {
-            for (int col = 0; col < numColumns; col++) {
-                Passenger curPassenger =  ((PassengerViewAdapter) getAdapter()).getItem(row * numColumns + col);
-                totalMoment += rowArms.get(row) * curPassenger.getWeight();
-            }
-        }
-        return 0;
     }
 
     private void switchAnimation(boolean turnOn) {

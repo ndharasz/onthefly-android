@@ -15,6 +15,7 @@ import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.activities.ActivityEditFlight;
 import com.example.noah.onthefly.models.Passenger;
 import com.example.noah.onthefly.models.Plane;
+import com.example.noah.onthefly.models.WeightAndBalance;
 import com.example.noah.onthefly.util.FlightManager;
 import com.example.noah.onthefly.widgets.PlaneView;
 
@@ -24,6 +25,8 @@ import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 
 public class FragmentPassengerView extends Fragment {
+    private static final String TAG = "FragmentPassengerView";
+
     Button tab;
     private PlaneView passengerView;
     private FlightManager flightManager;
@@ -51,8 +54,7 @@ public class FragmentPassengerView extends Fragment {
                              Bundle savedInstanceState) {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         flightManager = ((ActivityEditFlight) getActivity()).getFlightManager();
-        Log.d("Plane Read", flightManager.getPlane());
-        Plane plane = Plane.readFromFile(getContext(), flightManager.getPlane());
+        final Plane plane = Plane.readFromFile(getContext(), flightManager.getPlane());
 
         List<Double> passengerArms = new LinkedList<>();
         passengerArms.add(plane.getPilotSeatsArm());
@@ -98,8 +100,14 @@ public class FragmentPassengerView extends Fragment {
         this.flightManager = flightManager;
     }
 
-    public double calculateMoment() {
-        return passengerView.calculateMoment();
+    public void warn(boolean b) {
+        if (b) {
+
+            Log.d(TAG, "DANGER! Plane cannot fly as is");
+        } else {
+            
+            Log.d(TAG, "Plane is safe to fly");
+        }
     }
 
     public static int getHeight() {
