@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+<LinearLayout
+    android:id="@+id/activity_report"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/activity_vertical_margin"
     tools:context="com.example.noah.onthefly.activities.ActivityReport"
-    android:background="@color/colorPrimary"
+
     android:orientation="vertical"
     android:gravity="center">
 
-    <TextView
-        android:text="@string/reportGenerated"
+    <RelativeLayout
+        android:id="@+id/report_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorAccent"
-        android:padding="20sp"
-        android:gravity="center"
-        android:textSize="16sp"
-        android:id="@+id/header" />
+        android:layout_height="wrap_content"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -119,3 +118,4 @@
         android:onClick="send"
         style="@style/accent_button"/>
 </LinearLayout>
+</ScrollView>

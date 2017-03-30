@@ -1,6 +1,7 @@
 package com.example.noah.onthefly.models;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -165,5 +166,14 @@ public class Flight implements Serializable {
             passengers = new HashMap<>();
         }
         return passengers;
+    }
+
+    public double getTotalPassengerWeight() {
+        double totalWeight = 0;
+        Collection<Passenger> c = getPassengers().values();
+        for (Passenger pass : c) {
+            totalWeight += pass.getWeight();
+        }
+        return totalWeight;
     }
 }
