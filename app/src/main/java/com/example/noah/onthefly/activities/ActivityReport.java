@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.models.Flight;
+import com.example.noah.onthefly.models.WeightAndBalance;
+import com.example.noah.onthefly.util.CalculationManager;
 import com.example.noah.onthefly.util.Grapher;
 import com.example.noah.onthefly.util.Mailer;
 import com.google.firebase.auth.FirebaseAuth;
@@ -90,6 +92,9 @@ public class ActivityReport extends AppCompatActivity {
     }
     
     private void displayReport() {
+        CalculationManager calculationManager = new CalculationManager(ActivityReport.this, flight);
+        calculationManager.calculate();
+
         LinearLayout wrapper = (LinearLayout) getLayoutInflater().inflate(
                 R.layout.layout_report_table, null);
         ImageView graph = (ImageView) wrapper.findViewById(R.id.graph);
@@ -106,8 +111,8 @@ public class ActivityReport extends AppCompatActivity {
         ((TextView)table.findViewById(R.id.start_fuel)).setText("" + flight.getStartFuel());
         ((TextView)table.findViewById(R.id.fuel_burn)).setText("" + flight.getFuelFlow());
         ((TextView)table.findViewById(R.id.taxi_fuel)).setText("" + flight.getTaxiFuelBurn());
-        ((TextView)table.findViewById(R.id.takeoff_weight)).setText("");
-        ((TextView)table.findViewById(R.id.zero_fuel_weight)).setText("");
+        ((TextView)table.findViewById(R.id.takeoff_weight)).setText("" + calculationManager.getTakeoffWeight());
+        ((TextView)table.findViewById(R.id.zero_fuel_weight)).setText("" + calculationManager.getZeroFuelWeight());
 
         ((RelativeLayout)findViewById(R.id.report_wrapper)).addView(wrapper);
     }
@@ -151,14 +156,17 @@ public class ActivityReport extends AppCompatActivity {
     private void sendTo(String email) {
         if (!email.equals("")) {
             if(Mailer.isEmailValid(email)) {
-                Mailer mailer = new Mailer();
+                Mailer mailer = new Mailer(ActivityReport.this);
                 try {
                     mailer.addAttachment(internalPath + fileName);
                     mailer.setTo(email);
-                    mailer.send();
-                    Toast.makeText(this,
-                            "Your weight and balance report has been sent to " + email + ".",
-                            Toast.LENGTH_LONG).show();
+                    if (mailer.send()) {
+                        Toast.makeText(this,
+                                "Your weight and balance report has been sent to " + email + ".",
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(this, "Unable to send report.", Toast.LENGTH_LONG).show();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(this,

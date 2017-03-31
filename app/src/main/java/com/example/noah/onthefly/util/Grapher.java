@@ -11,6 +11,7 @@ import android.graphics.Path;
 import com.example.noah.onthefly.models.Coordinate;
 import com.example.noah.onthefly.models.Flight;
 import com.example.noah.onthefly.models.Plane;
+import com.example.noah.onthefly.models.WeightAndBalance;
 
 import java.util.List;
 
@@ -50,6 +51,12 @@ public class Grapher {
         plane = Plane.readFromFile(context, flight.getPlane());
         envelope = plane.getCenterOfGravityEnvelope();
 
+        CalculationManager calculationManager = new CalculationManager(context, flight);
+        WeightAndBalance weightAndBalance = calculationManager.calculate();
+        // Plot these coordinates :-)
+        Coordinate startCoordinate = weightAndBalance.getStartCoordinate();
+        Coordinate endCoordinate = weightAndBalance.getEndCoordinate();
+
         minX = Integer.MAX_VALUE;
         maxX = 0;
         minY = Integer.MAX_VALUE;
@@ -76,7 +83,7 @@ public class Grapher {
         Bitmap.Config conf = Bitmap.Config.ARGB_4444;
         bmp = Bitmap.createBitmap(width, height, conf);
         canvas = new Canvas(bmp);
-        canvas.drawColor(Color.parseColor("4A75FF"));
+        canvas.drawColor(Color.parseColor("#4A75FF"));
 
 
         drawAxes();
