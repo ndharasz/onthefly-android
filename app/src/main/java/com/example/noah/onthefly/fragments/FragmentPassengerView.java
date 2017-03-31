@@ -88,6 +88,13 @@ public class FragmentPassengerView extends Fragment {
             }
         });
 
+        passengerView.setOnActionEndedListener(new PlaneView.ActionEndedListener() {
+            @Override
+            public void onActionEnded() {
+                flightManager.save();
+            }
+        });
+
         for (int i = 0; i < plane.getNumSeats(); i++) {
             Passenger passenger = flightManager.getPassenger(i);
             passengerView.setPassenger(i, passenger);
