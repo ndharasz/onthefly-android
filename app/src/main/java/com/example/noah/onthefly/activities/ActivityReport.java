@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.models.Flight;
+import com.example.noah.onthefly.models.WeightAndBalance;
+import com.example.noah.onthefly.util.CalculationManager;
 import com.example.noah.onthefly.util.Grapher;
 import com.example.noah.onthefly.util.Mailer;
 import com.google.firebase.auth.FirebaseAuth;
@@ -57,13 +59,20 @@ public class ActivityReport extends AppCompatActivity {
     Flight flight;
     Bitmap graphImage;
     String internalPath;
+    String externalPath;
     String fileName;
-
+    CalculationManager calculationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
+        if(ContextCompat.checkSelfPermission(getBaseContext(), WRITE_PERMISSION) !=
+                getPackageManager().PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity)saveReportCheckbox.getContext(),
+                    new String[]{WRITE_PERMISSION}, WRITE_PERMISSION_REQUEST_CODE);
+
+        }
         flight = (Flight) getIntent().getSerializableExtra("flight");
         otherEmailInput = (EditText)findViewById(R.id.user_input_email);
         checkboxSetup();
@@ -73,23 +82,12 @@ public class ActivityReport extends AppCompatActivity {
     protected void checkboxSetup() {
         sendToSavedCheckbox = (CheckBox)findViewById(R.id.send_to_reg_checkbox);
         sendtoOtherCheckbox = (CheckBox)findViewById(R.id.send_to_other_checkbox);
-        saveReportCheckbox = (CheckBox)findViewById(R.id.save_report_checkbox);
-        saveReportCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked) {
-                    if(ContextCompat.checkSelfPermission(getBaseContext(), WRITE_PERMISSION) !=
-                            getPackageManager().PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions((Activity)saveReportCheckbox.getContext(),
-                                new String[]{WRITE_PERMISSION}, WRITE_PERMISSION_REQUEST_CODE);
-
-                    }
-                }
-            }
-        });
     }
     
     private void displayReport() {
+        calculationManager = new CalculationManager(ActivityReport.this, flight);
+        calculationManager.calculate();
+
         LinearLayout wrapper = (LinearLayout) getLayoutInflater().inflate(
                 R.layout.layout_report_table, null);
         ImageView graph = (ImageView) wrapper.findViewById(R.id.graph);
@@ -106,44 +104,21 @@ public class ActivityReport extends AppCompatActivity {
         ((TextView)table.findViewById(R.id.start_fuel)).setText("" + flight.getStartFuel());
         ((TextView)table.findViewById(R.id.fuel_burn)).setText("" + flight.getFuelFlow());
         ((TextView)table.findViewById(R.id.taxi_fuel)).setText("" + flight.getTaxiFuelBurn());
-        ((TextView)table.findViewById(R.id.takeoff_weight)).setText("");
-        ((TextView)table.findViewById(R.id.zero_fuel_weight)).setText("");
+        ((TextView)table.findViewById(R.id.takeoff_weight)).setText("" + calculationManager.getTakeoffWeight());
+        ((TextView)table.findViewById(R.id.zero_fuel_weight)).setText("" + calculationManager.getZeroFuelWeight());
 
         ((RelativeLayout)findViewById(R.id.report_wrapper)).addView(wrapper);
     }
 
     public void send(View inputButton) {
-        Document report = createPDF();
-        File internalFile = new File(internalPath, fileName);
+        createPDF();
+        saveToExt();
         if(sendToSavedCheckbox.isChecked()) {
             sendTo(FirebaseAuth.getInstance().getCurrentUser().getEmail());
         }
         if(sendtoOtherCheckbox.isChecked()) {
             sendTo(otherEmailInput.getText().toString());
         }
-        if(saveReportCheckbox.isChecked()) {
-            try {
-                String externalPath = Environment.getExternalStorageDirectory() + "/OnTheFlyPDFs/";
-                File externalFolder = new File(externalPath);
-                if(!externalFolder.exists()) {
-                    externalFolder.mkdirs();
-                }
-                File externalFile = new File(externalFolder, fileName);
-                if(!externalFile.exists()){
-                    externalFile.createNewFile();
-                }
-                FileChannel inChannel = new FileInputStream(internalFile).getChannel();
-                FileChannel outChannel = new FileOutputStream(externalFile).getChannel();
-                inChannel.transferTo(0, inChannel.size(), outChannel);
-                inChannel.close();
-                outChannel.close();
-                Toast.makeText(this, "Report has been saved.", Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-        }
-        internalFile.delete();
         Intent intent = new Intent(ActivityReport.this, ActivityFlightList.class);
         startActivity(intent);
     }
@@ -151,14 +126,17 @@ public class ActivityReport extends AppCompatActivity {
     private void sendTo(String email) {
         if (!email.equals("")) {
             if(Mailer.isEmailValid(email)) {
-                Mailer mailer = new Mailer();
+                Mailer mailer = new Mailer(ActivityReport.this);
                 try {
-                    mailer.addAttachment(internalPath + fileName);
+                    mailer.addAttachment(externalPath + fileName);
                     mailer.setTo(email);
-                    mailer.send();
-                    Toast.makeText(this,
-                            "Your weight and balance report has been sent to " + email + ".",
-                            Toast.LENGTH_LONG).show();
+                    if (mailer.send()) {
+                        Toast.makeText(this,
+                                "Your weight and balance report has been sent to " + email + ".",
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(this, "Unable to send report.", Toast.LENGTH_LONG).show();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(this,
@@ -173,6 +151,29 @@ public class ActivityReport extends AppCompatActivity {
             Toast.makeText(this, "Empty email field.", Toast.LENGTH_LONG).show();
             return;
         }
+    }
+
+    private void saveToExt() {
+        File internalFile = new File(internalPath, fileName);
+        try {
+            externalPath = Environment.getExternalStorageDirectory() + "/OnTheFlyPDFs/";
+            File externalFolder = new File(externalPath);
+            if (!externalFolder.exists()) {
+                externalFolder.mkdirs();
+            }
+            File externalFile = new File(externalFolder, fileName);
+            if (!externalFile.exists()) {
+                externalFile.createNewFile();
+            }
+            FileChannel inChannel = new FileInputStream(internalFile).getChannel();
+            FileChannel outChannel = new FileOutputStream(externalFile).getChannel();
+            inChannel.transferTo(0, inChannel.size(), outChannel);
+            inChannel.close();
+            outChannel.close();
+        } catch (Exception e) {
+            Toast.makeText(this, "Could not save File", Toast.LENGTH_SHORT).show();
+        }
+        internalFile.delete();
     }
 
     private Document createPDF() {
@@ -206,7 +207,7 @@ public class ActivityReport extends AppCompatActivity {
                         + usrEmail, FontFactory.getFont(FontFactory.TIMES_ITALIC, 16f))));
             }
 
-            Bitmap n = (Bitmap.createScaledBitmap(graphImage, 300, 300, false));
+            Bitmap n = (Bitmap.createScaledBitmap(graphImage, 300, 300, true));
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             n.compress(Bitmap.CompressFormat.PNG, 10, stream);
             Image image = Image.getInstance(stream.toByteArray());
@@ -257,7 +258,7 @@ public class ActivityReport extends AppCompatActivity {
         cell = new PdfPCell(new Phrase("BEW"));
         cell.setColspan(1);
         table.addCell(cell);
-        table.addCell("");
+        table.addCell("420.69");
 
         cell = new PdfPCell(new Phrase("Total Weight of Passengers"));
         cell.setColspan(1);
@@ -282,7 +283,7 @@ public class ActivityReport extends AppCompatActivity {
         cell = new PdfPCell(new Phrase("Fuel Tank"));
         cell.setColspan(1);
         table.addCell(cell);
-        table.addCell("");
+        table.addCell(""+flight.getStartFuel());
 
         cell = new PdfPCell(new Phrase("Fuel Burn"));
         cell.setColspan(1);
@@ -297,12 +298,12 @@ public class ActivityReport extends AppCompatActivity {
         cell = new PdfPCell(new Phrase("Max Takeoff Weight"));
         cell.setColspan(1);
         table.addCell(cell);
-        table.addCell("");
+        table.addCell(""+calculationManager.getTakeoffWeight());
 
         cell = new PdfPCell(new Phrase("Zero Fuel Weight"));
         cell.setColspan(1);
         table.addCell(cell);
-        table.addCell("");
+        table.addCell(""+calculationManager.getZeroFuelWeight());
 
         return table;
     }

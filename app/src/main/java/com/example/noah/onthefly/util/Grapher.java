@@ -11,6 +11,7 @@ import android.graphics.Path;
 import com.example.noah.onthefly.models.Coordinate;
 import com.example.noah.onthefly.models.Flight;
 import com.example.noah.onthefly.models.Plane;
+import com.example.noah.onthefly.models.WeightAndBalance;
 
 import java.util.List;
 
@@ -33,6 +34,8 @@ public class Grapher {
     Flight flight;
     Plane plane;
     List<Coordinate> envelope;
+    Coordinate startCoordinate;
+    Coordinate endCoordinate;
 
     int width;
     int height;
@@ -49,6 +52,12 @@ public class Grapher {
         this.context = context;
         plane = Plane.readFromFile(context, flight.getPlane());
         envelope = plane.getCenterOfGravityEnvelope();
+
+        CalculationManager calculationManager = new CalculationManager(context, flight);
+        WeightAndBalance weightAndBalance = calculationManager.calculate();
+        // Plot these coordinates :-)
+        startCoordinate = weightAndBalance.getStartCoordinate();
+        endCoordinate = weightAndBalance.getEndCoordinate();
 
         minX = Integer.MAX_VALUE;
         maxX = 0;
@@ -76,7 +85,7 @@ public class Grapher {
         Bitmap.Config conf = Bitmap.Config.ARGB_4444;
         bmp = Bitmap.createBitmap(width, height, conf);
         canvas = new Canvas(bmp);
-        canvas.drawColor(Color.parseColor("4A75FF"));
+        canvas.drawColor(Color.parseColor("#4A75FF"));
 
 
         drawAxes();
@@ -124,9 +133,11 @@ public class Grapher {
 
         textStyle.setTextAlign(Paint.Align.LEFT);
         for(int y = minY; y < maxY; y += (maxY - minY)/ydiv) {
-            grid.moveTo(leftMargin, convertY(y));
-            grid.lineTo(width - rightMargin, convertY(y));
-            canvas.drawText(Integer.toString(y), 0, convertY(y), textStyle);
+            if(convertY(y) > topMargin) {
+                grid.moveTo(leftMargin, convertY(y));
+                grid.lineTo(width - rightMargin, convertY(y));
+                canvas.drawText(Integer.toString(y), 0, convertY(y), textStyle);
+            }
         }
 
         canvas.drawPath(grid, gridPaint);
@@ -155,6 +166,9 @@ public class Grapher {
         flightPaint.setStyle(Paint.Style.STROKE);
 
         Path flightPath = new Path();
+        flightPath.moveTo(convertX(startCoordinate.getX()), convertY(startCoordinate.getY()));
+        flightPath.lineTo(convertX(endCoordinate.getX()), convertY(endCoordinate.getY()));
+        canvas.drawPath(flightPath, flightPaint);
     }
 
     private int convertX(float x) {

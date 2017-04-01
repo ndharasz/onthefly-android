@@ -38,8 +38,7 @@ public class WeightAndBalance {
      */
     public boolean allCoordinatesInEnvelope(List<Coordinate> envelope) {
         return coordinateInEnvelope(startCoordinate, envelope)
-                && coordinateInEnvelope(endCoordinate, envelope)
-                && coordinateInEnvelope(dryCoordinate, envelope);
+                && coordinateInEnvelope(endCoordinate, envelope);
     }
 
     private static boolean coordinateInEnvelope(Coordinate coordinate, List<Coordinate> envelope) {

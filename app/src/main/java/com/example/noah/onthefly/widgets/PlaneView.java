@@ -48,6 +48,13 @@ public class PlaneView extends GridView {
         }
     };
 
+    private ActionEndedListener actionEndedListener = new ActionEndedListener() {
+        @Override
+        public void onActionEnded() {
+            return;
+        }
+    };
+
     private PassengerAddedListener passengerAddedListener = new PassengerAddedListener() {
         @Override
         public void onPassengerAdded(int seat, Passenger passenger) {
@@ -61,6 +68,10 @@ public class PlaneView extends GridView {
 
     public interface PassengerAddedListener {
         public void onPassengerAdded(int seat, Passenger passenger);
+    }
+
+    public interface ActionEndedListener {
+        public void onActionEnded();
     }
 
     private class PassengerDragListener implements OnDragListener {
@@ -97,6 +108,7 @@ public class PlaneView extends GridView {
                 // Update views
                 Passenger.swap(passenger, replace);
                 passengerAdapter.refreshView();
+                actionEndedListener.onActionEnded();
                 dropped = true;
                 return true;
             } else if (event.getAction() == DragEvent.ACTION_DRAG_ENDED) {
@@ -232,6 +244,7 @@ public class PlaneView extends GridView {
                                 passengerRemovedListener.onPassengerRemoved(tInt);
                                 Passenger.swap(passenger, Passenger.deepCopy(Passenger.EMPTY));
                                 passengerAdapter.refreshView();
+                                actionEndedListener.onActionEnded();
                                 dialog.dismiss();
                             }
                         })
@@ -255,6 +268,7 @@ public class PlaneView extends GridView {
                                     }
 
                                     passengerAddedListener.onPassengerAdded(tInt, new Passenger(passName, passWeight));
+                                    actionEndedListener.onActionEnded();
                                     passengerAdapter.refreshView();
                                 } catch (Exception e) {
                                     e.printStackTrace();
@@ -310,6 +324,10 @@ public class PlaneView extends GridView {
 
     public void setOnPassengerAddedListener(PassengerAddedListener passengerAddedListener) {
         this.passengerAddedListener = passengerAddedListener;
+    }
+
+    public void setOnActionEndedListener(ActionEndedListener actionEndedListener) {
+        this.actionEndedListener = actionEndedListener;
     }
 
     public void setPassenger(int loc, Passenger passenger) {

@@ -1,5 +1,9 @@
 package com.example.noah.onthefly.util;
 
+import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,6 +34,7 @@ import javax.mail.internet.MimeMultipart;
  */
 
 public class Mailer extends javax.mail.Authenticator{
+    private static final String TAG = "Mailer";
     private final String user = "";
     private final String pass = "";
     private final boolean auth = true;
@@ -41,14 +46,17 @@ public class Mailer extends javax.mail.Authenticator{
     private String subject;
     private String body;
     private Multipart multipart;
+    private Context context;
 
-    public Mailer() {
+    public Mailer(Context context) {
+        this.context = context;
+
         host = "smtp.gmail.com";
         port = "465";
         sport = "465";
         from = "ontheflyapp@android.com";
         subject = "[NO REPLY]";
-        body = "";
+        body = "Weight and Balance PDF is attached.";
         multipart = new MimeMultipart();
 
         MailcapCommandMap mc = (MailcapCommandMap) CommandMap.getDefaultCommandMap();
@@ -104,8 +112,10 @@ public class Mailer extends javax.mail.Authenticator{
                         Transport.send(msg, recipient);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        //throw this so that activity can catch a failure
-                        throw new RuntimeException("Could not send.");
+                        // This exception is run in a thread, so it will get thrown
+                        // outside the scope of the catch class.  This crashed my app.
+                        // Perhaps a log instead?
+                        Log.d(TAG, "Email could not be sent");
                     }
                 }
             });

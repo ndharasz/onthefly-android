@@ -91,6 +91,7 @@ public class ActivityEditFlight extends FragmentActivity {
                 }
             }
         });
+
     }
 
     protected void setupButtons() {

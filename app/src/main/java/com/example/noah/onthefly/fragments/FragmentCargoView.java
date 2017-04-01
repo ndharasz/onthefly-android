@@ -183,7 +183,7 @@ public class FragmentCargoView extends Fragment {
         changeCargo("Remove Rear", new DialogCloseListener() {
             @Override
             public void onDialogClose(double weight) {
-                if(frontWeight - weight < 0) {
+                if(rearWeight - weight < 0) {
                     Toast.makeText(getActivity(), "Cannot remove more cargo than already exists.",
                             Toast.LENGTH_SHORT).show();
                 } else {
