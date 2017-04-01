@@ -34,6 +34,8 @@ public class Grapher {
     Flight flight;
     Plane plane;
     List<Coordinate> envelope;
+    Coordinate startCoordinate;
+    Coordinate endCoordinate;
 
     int width;
     int height;
@@ -54,8 +56,8 @@ public class Grapher {
         CalculationManager calculationManager = new CalculationManager(context, flight);
         WeightAndBalance weightAndBalance = calculationManager.calculate();
         // Plot these coordinates :-)
-        Coordinate startCoordinate = weightAndBalance.getStartCoordinate();
-        Coordinate endCoordinate = weightAndBalance.getEndCoordinate();
+        startCoordinate = weightAndBalance.getStartCoordinate();
+        endCoordinate = weightAndBalance.getEndCoordinate();
 
         minX = Integer.MAX_VALUE;
         maxX = 0;
@@ -131,9 +133,11 @@ public class Grapher {
 
         textStyle.setTextAlign(Paint.Align.LEFT);
         for(int y = minY; y < maxY; y += (maxY - minY)/ydiv) {
-            grid.moveTo(leftMargin, convertY(y));
-            grid.lineTo(width - rightMargin, convertY(y));
-            canvas.drawText(Integer.toString(y), 0, convertY(y), textStyle);
+            if(convertY(y) > topMargin) {
+                grid.moveTo(leftMargin, convertY(y));
+                grid.lineTo(width - rightMargin, convertY(y));
+                canvas.drawText(Integer.toString(y), 0, convertY(y), textStyle);
+            }
         }
 
         canvas.drawPath(grid, gridPaint);
@@ -162,6 +166,9 @@ public class Grapher {
         flightPaint.setStyle(Paint.Style.STROKE);
 
         Path flightPath = new Path();
+        flightPath.moveTo(convertX(startCoordinate.getX()), convertY(startCoordinate.getY()));
+        flightPath.lineTo(convertX(endCoordinate.getX()), convertY(endCoordinate.getY()));
+        canvas.drawPath(flightPath, flightPaint);
     }
 
     private int convertX(float x) {
