@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.noah.onthefly.R;
 import com.example.noah.onthefly.models.User;
 import com.example.noah.onthefly.util.GlobalVars;
+import com.example.noah.onthefly.util.Legal;
 import com.example.noah.onthefly.util.Mailer;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -46,6 +47,8 @@ public class ActivityCreateAccount extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
 
+
+
         inputSetup();
         addNameListener(firstName_input);
         addNameListener(lastName_input);
@@ -61,6 +64,9 @@ public class ActivityCreateAccount extends AppCompatActivity {
                 }
             }
         };
+
+        Legal legal = new Legal(this);
+        legal.show();
     }
 
     @Override
