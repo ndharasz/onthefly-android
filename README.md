@@ -32,35 +32,35 @@
 
 ### Known Bugs in Release 1.0
 * Dragging a "Co-Pilot" to "Pilot" seat doesn't rename properly
-* Navigating away from an expanded flight on "Upcoming Flights" and returning will cause the "Edit" button to disappear
+* Switching orientation to Landscape on the Edit Flight screen may cause the app to crash
 * Future versions of app will have a way to contact admin for troubleshooting support and feature suggestions
 
 # Install Guide
 
 ## Pre-requisites
-Installation of the On The Fly mobile application is handled via the Apple App Store, the industry standard for iOS mobile applications. In order to download and use the app, users must have an iOS device (iPhone, iPad, or iPod Touch) that runs iOS 10.0+. The device must also have 28.6 MB of free space to download and install the application. 
+Installation of the On The Fly mobile application is handled via the Google Play Store, standard for Android applications. In order to download and use the app, users must have an mobile device running Android (Min: Android Jelly Bean (v4.1 SDK 16), Recommended: Android Nougat (v6.0 SDK 25). The device must also have 30 MB of free space to download and install the application. 
 
 ## Dependent Libraries
 All dependent libraries are included in the app download itself. Users do not need to install any additional software to use this application. 
 
 ## Download Instructions:
-Use [this link](https://itunes.apple.com/us/app/on-the-fly-weight-balance/id1227535783?ls=1&mt=8) from an iOS device to open the app listing directly. Once the app has opened in the App Store, just click `Get` to download and install the application on your device.
+Use [this link]() from an Android device to open the app listing directly. Once the app has opened in the Play Store, just click 'Install' to download and install the application on your device.
 
 For step-by-step instructions that don't use the link above, consult the following: 
-1. Open the App Store on your iOS device. 
-2. Select the `Search` section along the bottom toolbar. 
-3. Type `"On The Fly (Weight & Balance)"` in the search bar to find the application. 
-4. In the results page, select the application, the app icon looks like this: 
-5. Select the `Get` button to download and install. You may be prompted to enter your AppleID credentials.
+1. Open the Play Store on your Android device. 
+2. Select the `Search` section along the Top. 
+3. Type `On The Fly` in the search bar to find the application. 
+4. In the results page, select the application. 
+5. Select the `Install` button to download and install.
 
 ## Install and Run Instructions
-The App Store automatically handles all aspects of software installation. In order to run the application, a user must simply click on the app icon from their device and it will run automatically. 
+The APlay Store automatically handles all aspects of software installation. In order to run the application, a user must simply click on the app icon from their device and it will run automatically. 
 
 ## Troubleshooting
-1. Make sure your device is running iOS 10.0+. To see the version of your operating system, go to Settings -> General -> About -> Version.
-2. Make sure your device has at least 28.8 MB of free space to install and run the application. To verify the amount of free space on your device, go to Settings -> General -> About -> Available. 
+1. Make sure your device is running Android 4.1+. To see the version of your operating system, go to Settings -> About Phone.
+2. Make sure your device has at least 30 MB of free space to install and run the application. To verify the amount of free space on your device, go to Settings -> Storage. 
 3. If having trouble loggin in, ensure that your device is connected to the internet (through either Wi-Fi or 4G/LTE data networks).
-4. If app freezes during download and installation (device error or connectivity issue), touch the app icon to re-start the process. If it stays frozen, hold the app icon until it shows a black and white "x" in the corner, delete, and follow the download instructions again.
+4. If app freezes during download and installation (device error or connectivity issue), touch the app icon to re-start the process. If it stays frozen, uninstall and follow the download instructions again.
 
 # End-User Liscense Agreement
 
